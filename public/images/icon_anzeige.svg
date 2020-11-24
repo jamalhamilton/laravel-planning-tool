@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.1 (78136) - https://sketchapp.com -->
+    <title>icon_anzeige</title>
+    <desc>Created with Sketch.</desc>
+    <g id="icon_anzeige" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon_anzeige_quer">
+            <path d="M26.3,16 C26.3,16.9936 25.4936,17.8 24.5,17.8 C23.5064,17.8 22.7,16.9936 22.7,16 C22.7,15.0064 23.5064,14.2 24.5,14.2 C25.4936,14.2 26.3,15.0064 26.3,16 Z" id="Stroke-1" stroke="#92B3C3" stroke-width="1.5"></path>
+            <path d="M33.5,7 L6.5,7 C4.025,7 2,9.025 2,11.5 L2,23.2 C2,25.675 4.025,27.7 6.5,27.7 L33.5,27.7 C35.975,27.7 38,25.675 38,23.2 L38,11.5 C38,9.025 35.975,7 33.5,7 M33.5,8.35 C35.237,8.35 36.65,9.763 36.65,11.5 L36.65,23.2 C36.65,24.937 35.237,26.35 33.5,26.35 L6.5,26.35 C4.763,26.35 3.35,24.937 3.35,23.2 L3.35,11.5 C3.35,9.763 4.763,8.35 6.5,8.35 L33.5,8.35" id="Fill-3" fill="#92B3C3"></path>
+            <path d="M33.5,27.7 L33.5,34" id="Stroke-5" stroke="#92B3C3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M5.6,27.7 L5.6,34" id="Stroke-7" stroke="#92B3C3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M7.4,13.4 L16.4,13.4" id="Stroke-9" stroke="#92B3C3" stroke-width="1.5" stroke-linecap="round"></path>
+            <path d="M7.4,16.4 L13.4,16.4" id="Stroke-9" stroke="#92B3C3" stroke-width="1.5" stroke-linecap="round"></path>
+            <polyline id="Stroke-13" stroke="#92B3C3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" points="18.4619 26.8 30.8 18.7 36.2 25.9"></polyline>
+        </g>
+    </g>
+</svg>

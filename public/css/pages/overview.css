@@ -1,0 +1,21 @@
+#datepicker7.readonly ~ label,
+#datepicker8.readonly ~ label {
+    font-size: 12px;
+    top: 0;
+    transition: all 0.125s cubic-bezier(0.2, 0, 0.03, 1);
+}
+
+#mCSB_1_container tbody>tr>td:last-child {
+	width: 91px;
+}
+
+
+.input__label--hoshi-color-1::after {
+    border-bottom: 0px solid #E2E7ED !important;
+}
+.mCSB_scrollTools.mCSB_scrollTools_horizontal{
+    display: none !important;
+}
+.containerRadio{
+    pointer-events: none;
+}

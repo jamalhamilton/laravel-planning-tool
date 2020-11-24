@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.1 (78136) - https://sketchapp.com -->
+    <title>icon_kino</title>
+    <desc>Created with Sketch.</desc>
+    <g id="icon_kino" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g>
+            <path d="M36.38,16.94 C36.5291169,16.94 36.65,17.0608831 36.65,17.21 L36.65,33.86 C36.65,35.4008745 35.4008745,36.65 33.86,36.65 L7.13,36.65 C6.39004599,36.65 5.68039858,36.3560544 5.15717208,35.8328279 C4.63394558,35.3096014 4.34,34.599954 4.34,33.86 L4.34,16.94 L36.38,16.94 L36.38,16.94 Z M36.38,15.59 L2.99,15.59 L2.99,33.86 C3.03772932,36.1263944 4.86360564,37.9522707 7.13,38 L33.86,38 C36.1263944,37.9522707 37.9522707,36.1263944 38,33.86 L38,17.21 C38,16.3152987 37.2747013,15.59 36.38,15.59 Z" id="Shape" fill="#92B3C3" fill-rule="nonzero"></path>
+            <path d="M34.85,3.53 C35.0423844,3.51416696 35.2234365,3.62279819 35.3,3.8 L36.11,7.4 C36.11,7.58 36.11,7.67 36.02,7.76 C35.93,7.85 35.93,7.94 35.75,7.94 L4.25,15.23 L3.35,11.18 C3.35,11 3.35,10.91 3.44,10.82 C3.4963217,10.7205397 3.59652832,10.6537353 3.71,10.64 L34.76,3.53 L34.85,3.53 L34.85,3.53 Z M34.85,2.18 L34.49,2.18 L3.35,9.29 C2.41679404,9.55312877 1.85969465,10.5081563 2.09,11.45 L3.26,16.85 L36.11,9.29 C37.0504588,9.02690143 37.6356181,8.09064663 37.46,7.13 L36.56,3.53 C36.3875302,2.72813288 35.6700003,2.16166184 34.85,2.18 Z" id="Shape" fill="#92B3C3" fill-rule="nonzero"></path>
+            <path d="M3.89,22.79 L38,22.79" id="Path" stroke="#92B3C3" stroke-width="1.5" stroke-linejoin="round"></path>
+            <path d="M17.39,22.79 L11.99,16.49" id="Path" stroke="#92B3C3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M29.9,22.79 L24.5,16.49" id="Path" stroke="#92B3C3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M24.5,11.09 L28.37,4.34" id="Path" stroke="#92B3C3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M11.99,13.79 L15.59,7.49" id="Path" stroke="#92B3C3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        </g>
+    </g>
+</svg>

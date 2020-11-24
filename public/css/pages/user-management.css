@@ -1,0 +1,71 @@
+#users_filter {
+    display:none;
+}
+
+#users_paginate {
+	display: none;
+}
+
+.input-warning-label::before, .input-warning-label::after {
+	content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 1px);
+    border-bottom: 8px solid #ff0000;
+}
+
+.userImgBox {
+	width: 100%;
+    max-width: 100px;
+    height: 100px;
+    display: flex;
+    /*margin: 20px auto;*/
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 15px;
+    box-shadow: 0px 5px 12px 0px rgba(96,118,117,0.16);
+    background-color: #fff;
+    transition: ease-in-out 0.3s;
+}
+
+.realm {
+	background: url(../../uploads/blank.jpg) center center no-repeat;
+    background-size: 100% 100%;
+    object-fit: contain;
+    object-position: center;
+}
+
+.uploadFieldBox .btn {
+    float: right;
+    position: relative;
+}
+
+.uploadFieldBox .btn > span {
+    display: inline-block;
+    white-space: inherit;
+    cursor: pointer;
+    font-size: 13px;
+    color: #FFF;
+    text-align: center;
+    /*text-transform: capitalize;*/
+    border-radius: 50px;
+    line-height: 40px;
+    height: 40px;
+    text-shadow: none;
+    font-weight: 700;
+}
+
+.uploadFieldBox .upload-btn {
+    width: 155px;
+    height: 48px;
+    top: 0px;
+    margin: 0px;
+    left: 2px;
+    position: absolute;
+    opacity: 0;
+}
+.mCSB_horizontal.mCSB_inside > .mCSB_container{
+    width: 100% !important;
+}

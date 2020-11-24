@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
+    <title>icon_grun_moreInfo</title>
+    <desc>Created with Sketch.</desc>
+    <g id="icon_grun_moreInfo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <polygon id="Bounds" points="0 0 24 0 24 24 0 24"></polygon>
+        <g id="Group-6" transform="translate(2.000000, 2.000000)">
+            <path d="M10,20.0001818 C4.48636364,20.0001818 0,15.5138182 0,10.0001818 C0,4.48563636 4.48636364,0.000181818182 10,0.000181818182 C15.5136364,0.000181818182 20,4.48563636 20,10.0001818 C20,15.5138182 15.5136364,20.0001818 10,20.0001818" id="Path" fill="#03BF9B"></path>
+            <polygon id="Fill-4" fill="#FFFFFF" points="14.8650909 9.18945455 10.8114545 9.18945455 10.8114545 5.13490909 9.18872727 5.13490909 9.18872727 9.18945455 5.13509091 9.18945455 5.13509091 10.8103636 9.18872727 10.8103636 9.18872727 14.8649091 10.8114545 14.8649091 10.8114545 10.8103636 14.8650909 10.8103636"></polygon>
+        </g>
+    </g>
+</svg>
