@@ -72,8 +72,12 @@ Route::any('/media/fill', 'MediaController@fill');
 Route::post('/media/completed', 'MediaController@completed');
 Route::post('/media/autocomplete', 'MediaController@autocomplete');
 Route::post('/media/category/list','MediaController@getCategories');
+
 Route::post('/media/note/insert','MediaController@insertNote');
 Route::post('/media/note/delete','MediaController@deleteNote');
+
+Route::post('/media/cpc/insert','MediaController@insertCPC');
+
 Route::post('/media/ctnote/insert','MediaController@insertCtNote');
 Route::post('/media/ctnote/delete','MediaController@deleteCtNote');
 Route::post('/media/line/delete','MediaController@deleteLine');

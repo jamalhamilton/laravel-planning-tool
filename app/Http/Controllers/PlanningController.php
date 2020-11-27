@@ -978,6 +978,7 @@ class PlanningController extends Controller
      */
     public function updateParams(Request $request)
     {
+
         $campaignID = $request->campaignID;
         $channelID = $request->channelID;
         $newDatas = $request->newDatas;

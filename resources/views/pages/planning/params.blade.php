@@ -120,7 +120,7 @@
 												@foreach ($parameters as $parameter)
 													<div class="param-group org-category {{($parameter['isConstant'] == 1) ? 'isConstant' : ''}}" data-id="{{$parameter['ID']}}" data-type="{{$parameter['value']}}" data-sort-order="{{$parameter['sortOrder']}}">
 														<div class="param-group-header tdTitle">
-															<div>{{$parameter['name']}} <button class="addLessBtn" style="display:none;"><i class="fa fa-plus"></i></button><button class="trashBtn" style="display:none;"><i class="fa fa-trash"></i></button><button class="upSortBtn" style="display:none;"><i class="fa fa-trash"></i></button><button class="downSortBtn" style="display:none;"><i class="fa fa-trash"></i></button></div>
+															<div><span class="groupTitle">{{$parameter['name']}}</span> <button class="addLessBtn" style="display:none;"><i class="fa fa-plus"></i></button><button class="trashBtn" style="display:none;"><i class="fa fa-trash"></i></button><button class="upSortBtn" style="display:none;"><i class="fa fa-trash"></i></button><button class="downSortBtn" style="display:none;"><i class="fa fa-trash"></i></button></div>
 														</div>
 														<div class="param-group-body">
 															@if ($parameter['isEmpty'])

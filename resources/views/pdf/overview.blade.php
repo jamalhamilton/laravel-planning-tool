@@ -260,8 +260,11 @@
             <td class="tg-0pky w250 text-right"  style="border-top: 0"><strong>in %</strong></td>
         </tr>
         @foreach ($second_table as $k=> $row)
+            @php if($row[0] =='Abzüge' && $row[3] == 0){ break; } @endphp
         <tr style="">
-            <?php $style = ($k==0)?' style="border-top: 0"':''?>
+            <?php
+
+            $style = ($k==0)?' style="border-top: 0"':''?>
             @foreach ($row as $n=>$cell)
                 @if ($type == 'internal')
                     <td style="border-left: none !important; <?php echo ($k==0)?'border-top: none !important;':'';?> " class="tg-0pky br_border <?php if($n>1) echo 'text-right';?>" <?php echo $style;?>>{{ $cell }}</td>

@@ -251,13 +251,13 @@
                                             <th style="width:115px">sprachregion</th>
                                             <th style="width:115px; text-align: right">werbedruck</th>
                                             <th style="width:210px">format</th>
-                                            <th style="width:120px; text-align: right">tkp brutto in chf</th>
+                                            <th style="width:120px; text-align: right">tkp/cpc brutto in chf</th>
                                             <th style="width:115px; text-align: right">brutto<br> in chf</th>
                                             <th style="width:70px; text-align: right">rabatt in %</th>
                                             <th style="width:115px; text-align: right">netto<br> in chf</th>
                                             <th style="width:70px; text-align: right">bk<br> in %</th>
                                             <th style="width:115px; text-align: right">n/n<br> in CHF</th>
-                                            <th style="width:115px; text-align: right">tkp n/n<br> in chf</th>
+                                            <th style="width:115px; text-align: right">tkp/cpc n/n<br> in chf</th>
                                         </tr>
                                     </thead>
                                     <tbody>

@@ -17,11 +17,22 @@ function calTotal() {
     for (var i = 0; i < elems.length; i++) {
         var idx = index[i % 4];
 
+
+
         var cells = $(elems[i]).parents("table.bigTable1780").find(".contentCollap  td:nth-child("+idx+")");
+
+
+
         total = 0;
         for (var j = 0; j < cells.length; j++) {
+
             if (idx == 5 && cells[j].innerHTML != "") {
-                total += parseInt(cells[j].innerHTML.replace("\'","").replace("\'","").replace("\'","").replace(",",""));
+            	if($(cells[j]).parents("tr").hasClass('hasCPC') && $(cells[j]).parents("tr").attr('data-clickrate')){
+            		total += parseFloat($(cells[j]).parents("tr").data('adimpressions'));
+				}else{
+					total += parseInt(cells[j].innerHTML.replace("\'","").replace("\'","").replace("\'","").replace(",",""));
+				}
+
             }
             else {
                 total += parseFloat(cells[j].innerHTML.replace("\'","").replace("\'","").replace("\'","").replace(",",""));
@@ -36,7 +47,7 @@ function calTotal() {
                 $(elems[i]).text("0.00");
         } else {
 			if (idx == 5) {
-				$(elems[i]).text(numberWithCommas(total));
+				$(elems[i]).text(numberWithCommas(total.toFixed(2)));
 			}
 			else {
 				$(elems[i]).text(numberWithCommas(total.toFixed(2)));
@@ -1165,6 +1176,9 @@ $('#menu_duplicate_line').on('click', function() {
 		collapseDiv.style.maxHeight = collapseDiv.scrollHeight + "px";
 		categoryID = categoryTable.data('id');
 
+		var cpc = $(contextDataRow).hasClass('hasCPC')?1:0;
+		var clickrate = $(contextDataRow).data('clickrate');
+
 		$.ajax({
 			headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
 			type: 'POST',
@@ -1173,12 +1187,22 @@ $('#menu_duplicate_line').on('click', function() {
 				'categoryID':categoryID,
 				'active_channel':$("#active_channel").val(),
 				'campaignID':$("#campaign_id").val(),
-				'data':newrow1
+				'data':newrow1,
+				'cpc':cpc,
+				'clickrate':clickrate
 			},
 			dataType: 'JSON',
 			success: function(data,textStatus,jqXHR) {
 
 				$(contextDataTable).find("tr:nth-child("+(index+2)+")").attr('data-id',data.id);
+
+				if(data.media.is_cpc){
+					alert(data.media.is_cpc);
+					$(contextDataTable).find("tr:nth-child("+(index+2)+")").addClass('hasCPC');
+					$(contextDataTable).find("tr:nth-child("+(index+2)+")").attr('data-adImpressions',data.media.ad_impressions.toFixed(2));
+					// $(contextDataTable).find("tr:nth-child("+(index+2)+")").find('.cpcSummary').attr('title',data.media.ad_impressions.toFixed(2));
+					calTotal();
+				}
 
 				reorderTable(contextDataTable);
 
@@ -1306,7 +1330,49 @@ $('body').on('click',"#addctgmodal", function() {
 
       	},
     });
-});	
+});
+
+	$('#menu_insert_cpc').on('click', function() {
+		if (contextDataCol === null || contextDataRow === null || contextDataTable === null) {
+			return;
+		}
+		var mediaID = $(contextDataRow).data('id');
+		var clickrate = $(contextDataRow).data('clickrate');
+
+		if(!clickrate) return;
+
+		$.ajax({
+			headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+			type: 'POST',
+			url: '/media/cpc/insert',
+			data:{
+				'mediaID':mediaID,
+				'active_channel':$("#active_channel").val(),
+				'campaignID':$("#campaign_id").val(),
+				'clickrate':clickrate
+			},
+			dataType: 'JSON',
+			success: function(data,textStatus,jqXHR) {
+				var table = $(contextDataTable).DataTable();
+				var index = table.row( contextDataRow ).index();
+
+				if(data.media){
+
+					$(contextDataTable).find("tr:nth-child("+(index+1)+")").attr('data-adImpressions',data.media.ad_impressions.toFixed(2));
+
+					$(contextDataTable).find("tr:nth-child("+(index+1)+")").find('.kostenCol').text(data.media.grossCHF.toFixed(2));
+					// $(contextDataTable).find("tr:nth-child("+(index+1)+")").find('.cpcSummary').attr('title',data.media.ad_impressions.toFixed(2));
+				}
+
+				$(contextDataTable).find("tr:nth-child("+(index+1)+")").toggleClass('hasCPC');
+				calTotal();
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+
+			},
+		});
+	});
+
 
 $('#menu_insert_note').on('click', function() {
 	if (contextDataCol === null || contextDataRow === null || contextDataTable === null) {

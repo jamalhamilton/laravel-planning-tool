@@ -235,6 +235,10 @@
             color: #fff!important;
             border-left:0px solid #fff ;
         }
+
+        .colCPC{
+            border-right:10px solid #A4B7CB!important;
+        }
     </style>
 
 
@@ -323,12 +327,12 @@ $_total_page = ceil(sizeof($date)/16);
                 <th width="120" class="nowrap tg-15li w120">SPRACHE</th>
                 <th width="120" class="nowrap tg-15li w220">FORMAT</th>
                 <th width="120" class="nowrap tg-15li w120 text-right">WERBE-<br>DRUCK</th>
-                <th width="120" class="nowrap tg-15li w120 text-right">TKP<br>BRUT<br></th>
+                <th width="120" class="nowrap tg-15li w120 text-right">TKP/CPC<br>BRUT<br></th>
                 <th width="120" class="nowrap tg-15li w120 text-right">KOSTEN<br>BRUT</th>
                 <th width="120" class="nowrap tg-15li w120 text-right">RABATT<br>IN %</th>
                 <th width="120" class="nowrap tg-15li w120 text-right">KOSTEN<br>NET</th>
                 <th width="120" class="nowrap tg-15li w120 text-right">BK IN %</th>
-                <th width="120" class="nowrap tg-15li w120 text-right">TKP<br>NET-NET</th>
+                <th width="120" class="nowrap tg-15li w120 text-right">TKP/CPC<br>NET-NET</th>
                 <th width="120" class="nowrap tg-15li w120 text-right">KOSTEN<br>NET-NET</th>
                 <th width="30" class="nowrap tg-drrh  w30 text-right" ></th>
                 @for ($j = 0; $j < $size - 1; $j++)
@@ -400,9 +404,9 @@ $_total_page = ceil(sizeof($date)/16);
                         <td class="tg-0lax br_border2 bt_border2">{!! $row[3] !!}</td>
 
                         <?php if($row[4] == 0 || $row[4] == '0' || $row[4] == 0.00 || $row[4] == '0.00'){ ?>
-                        <td class="tg-0lax br_border2 bt_border2 text-right"></td>
+                        <td class="tg-0lax br_border2 bt_border2 text-right @if($row[15]) colCPC @endif"></td>
                         <?php }else{ ?>
-                        <td class="tg-0lax br_border2 bt_border2 text-right">{!! number_format($row[4], 0, '.', '\'') !!}</td>
+                        <td class="tg-0lax br_border2 bt_border2 text-right @if($row[15]) colCPC @endif">{!! number_format($row[4], 0, '.', '\'') !!}</td>
                         <?php } ?>
 
                         <?php if($row[5] == 0 || $row[5] == '0' || $row[5] == 0.00 || $row[5] == '0.00'){ ?>
@@ -424,9 +428,9 @@ $_total_page = ceil(sizeof($date)/16);
                         <?php } ?>
 
                         <?php if($row[8] == 0 || $row[8] == '0' || $row[8] == 0.00 || $row[8] == '0.00'){ ?>
-                        <td class="tg-0lax br_border2 bt_border2 text-right"></td>
+                        <td class="tg-0lax br_border2 bt_border2 text-right @if($row[15]) colCPC @endif"></td>
                         <?php }else{ ?>
-                        <td class="tg-0lax br_border2 bt_border2 text-right">{!! number_format($row[8], 0, '.', '\'') !!}</td>
+                        <td class="tg-0lax br_border2 bt_border2 text-right @if($row[15]) colCPC @endif">{!! number_format($row[8], 0, '.', '\'') !!}</td>
                         <?php } ?>
 
                         <?php if($row[9] == 0 || $row[9] == '0' || $row[9] == 0.00 || $row[9] == '0.00'){ ?>
@@ -483,7 +487,14 @@ $_total_page = ceil(sizeof($date)/16);
                     </tr>
 
                     @php
+                    if($row[15]){
+                        //cpc
+                        $subTotalAd += $row[16];
+                    }else{
                     $subTotalAd += $row[4];
+                    }
+
+
                     $subTotalTkpGross += $row[5];
                     $subTotalGross += $row[6];
                     $subTotalDiscount += $row[7];
@@ -492,7 +503,13 @@ $_total_page = ceil(sizeof($date)/16);
                     $subTotalTkp += $row[10];
                     $subTotalNN += $row[11];
 
+                    if($row[15]){
+                        //cpc
+                        $totalAd += $row[16];
+                    }else{
                     $totalAd += $row[4];
+                    }
+
                     $totalTkpGross += $row[5];
                     $totalGross += $row[6];
                     $totalDiscount += $row[7];
@@ -587,15 +604,27 @@ $_total_page = ceil(sizeof($date)/16);
                 <td colspan="12" class=" ">&nbsp;</td>
                 <td colspan="{{$size+1}}"></td></tr>
             <tr>
-                <td colspan="4" style="margin-left: -23px !important;">
+
+                {{--<td colspan="{{$size+1}}"></td>--}}
+            </tr>
+
+        </table>
+
+            <table style="width: 2530px">
+            <tr><td style="position: relative">
                     @php
-                    //dd($rightTable);
-                    $sofLeft = sizeof($leftTable);
-                    $sofRight = sizeof($rightTable);
-                    $space = $sofRight-$sofLeft + 1;
-                    if($space == 4) $space = $space + 1;
+                        //dd($rightTable);
+                        $sofLeft = sizeof($leftTable);
+                        $sofRight = sizeof($rightTable);
+                        $space = $sofRight-$sofLeft + 1;
+                        if($space == 4) $space = $space + 1;
+
+                        $right_row = 0;
+                        foreach ($rightTable as $k=>$v){
+                            if(!empty($v[4]))$right_row += (count($v[4])-1);
+                        }
                     @endphp
-                    <table  class="tg tb_bottom" style="margin-top: <?php echo $calc_margin_top ;?>px !important;" >
+                    <table  class="tg tb_bottom" style="margin-top: <?php echo $calc_margin_top +$right_row*50 ;?>px !important;" >
 
                         @for ($i = 0; $i < sizeof($leftTable) - 1; $i++)
                             <tr>
@@ -628,34 +657,32 @@ $_total_page = ceil(sizeof($date)/16);
                             <td class="tg-16li"><span style="float: right !important;">{{ number_format($leftTable[$i][4], 2, '.', '\'') }}</span></td>
                         </tr>
                     </table>
-                </td>
 
-                <td colspan="8" style="margin-right: -20px !important;" >
-                    <table class="tg tb_bottom" align="right" >
+                </td>
+                <td style="position: relative">
+
+                    <table class="tg tb_bottom" align="right" style="bottom: 0; position: relative;">
 
                         @for ($i = 0; $i < sizeof($rightTable) - 1; $i++)
                             <tr class="@if($i== sizeof($rightTable) - 2) tg-17li @endif">
                                 <td class="tg-17li tg-space bb_border2 br_border2 w500 nowrap" colspan="2"><span>{{ $rightTable[$i][0] }}</span></td>
-                                <td class="tg-space bb_border2 br_border2 w150 tb_right_span">{{ $rightTable[$i][2] }} %</td>
-                                <td class="tg-space bb_border2 br_border2 w150 br_border2 tb_right_span">CHF {{ $rightTable[$i][1] }}</td>
+                                <td class="tg-space bb_border2 br_border2 w150 tb_right_span"><table width="100%">@foreach($rightTable[$i][4] as $k=>$v)<tr><td class="text-right">{{$v}}</td></tr> @endforeach</table></td>
+                                <td class="tg-space bb_border2 br_border2 w150 br_border2 tb_right_span" style="vertical-align: bottom;">CHF {{ $rightTable[$i][1] }}</td>
                             </tr>
 
                         @endfor
 
                         <tr class="text-bold tr_highlight">
                             <td class="tg-16li  nowrap" colspan="2"><span>{{ $rightTable[$i][0] }}</span></td>
-                            <td class="tg-16li  tb_right_span">{{ $rightTable[$i][2] }} %</td>
+                            <td class="tg-16li  tb_right_span"> </td>
                             <td class="tg-16li  tb_right_span">CHF  {{ $rightTable[$i][1] }}</td>
 
                             <td class="tg-space "></td>
                         </tr>
                     </table>
-                </td>
-                {{--<td colspan="{{$size+1}}"></td>--}}
-            </tr>
-
-        </table>
-
+                </td></tr>
+            </table>
+          @php //dd($rightTable);@endphp
 
          {{--   <table class="t-title">
                 <tr>

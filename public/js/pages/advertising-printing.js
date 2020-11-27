@@ -17,7 +17,7 @@ function calTotal(){
             var jjj = 12;
         }
         var idx = (i % (parseInt(weekNum) + 2)) + 2;
-        console.log(idx);
+        // console.log(i,idx);
         var cells = $(elems[i]).parents("tr.categorytr").find(".contentCollap td:nth-child("+idx+")");
         total = 0;
         
@@ -102,7 +102,14 @@ $("body").on('focus','td input',function (){
 $("body").on('blur','td input',function (){
 
     var number = $(this).val();
+
     $(this).val(numberWithCommas(number));
+
+    var oldTotal = $($(this).parents('tr').children()[2]).children().val();
+    if(oldTotal == 'tbd'){
+        $(this).val('tbd');
+        return;
+    }
 
     var thiz;
     mediaID = $(this).parents('tr').data('id');

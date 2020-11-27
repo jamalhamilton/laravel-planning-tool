@@ -21,6 +21,10 @@ use ZipArchive;
 class PdfController extends Controller
 {
 
+    public static function prettyPrint($d) {
+    $i = (int) $d;
+    return $d == $i ? number_format($d,0,".", "'"):number_format($d,2,".", "'");
+    }
     protected function generatePdf(Request $request)
     {
         $totalStartTime = 9000000000;
@@ -52,6 +56,8 @@ class PdfController extends Controller
         $serviceTotal = 0;
         $rates = $this->getRates($customerID);
         $serviceCosts_channel_tmp = array();
+
+
         foreach ($channels as $channel) {
             $onlineChannel = CampaignChannel::where('name',$channel->name)->where('campaignID', $campaignID)->first();
             $onlineChannelID = -1;
@@ -63,6 +69,7 @@ class PdfController extends Controller
             // Calculate service costs
 
             $serviceCosts_channel[$channel->name] = array();
+
             foreach ($serviceGroups as $serviceGroup) {
                 $query = "select SUM(t3.calcValue) as subTotal
                         from core_service_groups_items t1
@@ -70,6 +77,42 @@ class PdfController extends Controller
                         where t3.channelID = ? and t1.groupID = ? group by t1.groupID";
 
                 $res = DB::select($query, [$onlineChannelID, $serviceGroup['ID']]);
+
+                $query_all = "select *
+                        from core_service_groups_items t1
+                        left join campaign_channels_parameters t3 on t1.ID = t3.serviceItemID
+                        where t3.channelID = ? and t1.groupID = ?";
+
+                $resdes = [];
+                $res_all = DB::select($query_all, [$onlineChannelID, $serviceGroup['ID']]);
+                $totalFlatrate = 0;
+
+                foreach ($res_all as $k=>$v){
+                    if($v->isFlatrate){
+                        $totalFlatrate+= $v->calcValue;
+                    }else{
+                        if($v->value){
+                            $clientconservice = DB::select("select * from clients_con_services_values WHERE ID = ?", [$v->clientServiceItemID]);
+                            if($clientconservice){
+                                if(isset($resdes[$clientconservice[0]->value])){
+                                    $resdes[$clientconservice[0]->value] += $v->value;
+                                }else{
+                                    $resdes[$clientconservice[0]->value.""] = $v->value;
+                                }
+
+                            }
+
+                        }
+                    }
+
+                }
+                if($totalFlatrate>0){
+                    $resdes[""] = $totalFlatrate;
+                }
+
+
+
+//                dd($res_all);
                 $subTotal = (count($res) > 0) ? $res[0]->subTotal : "0.00";
 
                 if($serviceGroup["name"] == 'Technische Kosten' && count($res) == 0 && $channel->name == 'online') {
@@ -85,7 +128,8 @@ class PdfController extends Controller
 
                 $cost = array(
                     'groupName' => $serviceGroup["name"],
-                    'subTotal' => floatval($subTotal)
+                    'subTotal' => floatval($subTotal),
+                    'description'=>$resdes
                 );
 
                 $serviceCosts_channel_tmp[$serviceGroup["name"]] = 0;
@@ -95,6 +139,7 @@ class PdfController extends Controller
                 array_push($serviceCosts_channel[$channel->name] , $cost);
             }
         }
+        //dd($serviceCosts_channel); //luc
         foreach ($serviceCosts_channel as $chn_name => $costs_ar) {
             foreach($costs_ar as $cost){
                 $serviceCosts_channel_tmp[$cost['groupName']] += $cost['subTotal'];
@@ -108,6 +153,8 @@ class PdfController extends Controller
             );
             array_push($serviceCosts, $cost);
         }
+//        print_r($serviceCosts_channel);
+//        dd($serviceCosts);
         //////////////////////////////////////////////
 
         // overview Mediakosten items for all channels
@@ -165,6 +212,7 @@ class PdfController extends Controller
         }
 
         $serviceData = array('total' => number_format(floatval($serviceTotal),2,".","'"),'serviceCosts' => $serviceCosts);
+
         foreach ($mediaCosts as $key => $mediaCost) {
             if ($nnCHFTotal == 0) {
                 $mediaCosts[$key]["percentage"] = "0.00";
@@ -227,6 +275,7 @@ class PdfController extends Controller
         }
 
         $secondTable = array();
+
         foreach ($serviceData['serviceCosts']  as $idx => $serviceCost) {
             $row = array(
                 $serviceCost['groupName'],
@@ -420,6 +469,8 @@ class PdfController extends Controller
                         '(' . $media->ID . ')',
                         $media->grps,
                         $media->kontaktsumme,
+                        $media->is_cpc,
+                        $media->ad_impressions,
                     );
                     $totalNN += $media->nnCHF;
 
@@ -579,6 +630,7 @@ class PdfController extends Controller
             // Calculate service costs
 
             $serviceCosts_channel[$channel->name] = array();
+
             foreach ($serviceGroups as $serviceGroup) {
                 $query = "select SUM(t3.calcValue) as subTotal, SUM(t3.value)
                     from core_service_groups_items t1
@@ -588,6 +640,50 @@ class PdfController extends Controller
                 $res = DB::select($query, [$onlineChannelID, $serviceGroup['ID']]);
                 $subTotal = (count($res) > 0) ? $res[0]->subTotal : "0.00";
 
+                $resdes = [];
+                $query_all = "select *
+                        from core_service_groups_items t1
+                        left join campaign_channels_parameters t3 on t1.ID = t3.serviceItemID
+                        where t3.channelID = ? and t1.groupID = ?";
+                $res_all = DB::select($query_all, [$onlineChannelID, $serviceGroup['ID']]);
+                $totalFlatrate = 0;
+
+                foreach ($res_all as $k=>$v){
+                    if($v->isFlatrate){
+                        $totalFlatrate+= $v->calcValue;
+                    }else{
+                        if($v->value){
+
+                            if($v->clientServiceItemID!= -1){
+                            $clientconservice = DB::select("select * from clients_con_services_values WHERE ID = ?", [$v->clientServiceItemID]);
+
+                            if($clientconservice){
+                                    $key = $clientconservice[0]->value."";
+                                if(isset($resdes[$key])){
+                                    $resdes[$key] += $v->value;
+                                }else{
+                                    $resdes[$key] = $v->value;
+                                }
+
+                            }
+                            }else{
+                                if(!isset($resdes[0])){
+                                    $resdes[0] = $v->value;
+                                }else{
+                                    $resdes[0] += $v->value;
+                                }
+
+                            }
+
+
+                        }
+                    }
+
+                }
+                if($totalFlatrate>0){
+                    $resdes[""] = $totalFlatrate;
+                }
+                //print_r($resdes);
                 if($serviceGroup["name"] == 'Technische Kosten' && count($res) == 0 && $channel->name == 'online') {
                     $NNInChf = $this->calculateadPSum($campaignID, $channel->name);
                     $selectRates = $this->getRatesKosten_Honorar($customerID);
@@ -601,8 +697,10 @@ class PdfController extends Controller
 
                 $cost = array(
                     'groupName' => $serviceGroup["name"],
-                    'subTotal' => floatval($subTotal)
+                    'subTotal' => floatval($subTotal),
+                    'resdes'=> $resdes
                 );
+//                print_r($resdes);
 
                 $serviceCosts_channel_tmp[$serviceGroup["name"]] = 0;
                 $serviceCosts_channel_tmp[$serviceGroup["name"]] = 0;
@@ -615,13 +713,18 @@ class PdfController extends Controller
             $service_total = 0;
             $rightTable = array();
 
+//            dd($serviceCosts_channel);
+            $tmp_des = [];
+
             foreach ($serviceCosts_channel as $chn_name => $costs_ar) {
                 foreach($costs_ar as $cost){
                     $serviceCosts_channel_tmp[$cost['groupName']] += $cost['subTotal'];
-
+                    $tmp_des[$cost['groupName']] = $cost['resdes'];
                     $service_total += $cost['subTotal'];
                 }
             }
+//            dd($tmp_des);
+//            dd($serviceCosts_channel_tmp);
             foreach ($serviceCosts_channel_tmp as $groupNm => $value) {
                 //$groupNm = $this->indexToGroupName($serviceCosts_channel, $index);
                 $percent = 0;
@@ -632,14 +735,46 @@ class PdfController extends Controller
                     'groupName' =>$groupNm,
                     'subTotal' => number_format($value, 2),
                     'percentage' => $percent,
+                    'des'=>$tmp_des[$groupNm]
                 );
                 array_push($serviceCosts, $cost);
+                $descript = [];
+                //print_r($groupNm);print_r($tmp_des[$groupNm]);
+                if($tmp_des[$groupNm]) {
+                    foreach ($tmp_des[$groupNm] as $m => $n){
+
+                        if ($groupNm == 'Media-Honorar') {
+                            if ($m != "") {
+                                $descript[] = ' '.$m.'%';
+                            } else {
+                                $descript[] = 'Pauschale CHF '.$this->prettyPrint($n).' ';
+                            }
+                        } elseif ($groupNm == 'Technische Kosten') {
+                            if ($m != "")
+                                $descript[] = ' TKP CHF '.$m;
+                            else
+                                $descript[] = 'Pauschale CHF '.$this->prettyPrint($n).' ';
+
+                        } else {
+                            if ($m !== "")
+                                $descript[] = ' '.$this->prettyPrint($n).'h x CHF '.$this->prettyPrint($m).' ';
+                            else
+                                $descript[] = 'Pauschale CHF '.$this->prettyPrint($n).' ';
+                        }
+                    }
+
+
+                }
+
 
                 $row = array($groupNm,
-                    $value,
+                    $this->prettyPrint($value),
                     $percent,
-                    $subTotal
+                    $subTotal,
+                    $descript
                 );
+                if($groupNm == 'Abzüge' && $subTotal == 0) continue;
+
                 array_push($rightTable, $row);
             }
 
@@ -650,9 +785,9 @@ class PdfController extends Controller
                 $service_percentage = number_format(100 * floatval($service_total) / $total, 2);
             }
 
-            array_push($rightTable, array('Total Servicekosten exkl. MWST', $service_total, $service_percentage));
-            array_push($rightTable, array('Total Media- & Servicekosten exkl. MWST.', number_format($total, 2, ".", "'"), '100.00'));
-
+            array_push($rightTable, array('Total Servicekosten exkl. MWST', $this->prettyPrint($service_total), $service_percentage,'',[]));
+            array_push($rightTable, array('Total Media- & Servicekosten exkl. MWST.', number_format($total, 2, ".", "'"), '100.00','',[]));
+            //dd($rightTable);
             $diff = sizeof($rightTable) - sizeof($leftTable) - 1;
 
             $empty = array();
@@ -693,6 +828,8 @@ class PdfController extends Controller
                 'rightTable' => $rightTable,
                 'diff' => $diff
             ];
+
+//            dd($data2);
 
             $customer = Client::where('ID', $customerID)->first();
 

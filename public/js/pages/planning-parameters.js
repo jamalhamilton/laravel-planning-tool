@@ -344,6 +344,7 @@ $(document).ready(function(){
 	});
 
 	$("#open-category-create").on('click', function() {
+
 		$('#modal3').modal({
 			"closeExisting": false,
 			"showClose": false,
@@ -355,6 +356,8 @@ $(document).ready(function(){
 		if ($('#modal3 input').val() == '') {
 			return;
 		}
+		
+
 		
 		var groupName = $("#modal3 input").val();
 		var sortOrder = $(".param-group").length + 1;
@@ -407,7 +410,6 @@ $(document).ready(function(){
 	contentToAdd += '					<div class="custom-select tdSelectField">';
 	contentToAdd += '						<select>';
 	contentToAdd += '						</select>';
-	contentToAdd += '					<div class="select-selected">180 CHF/h</div><div class="select-items select-hide"><div class="same-as-selected">180 CHF/h</div><div>100 CHF/h</div><div>80 CHF/h</div><div>60 CHF/h</div><div>40 CHF/h</div><div>30 CHF/h</div></div></div>';
 	contentToAdd += '					</td>';
 	contentToAdd += '					<td style=""><i class="icon_equal"></i></td>';
 	contentToAdd += '				</tr>';
@@ -516,6 +518,7 @@ $(document).ready(function(){
 			var radioIdx = 0;
 			var textToReplace;
 
+
 			for (var i = 0; i < selects.length; i++) {
 				var selected = (i == 0) ? 'selected' : '';
 				selectHtml += '<option value="' + selects[i].value +'" data-id="'+ selects[i].ID +'" data-service-id="'+selects[i].serviceID+'" '+selected+'>'+ numberWithCommas(selects[i].value) +' ' + chfType + '</option>';
@@ -528,6 +531,40 @@ $(document).ready(function(){
 			var pCategory = currentCategory;
 
 			$('#params-list span').each(function(){
+                var neworder = pCategory.find('.param-group-body .cost-element').length + 1;
+
+                $new_element = $(contentToAdd);
+
+                $new_element.attr('data-group-id', groupID);
+                $new_element.attr('data-sort-order', neworder);
+                $new_element.find('select').html(selectHtml);
+                $new_element.find('select').next().next().html(div_selectHtml);
+
+                initNewCustomSelect($new_element.find('.custom-select'));
+
+                textToReplace = $(this).text();
+
+                radioIdx = getMaxID(textToReplace);
+
+                $new_element.find(' .calc-item:first').text(textToReplace);
+                $new_element.find('input[type="radio"]').attr("name", textToReplace+'_'+radioIdx);
+                $new_element.find('input.input-proxi').attr("readonly", true);
+
+                $('.elem-value',$new_element).on('click', function(){
+                    if (fEditMode) {
+                        this.select();
+                    }
+                });
+                $('.elem-calc-value',$new_element).on('click', function(){
+                    if (fEditMode) {
+                        this.select();
+                    }
+                });
+
+                pCategory.find('.param-group-body').append($new_element);
+            });
+
+			/*$('#params-list span').each(function(){
 				if (pCategory.find('.param-group-body .setNow').length > 0)
 					pCategory.find('.param-group-body .setNow').remove();
 
@@ -576,7 +613,7 @@ $(document).ready(function(){
 						this.select();
 					}
 				});
-			});
+			});*/
 
 			$('#modal2').hide();
 			$('.blocker-confirm').hide();
@@ -622,7 +659,8 @@ $(document).ready(function(){
 			currentCategory = $(this).parents('.param-group');
 			groupType = $(this).parents('.param-group').data('type');
 			
-			var categoryName = $(this).parent().text();
+			var categoryName = $(this).parent().find('.groupTitle').text();
+
 			var selectHtml = '';
 			var selects = selectData_withgroupname[groupType];
 			
@@ -642,7 +680,7 @@ $(document).ready(function(){
 			$('#modal2 .custom-select .select-items').remove();
 			$('#modal2 .custom-select .select-selected').remove();
 
-			if(categoryName != 'Technische Kosten ' && categoryName != 'Media-Honorar ')
+			if(categoryName != 'Technische Kosten ' && categoryName != 'Media-Honorar ' && categoryName != 'Abzüge ')
 			{
 				//$('#indiv_form').hide();
 				initNewCustomSelect($('#modal2 .custom-select'));
@@ -658,6 +696,8 @@ $(document).ready(function(){
 				"showClose": false,
 				'blockerClass':'blocker-confirm'
 			});
+
+
 
 			$("#modal3_indi_category").val("");
 		}
@@ -803,7 +843,7 @@ $(document).ready(function(){
 			currentCategory = $(this).parents('.param-group');
 			groupType = 'HOURLY_RATE';
 
-			var categoryName = $(this).parents('.param-group .param-group-header div').text();
+			var categoryName = $(this).parents('.param-group').find('.groupTitle').text();
 			var selectHtml = '';
 			var selects = selectData_withgroupname[groupType];
 			
@@ -818,7 +858,16 @@ $(document).ready(function(){
 			$('#modal2 .custom-select .select-items').remove();
 			$('#modal2 .custom-select .select-selected').remove();
 
+
+			if(categoryName != 'Technische Kosten' && categoryName != 'Media-Honorar' && categoryName != 'Abzüge')
+			{
 			initNewCustomSelect($('#modal2 .custom-select'));
+			}else{
+				$('#modal2 .custom-select select').html('');
+				$('#modal2 .custom-select .select-items').remove();
+				$('#modal2 .custom-select .select-selected').remove();
+			}
+
 
 			$('#modal2').modal({
 				"closeExisting": false,

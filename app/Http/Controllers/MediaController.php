@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CampaignChannelMediaCPC;
 use App\Models\CoreCampaignCategory;
+use App\Models\ClickRate;
 use App\Models\Campaign;
 use App\Models\CampaignChannel;
 use App\Models\CampaignChannelMediaConCategory;
@@ -172,6 +174,8 @@ class MediaController extends Controller
                         $notes[$note->colOrder] = $note->note;
                     }
 
+//                    $grossCHF = ($media->is_cpc)? $media->adPressureValue * $media->tkpGrossCHF : $media->grossCHF;
+                    $grossCHF =  $media->grossCHF;
 
                     $mediaData[$index] = array(
                         'id' => $media->ID,
@@ -181,7 +185,7 @@ class MediaController extends Controller
                         'adPrint' => number_format($media->adPressureValue, 0, '.', '\''),
                         /*'format' => $media->scoreadformat->name,*/
                         'tkpGrossCHF' => number_format($media->tkpGrossCHF, 2, '.', '\''),
-                        'grossCHF' => number_format($media->grossCHF, 2, '.', '\''),
+                        'grossCHF' => number_format($grossCHF, 2, '.', '\''),
                         'discountPersentual' => number_format($media->discountPersentual, 2, '.', '\''),
                         'netCHF' => number_format($media->netCHF, 2, '.', '\''),
                         'bkPersentual' => number_format($media->bkPersentual, 2, '.', '\''),
@@ -192,6 +196,8 @@ class MediaController extends Controller
                         'format' => $media->formatValue,
                         'grps' => number_format($media->grps, 2, '.', '\''),
                         'kontaktsumme' => number_format($media->kontaktsumme, 0, '.', '\''),
+                        'is_cpc'=>$media->is_cpc,
+                        'ad_impressions'=>$media->ad_impressions
                     );
                     if ($media->regionID) {
 
@@ -223,11 +229,17 @@ class MediaController extends Controller
                 );
             }
         }
+        $clickrate = ClickRate::all();
+        $clickrateArr = [];
+        foreach ($clickrate as $c){
+            $clickrateArr[$c->name] = $c->value;
+        }
 
         return view('pages.media.'.$active_channel.'.fill',
                     ['tabIndex' => 1,
                      'activetab' => $active_channel,
                      'data' => $data,
+                     'clickrateArr'=>$clickrateArr,
                      'campaignName' => $campaignName,
                      'calRegions' => $calRegions,
                      'constantCategories' => $constantCategories,
@@ -303,9 +315,54 @@ class MediaController extends Controller
             'status' => 'OK',
             'msg' => $msg
             );
-        
+
         return response()->json($resp);
-    }   
+    }
+
+    /**
+     * update CPC
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function insertCPC(Request $request){
+        $media = CampaignChannelMedia::where('ID',$request->mediaID)->first();
+        $clickrate = $request->clickrate;
+
+        $msg = "Invalid";$cpc = -1;
+        if(!empty($media)){
+            $media->is_cpc = 1 - $media->is_cpc;
+            $cpc = $media->is_cpc;
+            //update cpc
+            if($cpc){
+                $media->grossCHF = $media->adPressureValue * $media->tkpGrossCHF;
+                if($clickrate){
+                    $media->ad_impressions = $media->adPressureValue/$clickrate*100;
+                }else{
+                    $media->ad_impressions = 0;
+                }
+
+            }else{
+                $media->grossCHF = $media->adPressureValue / 1000 * $media->tkpGrossCHF;
+                $media->ad_impressions = 0;
+            }
+
+            $msg = ($media->save())? "CPC has updated!" : "CPC Failed!";
+        }
+
+        $this->plusVersionNumber($request->campaignID, $request->active_channel);
+
+        $resp = array(
+            'status' => 'OK',
+            'msg' => $msg,
+            'cpc'=>$cpc,
+            'media'=>$media
+        );
+
+        return response()->json($resp);
+
+    }
+
+
     /**
      * Show the application dashboard.
      *
@@ -374,6 +431,10 @@ class MediaController extends Controller
     public function insertLine(Request $request)
     {
         $active_channel = $request->active_channel;
+
+        $cpc = intval($request->cpc);
+        $clickrate = floatval($request->clickrate);
+
         if($active_channel == 'online' || $active_channel == 'plakat'
             || $active_channel == 'kino' ||  $active_channel == 'radio' ||  $active_channel == 'ambient' ) {
             $fieldname = array('placing',
@@ -450,6 +511,14 @@ class MediaController extends Controller
 
         }
 
+        if($cpc){
+            $media->is_cpc = 1;
+            $media->grossCHF = $media->adPressureValue * $media->tkpGrossCHF;
+            $media->ad_impressions = $media->adPressureValue/$clickrate*100;
+
+        }else{
+            $media->grossCHF = $media->adPressureValue / 1000 * $media->tkpGrossCHF;
+        }
         $msg = ($media->save()) ? "Insert Successed!" : "Insert Failed!";
 
         /////////////// Ads update ///////////
@@ -514,7 +583,8 @@ class MediaController extends Controller
         $resp = array(
             'status' => 'OK',
             'msg' => $msg,
-            'id' => $media->ID
+            'id' => $media->ID,
+            'media'=>$media
             );
 
         return response()->json($resp);
@@ -686,10 +756,17 @@ class MediaController extends Controller
             $selectRates = $this->getRatesKosten_Honorar($campaign->clientID);
 
             if($active_channel == 'online' || $active_channel == 'ambient'  ) {
-
+                //dd($request->all());
                 if (!empty($media->adPressureValue)) {
-                    if ($media->tkpGrossCHF != 0 && $media->grossCHF != 0 || $request->colIndex == 5)
-                        $media->grossCHF = $media->adPressureValue / 1000 * $media->tkpGrossCHF;
+                    if ($media->tkpGrossCHF != 0 && $media->grossCHF != 0 || $request->colIndex == 5){
+                        if($media->is_cpc){
+                            $media->grossCHF = $media->adPressureValue * $media->tkpGrossCHF;
+                        }else{
+                            $media->grossCHF = $media->adPressureValue / 1000 * $media->tkpGrossCHF;
+                        }
+                    }
+
+
                     if ($media->tkpGrossCHF == 0 && $request->colIndex == 6){
                         $media->tkpGrossCHF = 1000 * $media->grossCHF /  $media->adPressureValue;
                     }
