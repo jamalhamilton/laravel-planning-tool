@@ -395,11 +395,11 @@ $(document).ready(function(){
 	contentToAdd += '			<tbody>';
 	contentToAdd += '				<tr>';
 	contentToAdd += '					<td>';
-	contentToAdd += '						<label class="containerRadio" style="display: block;">Stundensatz';
+	contentToAdd += '						<label class="containerRadio containerRadio_0"  style="display: block;">Stundensatz';
 	contentToAdd += '							<input type="radio" checked="checked" name="unnamed" value="0">';
 	contentToAdd += '							<span class="checkmark"></span>';
 	contentToAdd += '						</label>';
-	contentToAdd += '						<label class="containerRadio" style="display: block;">Pauschale';
+	contentToAdd += '						<label class="containerRadio containerRadio_1" style="display: block;">Pauschale';
 	contentToAdd += '							<input type="radio" name="unnamed" value="1">';
 	contentToAdd += '							<span class="checkmark"></span>';
 	contentToAdd += '						</label>';
@@ -529,6 +529,8 @@ $(document).ready(function(){
 			}
 
 			var pCategory = currentCategory;
+            if (pCategory.find('.param-group-body .setNow').length > 0)
+                pCategory.find('.param-group-body .setNow').remove();
 
 			$('#params-list span').each(function(){
                 var neworder = pCategory.find('.param-group-body .cost-element').length + 1;
