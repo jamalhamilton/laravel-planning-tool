@@ -682,15 +682,13 @@ $(document).ready(function(){
 			$('#modal2 .custom-select .select-items').remove();
 			$('#modal2 .custom-select .select-selected').remove();
 
-			if(categoryName != 'Technische Kosten ' && categoryName != 'Media-Honorar ' && categoryName != 'Abzüge ')
+			if(categoryName != 'Technische Kosten' && categoryName != 'Media-Honorar' && categoryName != 'Abzüge')
 			{
-				//$('#indiv_form').hide();
 				initNewCustomSelect($('#modal2 .custom-select'));
-			}
-
-			else
-			{
-				$('#indiv_form').show();
+			}else{
+				$('#modal2 .custom-select select').html('');
+				$('#modal2 .custom-select .select-items').remove();
+				$('#modal2 .custom-select .select-selected').remove();
 			}
 
 			$('#modal2').modal({
@@ -863,7 +861,7 @@ $(document).ready(function(){
 
 			if(categoryName != 'Technische Kosten' && categoryName != 'Media-Honorar' && categoryName != 'Abzüge')
 			{
-			initNewCustomSelect($('#modal2 .custom-select'));
+				initNewCustomSelect($('#modal2 .custom-select'));
 			}else{
 				$('#modal2 .custom-select select').html('');
 				$('#modal2 .custom-select .select-items').remove();

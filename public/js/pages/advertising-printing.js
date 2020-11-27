@@ -106,10 +106,7 @@ $("body").on('blur','td input',function (){
     $(this).val(numberWithCommas(number));
 
     var oldTotal = $($(this).parents('tr').children()[2]).children().val();
-    if(oldTotal == 'tbd'){
-        $(this).val('tbd');
-        return;
-    }
+
 
     var thiz;
     mediaID = $(this).parents('tr').data('id');
@@ -127,8 +124,10 @@ $("body").on('blur','td input',function (){
             val = val.replaceAll("\'", "");
         adweeksum += parseFloat(val);
     }
-    
-    $($(this).parents('tr').children()[2]).children().val(numberWithCommas(adweeksum));
+    if(oldTotal != 'tbd'){
+        $($(this).parents('tr').children()[2]).children().val(numberWithCommas(adweeksum));
+    }
+
 
     var adPrintSum = $($(this).parents('tr').children()[1]).children().val();
 

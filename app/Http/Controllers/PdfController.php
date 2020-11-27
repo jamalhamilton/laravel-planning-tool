@@ -768,7 +768,7 @@ class PdfController extends Controller
 
 
                 $row = array($groupNm,
-                    $this->prettyPrint($value),
+                    number_format($value,2, ".", "'"),
                     $percent,
                     $subTotal,
                     $descript
@@ -785,7 +785,7 @@ class PdfController extends Controller
                 $service_percentage = number_format(100 * floatval($service_total) / $total, 2);
             }
 
-            array_push($rightTable, array('Total Servicekosten exkl. MWST', $this->prettyPrint($service_total), $service_percentage,'',[]));
+            array_push($rightTable, array('Total Servicekosten exkl. MWST', number_format($service_total,2, ".", "'"), $service_percentage,'',[]));
             array_push($rightTable, array('Total Media- & Servicekosten exkl. MWST.', number_format($total, 2, ".", "'"), '100.00','',[]));
             //dd($rightTable);
             $diff = sizeof($rightTable) - sizeof($leftTable) - 1;
