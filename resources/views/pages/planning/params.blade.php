@@ -443,11 +443,11 @@
 
 											<ul class="totalCostUl">
 												<li>{{trans('language.costTotal')}}</li>
-												<li class="textRight" >{{$totalVal}}</li>
+												<li class="textRight" >{{number_format($totalVal,2,".","'")}}</li>
 											</ul>
 
 											<div class="clearfix"></div>
-											<div class="param-body" id="sortable_groups_no_affect">
+											<div class="param-body" id="deduct_section">
 												<!--<div class="column sortable">-->
 												<?php $totalDeduct = 0; ?>
 												@foreach ($deducts as $parameter)
@@ -514,7 +514,7 @@
 																					</table>
 																				</div>
 																				<div class="calc-item colTotal"  style="width: 16%">
-																					<input type = "text" class="lineField input-proxi elem-calc-value" placeholder = "0" readonly="" value="{{$costElem['calcValue']}}">
+																					<input type = "text" class="lineField input-abzuge elem-calc-value" placeholder = "0" readonly="" value="{{$costElem['calcValue']}}">
 
 																				</div>
 
@@ -534,12 +534,14 @@
 														</div>
 													</div>
 												@endforeach
+												<div class="clearfix"></div>
+												<ul class="totalCostUl_deduct">
+													<li>Abzüge Total</li>
+													<li class="textRight" >{{number_format($totalDeduct,2,".","'")}}</li>
+												</ul>
 											</div>
 
-											<ul class="totalCostUl_deduct">
-												<li>Abzüge Total</li>
-												<li class="textRight" >{{$totalDeduct}}</li>
-											</ul>
+
 										</div>
 										<div class="btnCenterGroup" id="online-btn-group">
 											<button type="button" class="btn2" id="online-edit-cancel">{{trans('language.Cancel')}}</button>

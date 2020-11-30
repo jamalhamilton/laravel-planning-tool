@@ -72,6 +72,11 @@ function numberFormat(){
         var val = $(this).val().replace(/\'/g,"");
         $(this).val(numberWithCommas(val));
     });
+    $('.lineField.input-abzuge.elem-calc-value').each(function (index, value){
+
+        var val = $(this).val().replace(/\'/g,"");
+        $(this).val(numberWithCommas(val));
+    });
 
 }
 function numberRemoveFormat(){
@@ -81,6 +86,11 @@ function numberRemoveFormat(){
         $(this).val(val);
     });
     $('.lineField.input-proxi.elem-calc-value').each(function (index, value){
+
+        var val = $(this).val().replace(/\'/g,"");
+        $(this).val(val);
+    });
+    $('.lineField.input-abzuge.elem-calc-value').each(function (index, value){
 
         var val = $(this).val().replace(/\'/g,"");
         $(this).val(val);
@@ -574,6 +584,9 @@ $(document).ready(function(){
 					$new_element.find('.containerRadio_1 input').attr('checked',true);
 					$new_element.find('.containerRadio_0').remove();
 					var obj = $new_element.find('.containerRadio');
+
+					$new_element.find('.input-proxi').removeClass('input-proxi').addClass('.input-abzuge');
+
 					$(obj).parent().next().hide();
 					$(obj).parent().next().next().hide();
 					$(obj).parent().next().next().next().hide();
@@ -763,6 +776,7 @@ $(document).ready(function(){
 				if (data['status'] == 'success') {
 
 					calculateTotalCost();
+                    calculateDeductCost();
 				}
 			},
 			error: function(err) {
@@ -936,11 +950,14 @@ $(document).ready(function(){
 		$(this).parents('.calculationTable').parent('.calc-item').next().children('input').val(calcVal);
 	
 		calculateTotalCost();
+        calculateDeductCost();
 	} );
 
 	$('#Online').on('input propertychange paste', 'input.elem-calc-value', function(e){ // 'keyup change'
 		calculateTotalCost();
-	} ); 
+        calculateDeductCost();
+	} );
+
 
 	$('#Online').on('change', '.custom-select select',  function() {
 		var groupType = $(this).parents('.param-group').data('type');
@@ -957,6 +974,7 @@ $(document).ready(function(){
 		$(this).parents('.calculationTable').parent('.calc-item').next().children('input').val(calcVal);
 	
 		calculateTotalCost();
+        calculateDeductCost();
 	});
 
 	
@@ -1048,6 +1066,18 @@ function calculateTotalCost() {
 
 	$('ul.totalCostUl > li.textRight').text(numberWithCommas(totalCost.toFixed(2)));
 }
+// Calculate total cost
+function calculateDeductCost() {
+	var totalCost = 0.0;
+
+	$('#deduct_section .input-abzuge').each(function() {
+
+		totalCost += parseFloat($(this).val().replace(/\'/g,""));
+	});
+	console.log("calculateDeductCost",totalCost);
+
+	$('#deduct_section  li.textRight').text(numberWithCommas(totalCost.toFixed(2)));
+}
 
 function getMaxID(radioName) {
 	var idx = 0;
@@ -1087,6 +1117,7 @@ function calculateHonorar(){
     $("#Honorar_auf_Media").parents('.calculationTable').parent('.calc-item').next().children('input').val(calcVal);
 
     calculateTotalCost();
+    calculateDeductCost();
 
     numberFormat();
 
@@ -1114,6 +1145,7 @@ function calculateTrafficKosten(){
 	$("#Traffic-Kosten").parents('.calculationTable').parent('.calc-item').next().children('input').val(calcVal);
 
 	calculateTotalCost();
+    calculateDeductCost();
 
 	numberFormat();
 

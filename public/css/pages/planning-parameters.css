@@ -88,6 +88,17 @@ input[type="text"]:disabled {
     text-align: right;
 }
 
+#Online .input-abzuge {
+	border: 1px #bdcad9 solid;
+	height: 33px;
+	padding: 5px;
+    text-align: right;
+}
+#Online .input-abzuge[readonly] {
+    border: none;
+    color: #5C7C9D;
+}
+
 .input-warning-label::before, .input-warning-label::after {
 	content: '';
     position: absolute;
