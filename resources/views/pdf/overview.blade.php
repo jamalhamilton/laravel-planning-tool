@@ -294,14 +294,14 @@
             <tr style="">
                 <td style="border-left: none !important;" class="tg-0pky br_border">{{ $k }}</td>
                 <td style="border-left: none !important;" class="tg-0pky br_border"></td>
-                <td style="border-left: none !important; text-align:right;" class="tg-0pky br_border">{{ $cell }}</td>
+                <td style="border-left: none !important; text-align:right;" class="tg-0pky br_border">{{ number_format($cell,2,'.',"'") }}</td>
                 <td style="border-left: none !important;" class="tg-0pky br_border"></td>
             </tr>
         @endforeach
         <tr class="tr_highlight">
             <td class="tg-0pky"><strong>Total Abzüge</strong></td>
             <td class="tg-0pky"><strong></strong></td>
-            <td class="tg-0pky text-right"><strong>{{$deductsCost['subtotal']}}</strong></td>
+            <td class="tg-0pky text-right"><strong>{{ number_format($deductsCost['subtotal'],2,'.',"'")}}</strong></td>
             <td class="tg-0pky text-right"><strong></strong></td>
         </tr>
     </table>
