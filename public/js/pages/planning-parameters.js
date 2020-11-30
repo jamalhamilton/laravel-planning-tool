@@ -585,7 +585,7 @@ $(document).ready(function(){
 					$new_element.find('.containerRadio_0').remove();
 					var obj = $new_element.find('.containerRadio');
 
-					$new_element.find('.input-proxi').removeClass('input-proxi').addClass('.input-abzuge');
+					$new_element.find('.input-proxi').removeClass('input-proxi').addClass('input-abzuge');
 
 					$(obj).parent().next().hide();
 					$(obj).parent().next().next().hide();
