@@ -48,7 +48,7 @@
     .tg  {border-collapse:collapse;border-spacing:0;border-color:#DAE6EB;}
     .tg td{
         font-size:70px;
-        padding:50px 50px;
+        padding:30px 50px;
         border-style:none;
         border-top-style: solid;
         border-width: 5px;
