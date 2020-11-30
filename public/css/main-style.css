@@ -645,9 +645,15 @@ strong{color: #5C7C9D;}
 .tabFooter{margin-top: 50px; margin-bottom: 20px; padding-top: 0px !important;}
 .tabFooter .btn2{height: 50px;}
 .tabFooter button{margin: 0px 5px;}
+
 .totalCostUl{background: #c0cddb; border-radius: 5px;width: 100%; float: left; clear: both; margin-bottom: 30px;}
 .totalCostUl li{width: 50%; float: left; font-size: 16px; font-weight: 700; padding: 8px 10px; color: #fff; text-align: left;}
 .totalCostUl .textRight{text-align: right;}
+
+.totalCostUl_deduct{background: #c0cddb; border-radius: 5px;width: 100%; float: left; clear: both; margin-bottom: 30px;}
+.totalCostUl_deduct li{width: 50%; float: left; font-size: 16px; font-weight: 700; padding: 8px 10px; color: #fff; text-align: left;}
+.totalCostUl_deduct .textRight{text-align: right;}
+
 .widewrap{width: 100%; margin: 0 auto; padding: 0 30px;}
 .wrap720{width: 100%; max-width: 720px; margin: 0 auto;}
 .textCenter{text-align: center;}

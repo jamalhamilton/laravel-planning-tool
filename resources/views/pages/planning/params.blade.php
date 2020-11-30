@@ -152,284 +152,284 @@
 
 																		@if ($activetab == 'online' )
 																			<div data-id="{{$costElem['paramID']}}" data-group-id="{{$parameter['ID']}}" data-service-id="{{$costElem['itemID']}}" class="cost-element {{empty($costElem['paramID']) ? 'new-element' : 'org-element'}}"  data-sort-order="{{$costElem['sortOrder']}}"style="width: 100%; position: relative">
-																			<div class="calc-item" style="width: 30%;">
-																				{{$costElem['itemName']}}
-																			</div>
-																			<div class="calc-item" style="width: 55%;">
-																				<table class="calculationTable">
-																					<tbody>
-																					<tr>
-																						@if ($costElem['itemName'] == 'Traffic-Kosten')
-																							<td>
-																								<label class="containerRadio" id="AdlmpsTraffic" style="display: block !important;">
-																									CHF/1'000 Adlmps
-																									<input type="radio" checked name="radio{{$costElem['itemID']}}" value="0">
-																									<span class="checkmark"></span>
-																								</label>
-																							</td>
-																							<td ><input type="text" id = "Traffic-Kosten" placeholder="0" class="lineField elem-value" value="{{$adP}}" readonly></td>
-																							<td ><i class="icon_multiplication"></i></td>
-																							<td >
-																								<div class="custom-select tdSelectField disabled" value="1">
-																									<select>
-																										@foreach ($rates[$costElem['itemType']] as $rate)
-																											@if (empty($rate->value) || $rate->value == 0)
-																												<option value="{{$rate->defaultValue}}" data-id="-1" data-service-id="{{$rate->serviceID}}">{{$rate->defaultValue}} {{$chfType}}</option>
-																											@else
-																												<option value="{{$rate->value}}" data-id="{{$rate->ID}}" {{($rate->ID == $costElem['csID']) ? 'selected' : ''}}>{{$rate->value}} {{$chfType}}</option>
-																											@endif
-																										@endforeach
-																									</select>
-																								</div><!--custom-select-->
-																							</td>
-																							<td ><i class="icon_equal"></i></td>
-
-																						@elseif ($costElem['itemName'] == 'Maintenance')
-																							<td>
-																								<label class="containerRadio">
-																									{{trans('language.Pauschale')}}
-																									<input type="radio" checked="checked" name="radio{{$costElem['itemID']}}" value="1">
-																									<span class="checkmark"></span>
-																								</label>
-																							</td>
-
-																						@elseif ($costElem['itemName'] == 'Honorar auf Media N/N')
-																							<td>
-																								<label class="containerRadio">
-																									Mediakosten
-																									<input type="radio" checked="checked" name="radio{{$costElem['itemID']}}" value="0">
-
-																									<span class="checkmark"></span>
-																								</label>
-																							</td>
-
-																							<td ><input type="text" id="Honorar_auf_Media" placeholder="0" class="lineField elem-value" value="{{$nnInChf}}" readonly></td>
-																							<td ><i class="icon_multiplication"></i></td>
-																							<td >
-																								<div class="custom-select tdSelectField disabled" value="1">
-																									<select>
-																										@foreach ($rates[$costElem['itemType']] as $rate)
-																											@if (empty($rate->value) || $rate->value == 0)
-																												<option value="{{$rate->defaultValue}}" data-id="-1" data-service-id="{{$rate->serviceID}}">{{$rate->defaultValue}} {{$chfType}}</option>
-																											@else
-																												<option value="{{$rate->value}}" data-id="{{$rate->ID}}" {{($rate->ID == $costElem['csID']) ? 'selected' : ''}}>{{$rate->value}} {{$chfType}}</option>
-																											@endif
-																										@endforeach
-																									</select>
-																								</div><!--custom-select-->
-																							</td>
-																							<td ><i class="icon_equal"></i></td>
-
-																						@elseif ($costElem['itemName'] == 'Zusatzhonorar')
-																							<td>
-
-																								<label class="containerRadio">
-																									{{trans('language.Pauschale')}}
-																									<input type="radio" checked="checked" name="radio{{$costElem['itemID']}}" value="1">
-																									<span class="checkmark"></span>
-																								</label>
-																							</td>
-
-																						@else
-																							<td>
-																								<label class="containerRadio">
-																									Stundensatz
-																									@if ($costElem['isFlatrate'])
-																										<input type="radio" name="radio{{$costElem['itemID']}}" value="0">
-																									@else
-																										<input type="radio" checked="checked" name="radio{{$costElem['itemID']}}" value="0">
-																									@endif
-																									<span class="checkmark"></span>
-																								</label>
-																								<label class="containerRadio">
-																									{{trans('language.Pauschale')}}
-																									@if ($costElem['isFlatrate'])
-																										<input type="radio" checked="checked" name="radio{{$costElem['itemID']}}" value="1">
-																									@else
-																										<input type="radio" name="radio{{$costElem['itemID']}}" value="1">
-																									@endif
-																									<span class="checkmark"></span>
-																								</label>
-																							</td>
-
-																							<td style="{{$costElem['isFlatrate'] ? 'display:none;' : ''}}"><input type="text" placeholder="0" class="lineField elem-value" value="{{$costElem['itemValue']}}" readonly></td>
-																							<td style="{{$costElem['isFlatrate'] ? 'display:none;' : ''}}"><i class="icon_multiplication"></i></td>
-																							<td style="{{$costElem['isFlatrate'] ? 'display:none;' : ''}}">
-																								<div class="custom-select tdSelectField disabled">
-																									<select>
-																										@foreach ($rates[$costElem['itemType']] as $rate)
-																											@if (empty($rate->value) || $rate->value == 0)
-																												<option value="{{$rate->defaultValue}}" data-id="-1" data-service-id="{{$rate->serviceID}}">{{$rate->defaultValue}} {{$chfType}}</option>
-																											@else
-																												<option value="{{$rate->value}}" data-id="{{$rate->ID}}" {{($rate->ID == $costElem['csID']) ? 'selected' : ''}}>{{$rate->value}} {{$chfType}}</option>
-																											@endif
-																										@endforeach
-																									</select>
-																								</div><!--custom-select-->
-																							</td>
-																							<td style="{{$costElem['isFlatrate'] ? 'display:none;' : ''}}"><i class="icon_equal"></i></td>
-
-																						@endif
-
-
-																					</tr>
-																					</tbody>
-																				</table>
-																			</div>
-																			<div class="calc-item colTotal"  style="width: 16%">
-																				<input type = "text" class="lineField input-proxi elem-calc-value" placeholder = "0" readonly="" value="{{$costElem['calcValue']}}">
-
-																			</div>
-
-																			<div class="calc-item trashBtn_Item_Div" style="display: none;">
-																				<button class="trashBtn_item"  style="<?php if ($costElem['isConstant'] == 1) echo "visibility:hidden;" ?>"><i class="fa fa-trash"></i></button>
-																			</div>
-																			<div style="display: inline-block;position: absolute; top: 25px; right: 0px;">
-																				<button class="SubUpSortBtn" style="display:none;float: left"><i class="fa fa-trash"></i></button><button class="SubDownSortBtn" style="display:none;float: left"><i class="fa fa-trash"></i></button>
-																			</div>
-
-																			<div class="clearfix"></div>
-																		</div>
-																		@elseif ($costElem['itemName'] != 'Setup AdServer' )
-                                                                                <div data-id="{{$costElem['paramID']}}" data-group-id="{{$parameter['ID']}}" data-service-id="{{$costElem['itemID']}}" class="cost-element {{empty($costElem['paramID']) ? 'new-element' : 'org-element'}}"  data-sort-order="{{$costElem['sortOrder']}}"style="width: 100%; position: relative">
-																					<div class="calc-item" style="width: 30%;">
-																						{{$costElem['itemName']}}
-																					</div>
-																					<div class="calc-item" style="width: 55%;">
-																						<table class="calculationTable">
-																							<tbody>
-																							<tr>
-																								@if ($costElem['itemName'] == 'Traffic-Kosten')
-																									<td>
-																										<label class="containerRadio" id="AdlmpsTraffic" style="display: block !important;">
-																											CHF/1'000 Adlmps
-																											<input type="radio" checked name="radio{{$costElem['itemID']}}" value="0">
-																											<span class="checkmark"></span>
-																										</label>
-																									</td>
-																									<td ><input type="text" id = "Traffic-Kosten" placeholder="0" class="lineField elem-value" value="{{$adP}}" readonly></td>
-																									<td ><i class="icon_multiplication"></i></td>
-																									<td >
-																										<div class="custom-select tdSelectField disabled" value="1">
-																											<select>
-																												@foreach ($rates[$costElem['itemType']] as $rate)
-																													@if (empty($rate->value) || $rate->value == 0)
-																														<option value="{{$rate->defaultValue}}" data-id="-1" data-service-id="{{$rate->serviceID}}">{{$rate->defaultValue}} {{$chfType}}</option>
-																													@else
-																														<option value="{{$rate->value}}" data-id="{{$rate->ID}}" {{($rate->ID == $costElem['csID']) ? 'selected' : ''}}>{{$rate->value}} {{$chfType}}</option>
-																													@endif
-																												@endforeach
-																											</select>
-																										</div><!--custom-select-->
-																									</td>
-																									<td ><i class="icon_equal"></i></td>
-
-																								@elseif ($costElem['itemName'] == 'Maintenance')
-																									<td>
-																										<label class="containerRadio">
-																											{{trans('language.Pauschale')}}
-																											<input type="radio" checked="checked" name="radio{{$costElem['itemID']}}" value="1">
-																											<span class="checkmark"></span>
-																										</label>
-																									</td>
-
-																								@elseif ($costElem['itemName'] == 'Honorar auf Media N/N')
-																									<td>
-																										<label class="containerRadio">
-																											Mediakosten
-																											<input type="radio" checked="checked" name="radio{{$costElem['itemID']}}" value="0">
-
-																											<span class="checkmark"></span>
-																										</label>
-																									</td>
-
-																									<td ><input type="text" id="Honorar_auf_Media" placeholder="0" class="lineField elem-value" value="{{$nnInChf}}" readonly></td>
-																									<td ><i class="icon_multiplication"></i></td>
-																									<td >
-																										<div class="custom-select tdSelectField disabled" value="1">
-																											<select>
-																												@foreach ($rates[$costElem['itemType']] as $rate)
-																													@if (empty($rate->value) || $rate->value == 0)
-																														<option value="{{$rate->defaultValue}}" data-id="-1" data-service-id="{{$rate->serviceID}}">{{$rate->defaultValue}} {{$chfType}}</option>
-																													@else
-																														<option value="{{$rate->value}}" data-id="{{$rate->ID}}" {{($rate->ID == $costElem['csID']) ? 'selected' : ''}}>{{$rate->value}} {{$chfType}}</option>
-																													@endif
-																												@endforeach
-																											</select>
-																										</div><!--custom-select-->
-																									</td>
-																									<td ><i class="icon_equal"></i></td>
-
-																								@elseif ($costElem['itemName'] == 'Zusatzhonorar')
-																									<td>
-
-																										<label class="containerRadio">
-																											{{trans('language.Pauschale')}}
-																											<input type="radio" checked="checked" name="radio{{$costElem['itemID']}}" value="1">
-																											<span class="checkmark"></span>
-																										</label>
-																									</td>
-
-																								@else
-																									<td>
-																										<label class="containerRadio">
-																											Stundensatz
-																											@if ($costElem['isFlatrate'])
-																												<input type="radio" name="radio{{$costElem['itemID']}}" value="0">
-																											@else
-																												<input type="radio" checked="checked" name="radio{{$costElem['itemID']}}" value="0">
-																											@endif
-																											<span class="checkmark"></span>
-																										</label>
-																										<label class="containerRadio">
-																											{{trans('language.Pauschale')}}
-																											@if ($costElem['isFlatrate'])
-																												<input type="radio" checked="checked" name="radio{{$costElem['itemID']}}" value="1">
-																											@else
-																												<input type="radio" name="radio{{$costElem['itemID']}}" value="1">
-																											@endif
-																											<span class="checkmark"></span>
-																										</label>
-																									</td>
-
-																									<td style="{{$costElem['isFlatrate'] ? 'display:none;' : ''}}"><input type="text" placeholder="0" class="lineField elem-value" value="{{$costElem['itemValue']}}" readonly></td>
-																									<td style="{{$costElem['isFlatrate'] ? 'display:none;' : ''}}"><i class="icon_multiplication"></i></td>
-																									<td style="{{$costElem['isFlatrate'] ? 'display:none;' : ''}}">
-																										<div class="custom-select tdSelectField disabled">
-																											<select>
-																												@foreach ($rates[$costElem['itemType']] as $rate)
-																													@if (empty($rate->value) || $rate->value == 0)
-																														<option value="{{$rate->defaultValue}}" data-id="-1" data-service-id="{{$rate->serviceID}}">{{$rate->defaultValue}} {{$chfType}}</option>
-																													@else
-																														<option value="{{$rate->value}}" data-id="{{$rate->ID}}" {{($rate->ID == $costElem['csID']) ? 'selected' : ''}}>{{$rate->value}} {{$chfType}}</option>
-																													@endif
-																												@endforeach
-																											</select>
-																										</div><!--custom-select-->
-																									</td>
-																									<td style="{{$costElem['isFlatrate'] ? 'display:none;' : ''}}"><i class="icon_equal"></i></td>
-
-																								@endif
-
-
-																							</tr>
-																							</tbody>
-																						</table>
-																					</div>
-																					<div class="calc-item colTotal"  style="width: 16%">
-																						<input type = "text" class="lineField input-proxi elem-calc-value" placeholder = "0" readonly="" value="{{$costElem['calcValue']}}">
-
-																					</div>
-
-																					<div class="calc-item trashBtn_Item_Div" style="display: none;">
-																						<button class="trashBtn_item"  style="<?php if ($costElem['isConstant'] == 1) echo "visibility:hidden;" ?>"><i class="fa fa-trash"></i></button>
-																					</div>
-																					<div style="display: inline-block;position: absolute; top: 25px; right: 0px;">
-																						<button class="SubUpSortBtn" style="display:none;float: left"><i class="fa fa-trash"></i></button><button class="SubDownSortBtn" style="display:none;float: left"><i class="fa fa-trash"></i></button>
-																					</div>
-
-																					<div class="clearfix"></div>
+																				<div class="calc-item" style="width: 30%;">
+																					{{$costElem['itemName']}}
 																				</div>
+																				<div class="calc-item" style="width: 55%;">
+																					<table class="calculationTable">
+																						<tbody>
+																						<tr>
+																							@if ($costElem['itemName'] == 'Traffic-Kosten')
+																								<td>
+																									<label class="containerRadio" id="AdlmpsTraffic" style="display: block !important;">
+																										CHF/1'000 Adlmps
+																										<input type="radio" checked name="radio{{$costElem['itemID']}}" value="0">
+																										<span class="checkmark"></span>
+																									</label>
+																								</td>
+																								<td ><input type="text" id = "Traffic-Kosten" placeholder="0" class="lineField elem-value" value="{{$adP}}" readonly></td>
+																								<td ><i class="icon_multiplication"></i></td>
+																								<td >
+																									<div class="custom-select tdSelectField disabled" value="1">
+																										<select>
+																											@foreach ($rates[$costElem['itemType']] as $rate)
+																												@if (empty($rate->value) || $rate->value == 0)
+																													<option value="{{$rate->defaultValue}}" data-id="-1" data-service-id="{{$rate->serviceID}}">{{$rate->defaultValue}} {{$chfType}}</option>
+																												@else
+																													<option value="{{$rate->value}}" data-id="{{$rate->ID}}" {{($rate->ID == $costElem['csID']) ? 'selected' : ''}}>{{$rate->value}} {{$chfType}}</option>
+																												@endif
+																											@endforeach
+																										</select>
+																									</div><!--custom-select-->
+																								</td>
+																								<td ><i class="icon_equal"></i></td>
+
+																							@elseif ($costElem['itemName'] == 'Maintenance')
+																								<td>
+																									<label class="containerRadio">
+																										{{trans('language.Pauschale')}}
+																										<input type="radio" checked="checked" name="radio{{$costElem['itemID']}}" value="1">
+																										<span class="checkmark"></span>
+																									</label>
+																								</td>
+
+																							@elseif ($costElem['itemName'] == 'Honorar auf Media N/N')
+																								<td>
+																									<label class="containerRadio">
+																										Mediakosten
+																										<input type="radio" checked="checked" name="radio{{$costElem['itemID']}}" value="0">
+
+																										<span class="checkmark"></span>
+																									</label>
+																								</td>
+
+																								<td ><input type="text" id="Honorar_auf_Media" placeholder="0" class="lineField elem-value" value="{{$nnInChf}}" readonly></td>
+																								<td ><i class="icon_multiplication"></i></td>
+																								<td >
+																									<div class="custom-select tdSelectField disabled" value="1">
+																										<select>
+																											@foreach ($rates[$costElem['itemType']] as $rate)
+																												@if (empty($rate->value) || $rate->value == 0)
+																													<option value="{{$rate->defaultValue}}" data-id="-1" data-service-id="{{$rate->serviceID}}">{{$rate->defaultValue}} {{$chfType}}</option>
+																												@else
+																													<option value="{{$rate->value}}" data-id="{{$rate->ID}}" {{($rate->ID == $costElem['csID']) ? 'selected' : ''}}>{{$rate->value}} {{$chfType}}</option>
+																												@endif
+																											@endforeach
+																										</select>
+																									</div><!--custom-select-->
+																								</td>
+																								<td ><i class="icon_equal"></i></td>
+
+																							@elseif ($costElem['itemName'] == 'Zusatzhonorar')
+																								<td>
+
+																									<label class="containerRadio">
+																										{{trans('language.Pauschale')}}
+																										<input type="radio" checked="checked" name="radio{{$costElem['itemID']}}" value="1">
+																										<span class="checkmark"></span>
+																									</label>
+																								</td>
+
+																							@else
+																								<td>
+																									<label class="containerRadio">
+																										Stundensatz
+																										@if ($costElem['isFlatrate'])
+																											<input type="radio" name="radio{{$costElem['itemID']}}" value="0">
+																										@else
+																											<input type="radio" checked="checked" name="radio{{$costElem['itemID']}}" value="0">
+																										@endif
+																										<span class="checkmark"></span>
+																									</label>
+																									<label class="containerRadio">
+																										{{trans('language.Pauschale')}}
+																										@if ($costElem['isFlatrate'])
+																											<input type="radio" checked="checked" name="radio{{$costElem['itemID']}}" value="1">
+																										@else
+																											<input type="radio" name="radio{{$costElem['itemID']}}" value="1">
+																										@endif
+																										<span class="checkmark"></span>
+																									</label>
+																								</td>
+
+																								<td style="{{$costElem['isFlatrate'] ? 'display:none;' : ''}}"><input type="text" placeholder="0" class="lineField elem-value" value="{{$costElem['itemValue']}}" readonly></td>
+																								<td style="{{$costElem['isFlatrate'] ? 'display:none;' : ''}}"><i class="icon_multiplication"></i></td>
+																								<td style="{{$costElem['isFlatrate'] ? 'display:none;' : ''}}">
+																									<div class="custom-select tdSelectField disabled">
+																										<select>
+																											@foreach ($rates[$costElem['itemType']] as $rate)
+																												@if (empty($rate->value) || $rate->value == 0)
+																													<option value="{{$rate->defaultValue}}" data-id="-1" data-service-id="{{$rate->serviceID}}">{{$rate->defaultValue}} {{$chfType}}</option>
+																												@else
+																													<option value="{{$rate->value}}" data-id="{{$rate->ID}}" {{($rate->ID == $costElem['csID']) ? 'selected' : ''}}>{{$rate->value}} {{$chfType}}</option>
+																												@endif
+																											@endforeach
+																										</select>
+																									</div><!--custom-select-->
+																								</td>
+																								<td style="{{$costElem['isFlatrate'] ? 'display:none;' : ''}}"><i class="icon_equal"></i></td>
+
+																							@endif
+
+
+																						</tr>
+																						</tbody>
+																					</table>
+																				</div>
+																				<div class="calc-item colTotal"  style="width: 16%">
+																					<input type = "text" class="lineField input-proxi elem-calc-value" placeholder = "0" readonly="" value="{{$costElem['calcValue']}}">
+
+																				</div>
+
+																				<div class="calc-item trashBtn_Item_Div" style="display: none;">
+																					<button class="trashBtn_item"  style="<?php if ($costElem['isConstant'] == 1) echo "visibility:hidden;" ?>"><i class="fa fa-trash"></i></button>
+																				</div>
+																				<div style="display: inline-block;position: absolute; top: 25px; right: 0px;">
+																					<button class="SubUpSortBtn" style="display:none;float: left"><i class="fa fa-trash"></i></button><button class="SubDownSortBtn" style="display:none;float: left"><i class="fa fa-trash"></i></button>
+																				</div>
+
+																				<div class="clearfix"></div>
+																			</div>
+																		@elseif ($costElem['itemName'] != 'Setup AdServer' )
+																			<div data-id="{{$costElem['paramID']}}" data-group-id="{{$parameter['ID']}}" data-service-id="{{$costElem['itemID']}}" class="cost-element {{empty($costElem['paramID']) ? 'new-element' : 'org-element'}}"  data-sort-order="{{$costElem['sortOrder']}}"style="width: 100%; position: relative">
+																				<div class="calc-item" style="width: 30%;">
+																					{{$costElem['itemName']}}
+																				</div>
+																				<div class="calc-item" style="width: 55%;">
+																					<table class="calculationTable">
+																						<tbody>
+																						<tr>
+																							@if ($costElem['itemName'] == 'Traffic-Kosten')
+																								<td>
+																									<label class="containerRadio" id="AdlmpsTraffic" style="display: block !important;">
+																										CHF/1'000 Adlmps
+																										<input type="radio" checked name="radio{{$costElem['itemID']}}" value="0">
+																										<span class="checkmark"></span>
+																									</label>
+																								</td>
+																								<td ><input type="text" id = "Traffic-Kosten" placeholder="0" class="lineField elem-value" value="{{$adP}}" readonly></td>
+																								<td ><i class="icon_multiplication"></i></td>
+																								<td >
+																									<div class="custom-select tdSelectField disabled" value="1">
+																										<select>
+																											@foreach ($rates[$costElem['itemType']] as $rate)
+																												@if (empty($rate->value) || $rate->value == 0)
+																													<option value="{{$rate->defaultValue}}" data-id="-1" data-service-id="{{$rate->serviceID}}">{{$rate->defaultValue}} {{$chfType}}</option>
+																												@else
+																													<option value="{{$rate->value}}" data-id="{{$rate->ID}}" {{($rate->ID == $costElem['csID']) ? 'selected' : ''}}>{{$rate->value}} {{$chfType}}</option>
+																												@endif
+																											@endforeach
+																										</select>
+																									</div><!--custom-select-->
+																								</td>
+																								<td ><i class="icon_equal"></i></td>
+
+																							@elseif ($costElem['itemName'] == 'Maintenance')
+																								<td>
+																									<label class="containerRadio">
+																										{{trans('language.Pauschale')}}
+																										<input type="radio" checked="checked" name="radio{{$costElem['itemID']}}" value="1">
+																										<span class="checkmark"></span>
+																									</label>
+																								</td>
+
+																							@elseif ($costElem['itemName'] == 'Honorar auf Media N/N')
+																								<td>
+																									<label class="containerRadio">
+																										Mediakosten
+																										<input type="radio" checked="checked" name="radio{{$costElem['itemID']}}" value="0">
+
+																										<span class="checkmark"></span>
+																									</label>
+																								</td>
+
+																								<td ><input type="text" id="Honorar_auf_Media" placeholder="0" class="lineField elem-value" value="{{$nnInChf}}" readonly></td>
+																								<td ><i class="icon_multiplication"></i></td>
+																								<td >
+																									<div class="custom-select tdSelectField disabled" value="1">
+																										<select>
+																											@foreach ($rates[$costElem['itemType']] as $rate)
+																												@if (empty($rate->value) || $rate->value == 0)
+																													<option value="{{$rate->defaultValue}}" data-id="-1" data-service-id="{{$rate->serviceID}}">{{$rate->defaultValue}} {{$chfType}}</option>
+																												@else
+																													<option value="{{$rate->value}}" data-id="{{$rate->ID}}" {{($rate->ID == $costElem['csID']) ? 'selected' : ''}}>{{$rate->value}} {{$chfType}}</option>
+																												@endif
+																											@endforeach
+																										</select>
+																									</div><!--custom-select-->
+																								</td>
+																								<td ><i class="icon_equal"></i></td>
+
+																							@elseif ($costElem['itemName'] == 'Zusatzhonorar')
+																								<td>
+
+																									<label class="containerRadio">
+																										{{trans('language.Pauschale')}}
+																										<input type="radio" checked="checked" name="radio{{$costElem['itemID']}}" value="1">
+																										<span class="checkmark"></span>
+																									</label>
+																								</td>
+
+																							@else
+																								<td>
+																									<label class="containerRadio">
+																										Stundensatz
+																										@if ($costElem['isFlatrate'])
+																											<input type="radio" name="radio{{$costElem['itemID']}}" value="0">
+																										@else
+																											<input type="radio" checked="checked" name="radio{{$costElem['itemID']}}" value="0">
+																										@endif
+																										<span class="checkmark"></span>
+																									</label>
+																									<label class="containerRadio">
+																										{{trans('language.Pauschale')}}
+																										@if ($costElem['isFlatrate'])
+																											<input type="radio" checked="checked" name="radio{{$costElem['itemID']}}" value="1">
+																										@else
+																											<input type="radio" name="radio{{$costElem['itemID']}}" value="1">
+																										@endif
+																										<span class="checkmark"></span>
+																									</label>
+																								</td>
+
+																								<td style="{{$costElem['isFlatrate'] ? 'display:none;' : ''}}"><input type="text" placeholder="0" class="lineField elem-value" value="{{$costElem['itemValue']}}" readonly></td>
+																								<td style="{{$costElem['isFlatrate'] ? 'display:none;' : ''}}"><i class="icon_multiplication"></i></td>
+																								<td style="{{$costElem['isFlatrate'] ? 'display:none;' : ''}}">
+																									<div class="custom-select tdSelectField disabled">
+																										<select>
+																											@foreach ($rates[$costElem['itemType']] as $rate)
+																												@if (empty($rate->value) || $rate->value == 0)
+																													<option value="{{$rate->defaultValue}}" data-id="-1" data-service-id="{{$rate->serviceID}}">{{$rate->defaultValue}} {{$chfType}}</option>
+																												@else
+																													<option value="{{$rate->value}}" data-id="{{$rate->ID}}" {{($rate->ID == $costElem['csID']) ? 'selected' : ''}}>{{$rate->value}} {{$chfType}}</option>
+																												@endif
+																											@endforeach
+																										</select>
+																									</div><!--custom-select-->
+																								</td>
+																								<td style="{{$costElem['isFlatrate'] ? 'display:none;' : ''}}"><i class="icon_equal"></i></td>
+
+																							@endif
+
+
+																						</tr>
+																						</tbody>
+																					</table>
+																				</div>
+																				<div class="calc-item colTotal"  style="width: 16%">
+																					<input type = "text" class="lineField input-proxi elem-calc-value" placeholder = "0" readonly="" value="{{$costElem['calcValue']}}">
+
+																				</div>
+
+																				<div class="calc-item trashBtn_Item_Div" style="display: none;">
+																					<button class="trashBtn_item"  style="<?php if ($costElem['isConstant'] == 1) echo "visibility:hidden;" ?>"><i class="fa fa-trash"></i></button>
+																				</div>
+																				<div style="display: inline-block;position: absolute; top: 25px; right: 0px;">
+																					<button class="SubUpSortBtn" style="display:none;float: left"><i class="fa fa-trash"></i></button><button class="SubDownSortBtn" style="display:none;float: left"><i class="fa fa-trash"></i></button>
+																				</div>
+
+																				<div class="clearfix"></div>
+																			</div>
 																		@endif
 
 																	@endif
@@ -438,15 +438,107 @@
 															@endif
 														</div>
 													</div>
-													@endforeach
-															<!--<div class="param-group sortable-empty">
-												</div>-->
-													<!--</div>-->
+											@endforeach
 											</div>
 
 											<ul class="totalCostUl">
 												<li>{{trans('language.costTotal')}}</li>
 												<li class="textRight" >{{$totalVal}}</li>
+											</ul>
+
+											<div class="clearfix"></div>
+											<div class="param-body" id="sortable_groups_no_affect">
+												<!--<div class="column sortable">-->
+												<?php $totalDeduct = 0; ?>
+												@foreach ($deducts as $parameter)
+
+													<div class="param-group org-category {{($parameter['isConstant'] == 1) ? 'isConstant' : ''}}" data-id="{{$parameter['ID']}}" data-type="{{$parameter['value']}}" data-sort-order="{{$parameter['sortOrder']}}">
+														<div class="param-group-header tdTitle">
+															<div><span class="groupTitle">{{$parameter['name']}}</span> <button class="addLessBtn" style="display:none;"><i class="fa fa-plus"></i></button><button class="trashBtn" style="display:none;"><i class="fa fa-trash"></i></button><button class="upSortBtn" style="display:none;"><i class="fa fa-trash"></i></button><button class="downSortBtn" style="display:none;"><i class="fa fa-trash"></i></button></div>
+														</div>
+														<div class="param-group-body">
+															@if ($parameter['isEmpty'])
+																<div class="setNow">
+																	<p>{{trans('language.planparamMSG')}}</p>
+																	<button class="btn2" disabled>{{trans('language.setupNow')}}</button>
+																</div>
+															@else
+																@foreach ($parameter['children'] as $costElem)
+
+																	<?php
+
+																	$totalDeduct += (float)$costElem['calcValue'];
+																	if ($costElem['itemType'] == 'HOURLY_RATE' || $costElem['itemType'] == 'FIXED_RATE'){
+																		if($activetab == 'online' && $costElem['itemName'] == 'Traffic-Kosten'){
+																			$chfType = "CHF/TAI";
+																		}
+																		else{
+																			$chfType = "CHF/H";
+																		}
+																	}
+																	else{
+																		$chfType = "%";
+																	}
+																	?>
+
+
+																			<div data-id="{{$costElem['paramID']}}" data-group-id="{{$parameter['ID']}}" data-service-id="{{$costElem['itemID']}}" class="cost-element {{empty($costElem['paramID']) ? 'new-element' : 'org-element'}}"  data-sort-order="{{$costElem['sortOrder']}}"style="width: 100%; position: relative">
+																				<div class="calc-item" style="width: 30%;">
+																					{{$costElem['itemName']}}
+																				</div>
+																				<div class="calc-item" style="width: 55%;">
+																					<table class="calculationTable">
+																						<tbody>
+																						<tr>
+
+																								<td>
+
+																									<label class="containerRadio">
+																										{{trans('language.Pauschale')}}
+																										<input type="radio" checked="checked" name="radio{{$costElem['itemID']}}" value="1">
+																										<span class="checkmark"></span>
+																									</label>
+																								</td>
+
+																								<td style="{{$costElem['isFlatrate'] ? 'display:none;' : ''}}"><input type="text" placeholder="0" class="lineField elem-value" value="{{$costElem['itemValue']}}" readonly></td>
+																								<td style="{{$costElem['isFlatrate'] ? 'display:none;' : ''}}"><i class="icon_multiplication"></i></td>
+																								<td style="{{$costElem['isFlatrate'] ? 'display:none;' : ''}}">
+
+																								</td>
+																								<td style="{{$costElem['isFlatrate'] ? 'display:none;' : ''}}"><i class="icon_equal"></i></td>
+
+
+
+																						</tr>
+																						</tbody>
+																					</table>
+																				</div>
+																				<div class="calc-item colTotal"  style="width: 16%">
+																					<input type = "text" class="lineField input-proxi elem-calc-value" placeholder = "0" readonly="" value="{{$costElem['calcValue']}}">
+
+																				</div>
+
+																				<div class="calc-item trashBtn_Item_Div" style="display: none;">
+																					<button class="trashBtn_item"  style="<?php if ($costElem['isConstant'] == 1) echo "visibility:hidden;" ?>"><i class="fa fa-trash"></i></button>
+																				</div>
+																				<div style="display: inline-block;position: absolute; top: 25px; right: 0px;">
+																					<button class="SubUpSortBtn" style="display:none;float: left"><i class="fa fa-trash"></i></button><button class="SubDownSortBtn" style="display:none;float: left"><i class="fa fa-trash"></i></button>
+																				</div>
+
+																				<div class="clearfix"></div>
+																			</div>
+
+
+																@endforeach
+															@endif
+														</div>
+													</div>
+												@endforeach
+											</div>
+
+											<ul class="totalCostUl_deduct">
+												<li>Abzüge Total</li>
+												<li class="textRight" >{{$totalDeduct}}</li>
 											</ul>
 										</div>
 										<div class="btnCenterGroup" id="online-btn-group">

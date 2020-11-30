@@ -237,6 +237,25 @@
 									<td style="width: 30%;"><strong>{{$data['costData']['serviceData']['total']}}</strong></td>
 									<td><strong>{{$data['costData']['cost_percentage']}}</strong></td>
 								</tr>
+
+								<tr class="borderTdNone">
+									<td colspan="3" class="tdTitle"><div>Abzüge</div></td>
+								</tr>
+
+								@foreach ($data['costData']['deductsCost']['deductServices'] as $idx => $cost)
+									<tr class="{{($idx == 0) ? 'borderTdNone' : ''}}">
+										<td style="width: 50%;">{{$idx}}</td>
+										<td style="width: 30%;">{{$cost}}</td>
+										<td></td>
+
+									</tr>
+								@endforeach
+								<tr>
+									<td style="width: 50%;"><strong>Total Abzüge</strong></td>
+									<td style="width: 30%;"><strong>{{$data['costData']['deductsCost']['subtotal']}}</strong></td>
+									<td></td>
+								</tr>
+
 								<tr style="height: 19px;"></tr>
 								<tr class="borderTdNone borderRadiusTdGroup">
 									<td style="width: 50%;" class="tdTitle"><div>{{trans('language.totalWithoutMWST')}}</div></td>

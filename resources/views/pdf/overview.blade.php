@@ -260,7 +260,6 @@
             <td class="tg-0pky w250 text-right"  style="border-top: 0"><strong>in %</strong></td>
         </tr>
         @foreach ($second_table as $k=> $row)
-            @php if($row[0] =='Abzüge' && $row[3] == 0){ break; } @endphp
         <tr style="">
             <?php
 
@@ -281,7 +280,31 @@
             <td class="tg-0pky text-right"><strong>{{ $second_table_total[3] }}</strong></td>
         </tr>
     </table>
+    <br>
 
+    <table class="tg ">
+        <tr class="first-table rounded-circle" >
+            <td class="tg-0pky w500"  style="border-top: 0"><strong>Abzüge</strong></td>
+            <td class="tg-0pky w500"  style="border-top: 0"> </td>
+            <td class="tg-0pky w250 text-right"  style="border-top: 0"><strong>Kosten in CHF</strong></td>
+            <td class="tg-0pky w250 text-right"  style="border-top: 0"><strong>in %</strong></td>
+        </tr>
+        @foreach ($deductsCost['deductServices'] as $k=> $cell)
+
+            <tr style="">
+                <td style="border-left: none !important;" class="tg-0pky br_border">{{ $k }}</td>
+                <td style="border-left: none !important;" class="tg-0pky br_border"></td>
+                <td style="border-left: none !important; text-align:right;" class="tg-0pky br_border">{{ $cell }}</td>
+                <td style="border-left: none !important;" class="tg-0pky br_border"></td>
+            </tr>
+        @endforeach
+        <tr class="tr_highlight">
+            <td class="tg-0pky"><strong>Total Abzüge</strong></td>
+            <td class="tg-0pky"><strong></strong></td>
+            <td class="tg-0pky text-right"><strong>{{$deductsCost['subtotal']}}</strong></td>
+            <td class="tg-0pky text-right"><strong></strong></td>
+        </tr>
+    </table>
     <br>
 
     <table class="tg t-total font-s80 ">

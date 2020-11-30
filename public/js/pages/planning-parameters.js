@@ -150,6 +150,19 @@ $(document).ready(function(){
 		$("#Traffic-Kosten").attr("readonly","1");
 
 		$(".trashBtn_Item_Div").css("display","block");
+
+		//fix bug
+		$('.containerRadio input').each(function () {
+			if($(this).attr('checked') && $(this).val() == 1){
+				var obj = this;
+				$(obj).parent().next().hide();
+				$(obj).parent().next().next().hide();
+				$(obj).parent().next().next().next().hide();
+				$(obj).parent().next().next().next().next().hide();
+
+				$(obj).parents('.calculationTable').parents('.cost-element').find('input.elem-calc-value').removeAttr('readonly');
+			}
+		})
 	});
 
 	$("#online-edit-save").on('click', function(){
@@ -532,6 +545,9 @@ $(document).ready(function(){
             if (pCategory.find('.param-group-body .setNow').length > 0)
                 pCategory.find('.param-group-body .setNow').remove();
 
+            var groupName = pCategory.find('.groupTitle').text();
+
+
 			$('#params-list span').each(function(){
                 var neworder = pCategory.find('.param-group-body .cost-element').length + 1;
 
@@ -548,9 +564,23 @@ $(document).ready(function(){
 
                 radioIdx = getMaxID(textToReplace);
 
+                //containerRadio_0
+
                 $new_element.find(' .calc-item:first').text(textToReplace);
                 $new_element.find('input[type="radio"]').attr("name", textToReplace+'_'+radioIdx);
                 $new_element.find('input.input-proxi').attr("readonly", true);
+
+				if(groupName == 'Abzüge'){
+					$new_element.find('.containerRadio_1 input').attr('checked',true);
+					$new_element.find('.containerRadio_0').remove();
+					var obj = $new_element.find('.containerRadio');
+					$(obj).parent().next().hide();
+					$(obj).parent().next().next().hide();
+					$(obj).parent().next().next().next().hide();
+					$(obj).parent().next().next().next().next().hide();
+
+					$(obj).parents('.calculationTable').parents('.cost-element').find('input.elem-calc-value').removeAttr('readonly');
+				}
 
                 $('.elem-value',$new_element).on('click', function(){
                     if (fEditMode) {

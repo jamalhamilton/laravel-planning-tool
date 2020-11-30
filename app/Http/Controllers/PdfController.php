@@ -57,6 +57,10 @@ class PdfController extends Controller
         $rates = $this->getRates($customerID);
         $serviceCosts_channel_tmp = array();
 
+        //deduct
+        $serviceDeducts = CoreServiceGroup::where('isConstant',2)->get()->toArray();
+        $deductTotal = 0;
+        $serviceCosts_channel_deduct = array();
 
         foreach ($channels as $channel) {
             $onlineChannel = CampaignChannel::where('name',$channel->name)->where('campaignID', $campaignID)->first();
@@ -69,6 +73,7 @@ class PdfController extends Controller
             // Calculate service costs
 
             $serviceCosts_channel[$channel->name] = array();
+            $serviceCosts_channel_deduct[$channel->name] = array();
 
             foreach ($serviceGroups as $serviceGroup) {
                 $query = "select SUM(t3.calcValue) as subTotal
@@ -110,9 +115,6 @@ class PdfController extends Controller
                     $resdes[""] = $totalFlatrate;
                 }
 
-
-
-//                dd($res_all);
                 $subTotal = (count($res) > 0) ? $res[0]->subTotal : "0.00";
 
                 if($serviceGroup["name"] == 'Technische Kosten' && count($res) == 0 && $channel->name == 'online') {
@@ -138,8 +140,36 @@ class PdfController extends Controller
 
                 array_push($serviceCosts_channel[$channel->name] , $cost);
             }
+
+            //deduct
+            foreach ($serviceDeducts as $deduct){
+                $query = "select *
+                        from core_service_groups_items t1
+                        left join campaign_channels_parameters t3 on t1.ID = t3.serviceItemID
+                        where t3.channelID = ? and t1.groupID = ?";
+
+                $resdeduct = DB::select($query, [$onlineChannelID, $deduct['ID']]);
+                if(empty($resdeduct)) $resdeduct = array();
+
+                $subTotal = 0;
+                foreach ($resdeduct as $k=>$v){
+                    $subTotal+= $v->calcValue;
+                }
+
+
+                $cost = array(
+                    'groupName' => $deduct["name"],
+                    'subTotal' => floatval($subTotal),
+                    'child'=>$resdeduct
+                );
+
+                $deductTotal += floatval($subTotal);
+
+                array_push($serviceCosts_channel_deduct[$channel->name] , $cost);
+
+            }
         }
-        //dd($serviceCosts_channel); //luc
+
         foreach ($serviceCosts_channel as $chn_name => $costs_ar) {
             foreach($costs_ar as $cost){
                 $serviceCosts_channel_tmp[$cost['groupName']] += $cost['subTotal'];
@@ -155,6 +185,27 @@ class PdfController extends Controller
         }
 //        print_r($serviceCosts_channel);
 //        dd($serviceCosts);
+
+
+        //deduct
+        $deductsCost = array();
+        $deductsCost['deductServices'] = [];
+        $deductsCost['subtotal'] = 0;
+        foreach ($serviceCosts_channel_deduct as $c=>$item){
+            foreach ($item as $k => $v) {
+                foreach ($v['child'] as $x=>$y){
+                    if(!isset($deduct['deductServices'][$y->name])){
+                        $deductsCost['deductServices'][$y->name] = $y->calcValue;
+                    }else{
+                        $deductsCost['deductServices'][$y->name] += $y->calcValue;
+                    }
+                    $deductsCost['subtotal'] += $y->calcValue;
+
+                }
+            }
+
+        }
+//        dd($deductsCost);
         //////////////////////////////////////////////
 
         // overview Mediakosten items for all channels
@@ -325,6 +376,7 @@ class PdfController extends Controller
             'first_table_total' => array('Total Mediakosten', '', $mediaData['total'], $mediaData['percentage']),
             'second_table' => $secondTable,
             'second_table_total' => array('Total Servicekosten', '', $serviceData['total'], $serviceData['percentage']),
+            'deductsCost'=>$deductsCost,
             'total_table' => array(
                 array('Total ohne MWST', number_format($total, 2,".","'"), '100.00'),
                 array('Total inkl. MWST', number_format($totalMWST,2,".","'"), number_format(100.00 + $vat,2))
@@ -785,6 +837,11 @@ class PdfController extends Controller
                 $service_percentage = number_format(100 * floatval($service_total) / $total, 2);
             }
 
+            //deduct
+            $service_total+= $deductTotal;
+            $total+= $deductTotal;
+
+
             array_push($rightTable, array('Total Servicekosten exkl. MWST', number_format($service_total,2, ".", "'"), $service_percentage,'',[]));
             array_push($rightTable, array('Total Media- & Servicekosten exkl. MWST.', number_format($total, 2, ".", "'"), '100.00','',[]));
             //dd($rightTable);
@@ -851,6 +908,7 @@ class PdfController extends Controller
         $data3 = array();
 
         $pdf1 = PDF::loadView('pdf.overview', $data1, $merg)->setPaper($customPaper, 'portarit');
+
         $pdf1->save(public_path().'/uploads/pdf/templates/overview.pdf');
 
         $customPaper = array(0, 0, 3509, 4962);

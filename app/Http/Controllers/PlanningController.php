@@ -444,11 +444,17 @@ class PlanningController extends Controller
 
             $channels = CampaignChannel::where('campaignID', $campaignID)->get();
             $serviceGroups = CoreServiceGroup::where('isConstant',1)->get()->toArray();
+
+            //deduct
+            $serviceDeducts = CoreServiceGroup::where('isConstant',2)->get()->toArray();
+
             $serviceCosts = array();
             $serviceCosts_channel = array();
             $serviceTotal = 0;
+            $deductTotal = 0;
             $rates = $this->getRates($customerID);
             $serviceCosts_channel_tmp = array();
+
 
             foreach ($channels as $channel) {
                 $onlineChannel = CampaignChannel::where('name',$channel->name)->where('campaignID', $campaignID)->first();
@@ -470,6 +476,7 @@ class PlanningController extends Controller
                     $NNInChf = array_values($rates['PERCENTUAL_RATE'])[0]->value * floatval($NNInChf) / 100;
                 }
                 $serviceCosts_channel[$channel->name] = array();
+                $serviceCosts_channel_deduct[$channel->name] = array();
 
                 foreach ($serviceGroups as $serviceGroup) {
                     $query = "select SUM(t3.calcValue) as subTotal
@@ -501,7 +508,37 @@ class PlanningController extends Controller
 
                     array_push($serviceCosts_channel[$channel->name] , $cost);
                 }
+
+                //deduct
+                foreach ($serviceDeducts as $deduct){
+                    $query = "select *
+                        from core_service_groups_items t1
+                        left join campaign_channels_parameters t3 on t1.ID = t3.serviceItemID
+                        where t3.channelID = ? and t1.groupID = ?";
+
+                    $res = DB::select($query, [$onlineChannelID, $deduct['ID']]);
+                    if(empty($res)) $res = array();
+
+                    $subTotal = 0;
+                    foreach ($res as $k=>$v){
+                       $subTotal+= $v->calcValue;
+                    }
+
+
+                    $cost = array(
+                        'groupName' => $deduct["name"],
+                        'subTotal' => floatval($subTotal),
+                        'child'=>$res
+                    );
+
+                    $deductTotal += floatval($subTotal);
+
+                    array_push($serviceCosts_channel_deduct[$channel->name] , $cost);
+
+                }
+
             }
+
 
             foreach ($serviceCosts_channel as $chn_name => $costs_ar) {
                 foreach($costs_ar as $cost){
@@ -517,6 +554,27 @@ class PlanningController extends Controller
                 );
                 array_push($serviceCosts, $cost);
             }
+
+
+            //deduct
+            $deductsCost = array();
+            $deductsCost['deductServices'] = [];
+            $deductsCost['subtotal'] = 0;
+            foreach ($serviceCosts_channel_deduct as $c=>$item){
+                foreach ($item as $k => $v) {
+                    foreach ($v['child'] as $x=>$y){
+                        if(!isset($deduct['deductServices'][$y->name])){
+                            $deductsCost['deductServices'][$y->name] = $y->calcValue;
+                        }else{
+                            $deductsCost['deductServices'][$y->name] += $y->calcValue;
+                        }
+                        $deductsCost['subtotal'] += $y->calcValue;
+
+                    }
+                }
+
+            }
+
 
             ////////////////////
 
@@ -618,6 +676,7 @@ class PlanningController extends Controller
 
             $total = floatval($nnCHFTotal) + floatval($serviceTotal);  // total value of calculate
             // calculate service cost percentage
+
             foreach($serviceCosts as $key => $serviceCost) {
                 if ($serviceTotal == 0) {
                     $serviceCosts[$key]["percentage"] = "0.00";
@@ -679,7 +738,11 @@ class PlanningController extends Controller
             }
 
             $campaignExport = CampaignExport::where('campaignID', $campaignID)->orderBy('version', 'desc')->get();
-            
+
+            //deduct
+            $total+= $deductsCost['subtotal'];
+            $totalMWST+= $deductsCost['subtotal'];
+
             $data = array(
                 'campaignID' => $campaignID,
                 'campaignExport' => $campaignExport,
@@ -698,6 +761,7 @@ class PlanningController extends Controller
                 'costData' => array(
                         'vat' => $vat,
                         'serviceData' => $serviceData,
+                        'deductsCost' => $deductsCost,
                         'mediaData' => $mediaData,
                         'total' => number_format($total, 2,".","'"),
                         'cost_percentage' => $cost_percentage,
@@ -882,6 +946,8 @@ class PlanningController extends Controller
         $serviceGroupOrdersCnt = count($serviceGroupsOrders);
         $orderMap = array();
 
+        $deductGroup = CoreServiceGroup::where('isConstant',2)->orWhere('channelID', $channelID)->get()->toArray();
+
         $orderedServiceGroups = array();
 
         if ($serviceGroupOrdersCnt > 0) {
@@ -949,13 +1015,55 @@ class PlanningController extends Controller
             
             array_push($parameters, $serviceGroup);
         }
+        $deducts = array();
+        foreach ($deductGroup  as $order => $serviceGroup){
+            $serviceGroupItems = CoreServiceGroupItem::whereRaw('(groupID = ? and isConstant = 1) or (groupID = ? and channelID = ?)',[$serviceGroup['ID'],$serviceGroup['ID'],$channelID])->orderBy('sortOrder', 'ASC')->get()->toArray();
+
+            $serviceGroup['sortOrder'] = $order + 1;
+
+            $serviceGroup['children'] = array();
+            $serviceGroup['isEmpty'] = (count($serviceGroupItems) == 0);
+
+            foreach ($serviceGroupItems as $k => $serviceGroupItem) {
+
+                $serviceParam = array(
+                    'paramID' => '',
+                    'itemID' => $serviceGroupItem['ID'],
+                    'groupID' => $serviceGroup['ID'],
+                    'itemName' => $serviceGroupItem['name'],
+                    'itemValue' => 0,
+                    'itemType' => $serviceGroupItem['value'],
+                    'csID' => -1,
+                    'calcValue' => "0.00",
+                    'isFlatrate' => 0,
+                    'isConstant' => $serviceGroupItem['isConstant'],
+                    'sortOrder' => $k+1,
+                );
+
+                $param = CampaignChannelParameter::where('channelID', $channelID)->where('serviceItemID', $serviceGroupItem['ID'])->first();
+
+                if ($param) {
+                    $serviceParam['paramID'] = $param->ID;
+                    $serviceParam['csID'] = $param->clientServiceItemID;
+                    $serviceParam['itemValue'] = $param->value;
+                    $serviceParam['calcValue'] = number_format($param->calcValue, 2,'.','');
+                    $serviceParam['isFlatrate'] = $param->isFlatrate;
+
+                }
+
+                array_push($serviceGroup['children'], $serviceParam);
+            }
+
+
+            array_push($deducts, $serviceGroup);
+        }
 
         $NNInChf = $this->calculateNNInChfSum($campaignID, $active_channel);
         $AdP = $this->calculateadPSum($campaignID, $active_channel);
 
         $NNInChf = number_format($NNInChf, 2,".","'");
         $AdP = number_format($AdP, 2,".","'");
-
+//        dd($parameters,$deducts);
 
         return view('pages.planning.params', [
                         'tabIndex' => 1, 
@@ -966,6 +1074,7 @@ class PlanningController extends Controller
                         'nnInChf' => $NNInChf,
                         'adP' => $AdP,
                         'parameters' => $parameters, 
+                        'deducts' => $deducts,
                         'rates_groupwithname' => $selectRates_GroupWithName,
                         'rates' => $selectRates,
                         'channels' => $channels]);
