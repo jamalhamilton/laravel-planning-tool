@@ -368,6 +368,9 @@ class PdfController extends Controller
             array_push($header, $eDate);
         }
 
+        $total+= $deductTotal;
+        $totalMWST+= $deductTotal;
+
         $data1 = [
             'type' => $type,
             'header' => $header,

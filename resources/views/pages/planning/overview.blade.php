@@ -245,7 +245,7 @@
 								@foreach ($data['costData']['deductsCost']['deductServices'] as $idx => $cost)
 									<tr class="{{($idx == 0) ? 'borderTdNone' : ''}}">
 										<td style="width: 50%;">{{$idx}}</td>
-										<td style="width: 30%;">{{$cost}}</td>
+										<td style="width: 30%; text-align: right;">{{$cost}}</td>
 										<td></td>
 
 									</tr>
