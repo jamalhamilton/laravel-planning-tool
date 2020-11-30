@@ -245,14 +245,14 @@
 								@foreach ($data['costData']['deductsCost']['deductServices'] as $idx => $cost)
 									<tr class="{{($idx == 0) ? 'borderTdNone' : ''}}">
 										<td style="width: 50%;">{{$idx}}</td>
-										<td style="width: 30%; text-align: right;">{{$cost}}</td>
+										<td style="width: 30%; text-align: right;">{{number_format($cost,2,'.',"'")}}</td>
 										<td></td>
 
 									</tr>
 								@endforeach
 								<tr>
 									<td style="width: 50%;"><strong>Total Abzüge</strong></td>
-									<td style="width: 30%;"><strong>{{$data['costData']['deductsCost']['subtotal']}}</strong></td>
+									<td style="width: 30%;"><strong>{{number_format($data['costData']['deductsCost']['subtotal'],2,'.',"'")}}</strong></td>
 									<td></td>
 								</tr>
 
