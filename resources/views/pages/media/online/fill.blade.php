@@ -204,7 +204,7 @@
                                                         <button class="collapsible"> {{$table['name']}} </button>
                                                         <div class="contentCollap" style="max-width: 100%;max-height: 100%;">
                                                             @if (isset($table['media'][0]))
-                                                                <table class="table tableDisplay mytable" data-first="{{$table['media'][0]['id']}}">
+                                                                <table class="table tableDisplay mytable" data-first="{{$table['media'][0]['id']}}" data-clickrate="{{$clickrateArr[$table['name']]??''}}">
                                                                 <thead>
                                                                 <tr>
                                                                     <th style="width:16.8%"></th>
@@ -223,16 +223,16 @@
                                                                 </thead>
                                                                 <tbody class="tableToAdd">
                                                                 @foreach ($table['media'] as $idR => $media)
-                                                                    <tr class="blankInputTd @if($media['is_cpc']) hasCPC @endif" data-clickrate="{{$clickrateArr[$table['name']]??''}}" data-id="{{$media['id']}}" data-adImpressions="{{$media['ad_impressions']}}">
+                                                                    <tr class="blankInputTd @if($media['is_cpc']) hasCPC @endif" data-clickrate="{{$clickrateArr[$table['name']]??''}}" data-id="{{$media['id']}}" data-adimpressions="{{$media['ad_impressions']}}">
                                                                         <td data-type="free-input" class="{{(isset($media['mediaNotes']['1'])) ? 'cell-note':''}}" data-note="{{(isset($media['mediaNotes']['1'])) ? $media['mediaNotes']['1'] : ''}}">{!!$media['placement']!!}</td>
                                                                         <td data-type="free-input" class="{{(isset($media['mediaNotes']['2'])) ? 'cell-note':''}}" data-note="{{(isset($media['mediaNotes']['2'])) ? $media['mediaNotes']['2'] : ''}}">{!! $media['details'] !!}</td>
                                                                         <td data-type="free-input" class="{{(isset($media['mediaNotes']['3'])) ? 'free-input':''}}" data-note="{{(isset($media['mediaNotes']['3'])) ? $media['mediaNotes']['3'] : ''}}">{{$media['region']}}</td>
                                                                         <td data-type="auto-complete" class="{{(isset($media['mediaNotes']['4'])) ? 'cell-note':''}}" data-note="{{(isset($media['mediaNotes']['4'])) ? $media['mediaNotes']['4'] : ''}}">{!!$media['format']!!}</td>
-                                                                        <td data-type="free-input" class="cpcFlag cpcSummary {{(isset($media['mediaNotes']['5'])) ? 'cell-note':''}}" data-note="{{(isset($media['mediaNotes']['5'])) ? $media['mediaNotes']['5'] : ''}}">{{$media['adPrint']}}</td>
+                                                                        <td data-type="free-input" class="{{(isset($media['mediaNotes']['5'])) ? 'cell-note':''}}" data-note="{{(isset($media['mediaNotes']['5'])) ? $media['mediaNotes']['5'] : ''}}">{{$media['adPrint']}}</td>
                                                                         <td data-type="free-input" class="{{(isset($media['mediaNotes']['6'])) ? 'cell-note':''}}" data-note="{{(isset($media['mediaNotes']['6'])) ? $media['mediaNotes']['6'] : ''}}">{{$media['tkpGrossCHF']}}</td>
                                                                         <td data-type="free-input" class="kostenCol {{(isset($media['mediaNotes']['7'])) ? 'cell-note':''}}" data-note="{{(isset($media['mediaNotes']['7'])) ? $media['mediaNotes']['7'] : ''}}">{{$media['grossCHF']}}</td>
                                                                         <td data-type="free-input" class="{{(isset($media['mediaNotes']['8'])) ? 'cell-note':''}}" data-note="{{(isset($media['mediaNotes']['8'])) ? $media['mediaNotes']['8'] : ''}}">{{$media['discountPersentual']}}</td>
-                                                                        <td data-type="free-input" class="cpcFlag {{(isset($media['mediaNotes']['9'])) ? 'cell-note':''}}" data-note="{{(isset($media['mediaNotes']['9'])) ? $media['mediaNotes']['9'] : ''}}">{{$media['netCHF']}}</td>
+                                                                        <td data-type="free-input" class="{{(isset($media['mediaNotes']['9'])) ? 'cell-note':''}}" data-note="{{(isset($media['mediaNotes']['9'])) ? $media['mediaNotes']['9'] : ''}}">{{$media['netCHF']}}</td>
                                                                         <td data-type="free-input" class="{{(isset($media['mediaNotes']['10'])) ? 'cell-note':''}}" data-note="{{(isset($media['mediaNotes']['10'])) ? $media['mediaNotes']['10'] : ''}}">{{$media['bkPersentual']}}</td>
                                                                         <td data-type="free-input" class="{{(isset($media['mediaNotes']['11'])) ? 'cell-note':''}}" data-note="{{(isset($media['mediaNotes']['11'])) ? $media['mediaNotes']['11'] : ''}}">{{$media['nnCHF']}}</td>
                                                                         <td class="" data-type="free-input" class="{{(isset($media['mediaNotes']['12'])) ? 'cell-note':''}}" data-note="{{(isset($media['mediaNotes']['12'])) ? $media['mediaNotes']['12'] : ''}}">{{$media['tkpNNCHF']}}</td>

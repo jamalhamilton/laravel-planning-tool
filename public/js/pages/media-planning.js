@@ -25,10 +25,11 @@ function calTotal() {
 
         total = 0;
         for (var j = 0; j < cells.length; j++) {
+			if(i==0)console.log(total,j,cells[j].innerHTML,parseFloat($(cells[j]).parents("tr").attr('data-adimpressions')));
 
             if (idx == 5 && cells[j].innerHTML != "") {
             	if($(cells[j]).parents("tr").hasClass('hasCPC') && $(cells[j]).parents("tr").attr('data-clickrate')){
-            		total += parseFloat($(cells[j]).parents("tr").data('adimpressions'));
+            		total += parseFloat($(cells[j]).parents("tr").attr('data-adimpressions'));
 				}else{
 					total += parseInt(cells[j].innerHTML.replace("\'","").replace("\'","").replace("\'","").replace(",",""));
 				}
@@ -393,9 +394,12 @@ $(document).ready(function() {
 		"bInfo": false,
 		"bAutoWidth": false,
 		"aoColumnDefs": [
-            { "sClass": "free-input", "aTargets": [ 0,1,4,5,7,9 ] },
+            { "sClass": "cpcFlag cpcSummary free-input", "aTargets": [ 4 ] },
+            { "sClass": "cpcFlag disabled", "aTargets": [ 8 ] },
+            { "sClass": "free-input", "aTargets": [ 0,1,5,7,9 ] },
             { "sClass": "select-box", "aTargets": [ 2 ] },
-            { "sClass": "disabled", "aTargets": [ 6,8,10,11 ] },	
+            { "sClass": "disabled", "aTargets": [ 6,11 ] },
+			{ "sClass": "kostenCol disabled", "aTargets": [ 10 ] },
             { "sClass": "auto-complete", "aTargets": [ 3 ] }
         ],
 
@@ -558,6 +562,8 @@ $(document).ready(function() {
 	       	colIndex = $edit_target[0].cellIndex;     	
 	       	value = $edit_target.text();
 
+			var clickrate = $edit_target.parents('tr').data('clickrate');
+
 	       	$.ajax({
 	        	headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
 	            type: 'POST',
@@ -568,11 +574,15 @@ $(document).ready(function() {
 	            	'value':value,
 	            	'type':'select-search',
 					'active_channel':$("#active_channel").val(),
-					'campaignID':$("#campaign_id").val()
+					'campaignID':$("#campaign_id").val(),
+					'clickrate':clickrate
 	            },
 	            dataType: 'JSON',
 	            success: function(data,textStatus,jqXHR) {
+	        		// alert('1');
+					$edit_target.parents('tr').data('adimpressions',data.item.ad_impressions);
 	            	calTotal();
+
 
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
@@ -624,6 +634,8 @@ $(document).ready(function() {
 		var $editor = null;
 
         colIndex = $edit_target[0].cellIndex;
+		var clickrate = $edit_target.parents('tr').data('clickrate');
+
         if(colIndex == 6){
         	var prev_val = $edit_target.prev().text();
 			var prev_val_WERBEDRUCK = $edit_target.prev().prev().prev().text();
@@ -717,10 +729,12 @@ $(document).ready(function() {
 							'nnsum' : nnsum,
 							'active_channel':$("#active_channel").val(),
 			            	'type':"free-input",
+							'clickrate':clickrate
 			            },
 			            dataType: 'JSON',
 			            success: function(data,textStatus,jqXHR) {
 
+							$edit_target.parents('tr').data('adimpressions',data.item.ad_impressions);
 			            	if(colIndex>1){
 			            		if (typeof data.mediaData.adPressureValue !== 'undefined')
 			            			$(e.target).parent().find("td:nth-child(5)").html(numberWithCommas(parseInt(data.mediaData.adPressureValue)));
@@ -733,9 +747,11 @@ $(document).ready(function() {
 				            	if (typeof data.mediaData.tkpNNCHF !== 'undefined')
 				            		$(e.target).parent().find("td:nth-child(12)").html(numberWithCommas(parseFloat(data.mediaData.tkpNNCHF).toFixed(2)));
 
-								calTotal();
+
                                 $(e.target).parent().find("td:nth-child(7)").attr("class","disabled");
 							}
+
+							calTotal();
 
 						},
 						error: function(jqXHR, textStatus, errorThrown) {
@@ -863,6 +879,7 @@ $(document).ready(function() {
 			            },
 			            dataType: 'JSON',
 			            success: function(data,textStatus,jqXHR) {
+			        		// alert('3')
 						},
 						error: function(jqXHR, textStatus, errorThrown) {
 
@@ -900,6 +917,7 @@ $(document).ready(function() {
 		            },
 		            dataType: 'JSON',
 		            success: function(data,textStatus,jqXHR) {
+		        		// alert(4);
 					},
 					error: function(jqXHR, textStatus, errorThrown) {
 
@@ -1131,6 +1149,7 @@ $('#menu_insert_line').on('click', function() {
 	var collapseDiv  =$(contextDataTable).parent().parent()[0];
 	collapseDiv.style.maxHeight = collapseDiv.scrollHeight + "px";
     categoryID = categoryTable.data('id');
+    var clickrate = $(contextDataTable).data('clickrate');
 
    	$.ajax({
     	headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -1145,6 +1164,8 @@ $('#menu_insert_line').on('click', function() {
         success: function(data,textStatus,jqXHR) {
 
 			$(contextDataTable).find("tr:nth-child("+(index+2)+")").attr('data-id',data.id);
+			$(contextDataTable).find("tr:nth-child("+(index+2)+")").attr('data-clickrate',clickrate);
+			$(contextDataTable).find("tr:nth-child("+(index+2)+")").attr('data-adimpressions',0);
 
 			reorderTable(contextDataTable);
 
@@ -1199,7 +1220,7 @@ $('#menu_duplicate_line').on('click', function() {
 				if(data.media.is_cpc){
 					alert(data.media.is_cpc);
 					$(contextDataTable).find("tr:nth-child("+(index+2)+")").addClass('hasCPC');
-					$(contextDataTable).find("tr:nth-child("+(index+2)+")").attr('data-adImpressions',data.media.ad_impressions.toFixed(2));
+					$(contextDataTable).find("tr:nth-child("+(index+2)+")").attr('data-adimpressions',data.media.ad_impressions.toFixed(2));
 					// $(contextDataTable).find("tr:nth-child("+(index+2)+")").find('.cpcSummary').attr('title',data.media.ad_impressions.toFixed(2));
 					calTotal();
 				}
@@ -1358,7 +1379,7 @@ $('body').on('click',"#addctgmodal", function() {
 
 				if(data.media){
 
-					$(contextDataTable).find("tr:nth-child("+(index+1)+")").attr('data-adImpressions',data.media.ad_impressions.toFixed(2));
+					$(contextDataTable).find("tr:nth-child("+(index+1)+")").attr('data-adimpressions',data.media.ad_impressions.toFixed(2));
 
 					$(contextDataTable).find("tr:nth-child("+(index+1)+")").find('.kostenCol').text(data.media.grossCHF.toFixed(2));
 					// $(contextDataTable).find("tr:nth-child("+(index+1)+")").find('.cpcSummary').attr('title',data.media.ad_impressions.toFixed(2));

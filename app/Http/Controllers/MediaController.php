@@ -601,6 +601,7 @@ class MediaController extends Controller
 
         $media = CampaignChannelMedia::where('ID',$request->mediaID)->first();
         $onlineChannel = CampaignChannel::where('campaignID', $request->campaignID)->where('name', $request->active_channel)->first();
+        $clickrate = $request->clickrate;
 
         $fieldname = array();
 
@@ -759,10 +760,13 @@ class MediaController extends Controller
                 //dd($request->all());
                 if (!empty($media->adPressureValue)) {
                     if ($media->tkpGrossCHF != 0 && $media->grossCHF != 0 || $request->colIndex == 5){
+
                         if($media->is_cpc){
                             $media->grossCHF = $media->adPressureValue * $media->tkpGrossCHF;
+                            $media->ad_impressions = $media->adPressureValue/$clickrate*100;
                         }else{
                             $media->grossCHF = $media->adPressureValue / 1000 * $media->tkpGrossCHF;
+                            $media->ad_impressions = 0;
                         }
                     }
 
@@ -906,6 +910,7 @@ class MediaController extends Controller
             'status' => 'OK',
             'msg' => $msg,
             'mediaData' => $mediaData,
+            'item'=>$media
             );
 
         return response()->json($resp);

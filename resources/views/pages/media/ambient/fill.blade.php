@@ -204,7 +204,7 @@
                                                         <button class="collapsible"> {{$table['name']}} </button>
                                                         <div class="contentCollap" style="max-width: 100%;max-height: 100%;">
                                                             @if (isset($table['media'][0]))
-                                                            <table class="table tableDisplay mytable" data-first="{{$table['media'][0]['id']}}">
+                                                            <table class="table tableDisplay mytable" data-first="{{$table['media'][0]['id']}}" data-clickrate="{{$clickrateArr[$table['name']]??''}}">
                                                                 <thead>
                                                                 <tr>
                                                                     <th style="width:16.8%"></th>
@@ -223,7 +223,7 @@
                                                                 </thead>
                                                                 <tbody class="tableToAdd">
                                                                 @foreach ($table['media'] as $idR => $media)
-                                                                    <tr class="blankInputTd @if($media['is_cpc']) hasCPC @endif" data-clickrate="{{$clickrateArr[$table['name']]??''}}" data-id="{{$media['id']}}" data-adImpressions="{{$media['ad_impressions']}}">
+                                                                    <tr class="blankInputTd @if($media['is_cpc']) hasCPC @endif" data-clickrate="{{$clickrateArr[$table['name']]??''}}" data-id="{{$media['id']}}" data-adimpressions="{{$media['ad_impressions']}}">
                                                                         <td data-type="free-input" class="{{(isset($media['mediaNotes']['1'])) ? 'cell-note':''}}" data-note="{{(isset($media['mediaNotes']['1'])) ? $media['mediaNotes']['1'] : ''}}">{!!$media['placement']!!}</td>
                                                                         <td data-type="free-input" class="{{(isset($media['mediaNotes']['2'])) ? 'cell-note':''}}" data-note="{{(isset($media['mediaNotes']['2'])) ? $media['mediaNotes']['2'] : ''}}">{!! $media['details'] !!}</td>
                                                                         <td data-type="free-input" class="{{(isset($media['mediaNotes']['3'])) ? 'free-input':''}}" data-note="{{(isset($media['mediaNotes']['3'])) ? $media['mediaNotes']['3'] : ''}}">{{$media['region']}}</td>
