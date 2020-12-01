@@ -194,7 +194,7 @@ class PdfController extends Controller
         foreach ($serviceCosts_channel_deduct as $c=>$item){
             foreach ($item as $k => $v) {
                 foreach ($v['child'] as $x=>$y){
-                    if(!isset($deduct['deductServices'][$y->name])){
+                    if(!isset($deductsCost['deductServices'][$y->name])){
                         $deductsCost['deductServices'][$y->name] = $y->calcValue;
                     }else{
                         $deductsCost['deductServices'][$y->name] += $y->calcValue;

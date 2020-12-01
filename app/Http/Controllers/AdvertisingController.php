@@ -257,6 +257,7 @@ class AdvertisingController extends Controller
         }
 
         if($active_channel == 'online'  || $active_channel == 'tv' ) {
+
             foreach ($media->channeldistribution as $dist) {
                 if ($dist->weekNumber != $request->weekNum) {
                     if($active_channel == 'tv'){
@@ -268,7 +269,10 @@ class AdvertisingController extends Controller
                 }
             }
 
+
+
             if ($request->number <= $remained) {
+
                 $dist = CampaignChannelDistribution::where('mediaID', $request->mediaID)->where('weekNumber', $request->weekNum)->first();
                 if($dist->distributionCount == $request->number){
                     $ignore = 1;
@@ -276,6 +280,7 @@ class AdvertisingController extends Controller
 
                 $dist->distributionCount = $request->number;
                 $dist->save();
+
                 $msg = 'Edit Ok!';
 
                 // plus version number

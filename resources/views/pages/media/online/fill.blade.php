@@ -51,6 +51,15 @@
                     <div class="form-group">
                         <textarea class="textArea textarea-addinfo" placeholder="{{trans('language.comment')}}"></textarea>
                     </div>
+                    <div class="form-group addLessBox">
+                                            <span class="input input--hoshi">
+                                                <input class="input__field input__field--hoshi" type="text" id="clickrate" name="clickrate" value="0.25">
+                                                <label class="input__label input__label--hoshi input__label--hoshi-color-1">
+                                                    <span class="input__label-content input__label-content--hoshi">Click Rate</span>
+                                                </label>
+                                            </span>
+                    </div>
+
                     <div class="clearDiv"></div>
                     <div class="clearDiv"></div>
 
