@@ -151,18 +151,28 @@ class AdvertisingController extends Controller
 
                             $digit_nums = strlen(substr(strrchr($dist->distributionCount, "."), 1));
                             if($digit_nums > 2) $digit_nums = 2;
-                            if($digit_nums == 0) {
-                                $distCount[$dist->weekNumber] = number_format(intval($dist->distributionCount), 0, '.', '\'');
-                            }
-                            else {
-                                $distCount[$dist->weekNumber] = number_format(floatval($dist->distributionCount), $digit_nums, '.', '\'');
+
+                            if($dist->distributionCount != 'tbd'){
+                                if($digit_nums == 0) {
+                                    $distCount[$dist->weekNumber] = number_format(intval($dist->distributionCount), 0, '.', '\'');
+                                }
+                                else {
+                                    $distCount[$dist->weekNumber] = number_format(floatval($dist->distributionCount), $digit_nums, '.', '\'');
+                                }
+
+                                $adWeekSum += floatval($dist->distributionCount);
+                            }else{
+                                $distCount[$dist->weekNumber] = $dist->distributionCount;
                             }
 
-                            $adWeekSum += floatval($dist->distributionCount);
                         }
                         else {
-                            $distCount[$dist->weekNumber] = number_format(intval($dist->distributionCount), 0, '.', '\'');
-                            $adWeekSum += intval($dist->distributionCount);
+                            if($dist->distributionCount != 'tbd') {
+                                $distCount[$dist->weekNumber] = number_format(intval($dist->distributionCount), 0, '.', '\'');
+                                $adWeekSum += intval($dist->distributionCount);
+                            }else{
+                                $distCount[$dist->weekNumber] = $dist->distributionCount;
+                            }
                         }
 
                     }
@@ -256,6 +266,7 @@ class AdvertisingController extends Controller
             $remained = $media->grps;
         }
 
+
         if($active_channel == 'online'  || $active_channel == 'tv' ) {
 
             foreach ($media->channeldistribution as $dist) {
@@ -279,6 +290,7 @@ class AdvertisingController extends Controller
                 }
 
                 $dist->distributionCount = $request->number;
+
                 $dist->save();
 
                 $msg = 'Edit Ok!';

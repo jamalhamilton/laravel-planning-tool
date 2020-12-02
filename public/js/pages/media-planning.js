@@ -594,7 +594,7 @@ $(document).ready(function() {
 	            success: function(data,textStatus,jqXHR) {
 					$edit_target.parents('tr').data('adimpressions',data.item.ad_impressions);
 	            	calTotal();
-
+					//alert(1);
 
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
@@ -747,16 +747,17 @@ $(document).ready(function() {
 			            success: function(data,textStatus,jqXHR) {
 
 							$edit_target.parents('tr').data('adimpressions',data.item.ad_impressions);
+							console.log(data.mediaData);
 			            	if(colIndex>1){
-			            		if (typeof data.mediaData.adPressureValue !== 'undefined')
+			            		// if (typeof data.mediaData.adPressureValue !== 'undefined')
 			            			$(e.target).parent().find("td:nth-child(5)").html(numberWithCommas(parseInt(data.mediaData.adPressureValue)));
-			            		if (typeof data.mediaData.grossCHF !== 'undefined')
+			            		// if (typeof data.mediaData.grossCHF !== 'undefined')
 				            		$(e.target).parent().find("td:nth-child(7)").html(numberWithCommas(parseFloat(data.mediaData.grossCHF).toFixed(2)));
-				            	if (typeof data.mediaData.netCHF !== 'undefined')
+				            	// if (typeof data.mediaData.netCHF !== 'undefined')
 				            		$(e.target).parent().find("td:nth-child(9)").html(numberWithCommas(parseFloat(data.mediaData.netCHF).toFixed(2)));
-				            	if (typeof data.mediaData.nnCHF !== 'undefined')
+				            	// if (typeof data.mediaData.nnCHF !== 'undefined')
 				            		$(e.target).parent().find("td:nth-child(11)").html(numberWithCommas(parseFloat(data.mediaData.nnCHF).toFixed(2)));
-				            	if (typeof data.mediaData.tkpNNCHF !== 'undefined')
+				            	// if (typeof data.mediaData.tkpNNCHF !== 'undefined')
 				            		$(e.target).parent().find("td:nth-child(12)").html(numberWithCommas(parseFloat(data.mediaData.tkpNNCHF).toFixed(2)));
 
 
@@ -764,6 +765,7 @@ $(document).ready(function() {
 							}
 
 							calTotal();
+
 
 						},
 						error: function(jqXHR, textStatus, errorThrown) {
@@ -891,7 +893,7 @@ $(document).ready(function() {
 			            },
 			            dataType: 'JSON',
 			            success: function(data,textStatus,jqXHR) {
-			        		// alert('3')
+			        		//alert('3')
 						},
 						error: function(jqXHR, textStatus, errorThrown) {
 
@@ -929,7 +931,7 @@ $(document).ready(function() {
 		            },
 		            dataType: 'JSON',
 		            success: function(data,textStatus,jqXHR) {
-		        		// alert(4);
+		        		//alert(4);
 					},
 					error: function(jqXHR, textStatus, errorThrown) {
 

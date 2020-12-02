@@ -1,3 +1,4 @@
+
 function numberWithCommas(x) {
      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "\'");//if you want use , then replace "\'"!
 }
@@ -24,9 +25,13 @@ function calTotal(){
         for (var j = 0; j < cells.length; j++) {
             if(cells[j].childNodes.length > 1) {
                 var eVal = cells[j].childNodes[1].value;
+
                 if (typeof eVal !== "undefined") {
-                    if (eVal != "" && eVal != "tdb")
-                        total += parseInt(eVal.replaceAll("\'", "").replaceAll(",", ""));
+                    if (eVal != "" && eVal != "tbd"){
+                        var v = eVal.replaceAll("\'", "").replaceAll(",", "");
+                        if(parseInt(v)) total += parseInt(v);
+                    }
+
                 }
             }
         }
@@ -41,9 +46,10 @@ function calTotal(){
         var idx = (i % (parseInt(weekNum)+2))+2;
         var cells = $(elems[i]).parents("div.mediaPlanningTable").find(".subtotaltr td:nth-child("+idx+")");
         total = 0;
-        
+
         for (var j = 0; j < cells.length; j++) {
-            if(cells[j].innerText != "" && cells[j].innerText != "tdb"){
+
+            if(cells[j].innerText != "" && cells[j].innerText != "tbd"){
                 total += parseInt(cells[j].innerText.replaceAll("\'","").replaceAll(",",""));
             }
         }
@@ -116,15 +122,20 @@ $("body").on('blur','td input',function (){
     for(var i = 3; i < $(this).parents('tr').children().length ; i ++)
     {
         var val = $($(this).parents('tr').children()[i]).children().val();
+        if(val){
+            while(val.indexOf("\'") != -1)
+                val = val.replaceAll("\'", "");
+        }
+
         if(val == "")
-            val = '0';
+            val = 0;
         if(val == undefined)
-            break;
-        while(val.indexOf("\'") != -1)
-            val = val.replaceAll("\'", "");
-        adweeksum += parseFloat(val);
+            continue;
+
+        if(parseFloat(val)) adweeksum += parseFloat(val);
     }
-    if(oldTotal != 'tbd'){
+
+    if(oldTotal != '' && oldTotal != 'tbd'){
         $($(this).parents('tr').children()[2]).children().val(numberWithCommas(adweeksum));
     }
 
