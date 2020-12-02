@@ -25,10 +25,10 @@ function calTotal() {
 
         total = 0;
         for (var j = 0; j < cells.length; j++) {
-			if(i==0)console.log(total,j,cells[j].innerHTML,parseFloat($(cells[j]).parents("tr").attr('data-adimpressions')));
+			// if(i==0)console.log(total,j,cells[j].innerHTML,parseFloat($(cells[j]).parents("tr").attr('data-adimpressions')));
 
             if (idx == 5 && cells[j].innerHTML != "") {
-            	if($(cells[j]).parents("tr").hasClass('hasCPC') && $(cells[j]).parents("tr").attr('data-clickrate')){
+            	if($(cells[j]).parents("tr").hasClass('hasCPC') && $(cells[j]).parents("table.tableCategory").attr('data-clickrate')){
             		total += parseFloat($(cells[j]).parents("tr").attr('data-adimpressions'));
 				}else{
 					total += parseInt(cells[j].innerHTML.replace("\'","").replace("\'","").replace("\'","").replace(",",""));
@@ -454,18 +454,19 @@ $(document).ready(function() {
 
 	$("#Online").on('click','.btn-edit',function( e ) {
 		selectedTab = $(this).parents('table');
-	    
-	    if ( selectedTab.hasClass('table_selected') ) {
-	         selectedTab.removeClass('table_selected');
-	    } else {
-	        $('table.table_selected').removeClass('table_selected');
-	        selectedTab.addClass('table_selected');
-	    }
+
+		$('table.table_selected').removeClass('table_selected');
+		selectedTab.addClass('table_selected');
 
 	    //categoryName = $(".table_selected button.collapsible").text();
         categoryName = $(this).parents('.collapsibleBar.margin-0').find('.collapsible').text();
 
-	    isConstant = $(".table_selected").data('isconst');
+	    isConstant = selectedTab.data('isconst');
+
+
+	    var clickrate = selectedTab.data('clickrate');
+
+	    $('#clickrate').val(clickrate);
 
 
 	    $(".input-ctgname").val(categoryName);
@@ -518,6 +519,7 @@ $(document).ready(function() {
 		var categoryName=$('#editModal .input-ctgname').val();
 		var checkboxInfo=($('#editModal .ckb-addinfo').is(":checked"));
 		var addInfo=$('#editModal .textarea-addinfo').val();
+		var clickrate=$('#clickrate').val();
 
 		
 		$('table.table_selected .collapsible').text(categoryName);
@@ -536,10 +538,21 @@ $(document).ready(function() {
             	'addInfo':addInfo,
             	'categoryID':categoryID,
 				'active_channel':$("#active_channel").val(),
-				'campaignID': $("#campaign_id").val()
+				'campaignID': $("#campaign_id").val(),
+				'clickrate': clickrate
             },
             dataType: 'JSON',
             success: function(data,textStatus,jqXHR) {
+
+        		if(data.change_rate){
+					$('table.table_selected').data('clickrate',data.clickrate);
+					for(var i =0 ; i< data.cpc_items.length; i++){
+						//console.log(i,data.cpc_items[i].ad_impressions);
+						$('table.table_selected').find('tr[data-id="'+data.cpc_items[i].ID+'"]').attr('data-adimpressions',data.cpc_items[i].ad_impressions)
+						$('table.table_selected').find('tr[data-id="'+data.cpc_items[i].ID+'"]').find('td:nth-child(7)').text(data.cpc_items[i].grossCHF.toFixed(2));
+					}
+					calTotal();
+				}
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 
@@ -562,7 +575,7 @@ $(document).ready(function() {
 	       	colIndex = $edit_target[0].cellIndex;     	
 	       	value = $edit_target.text();
 
-			var clickrate = $edit_target.parents('tr').data('clickrate');
+			var clickrate = $edit_target.parents('table.tableCategory').data('clickrate');
 
 	       	$.ajax({
 	        	headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -634,7 +647,7 @@ $(document).ready(function() {
 		var $editor = null;
 
         colIndex = $edit_target[0].cellIndex;
-		var clickrate = $edit_target.parents('tr').data('clickrate');
+		var clickrate = $edit_target.parents('table.tableCategory').data('clickrate');
 
         if(colIndex == 6){
         	var prev_val = $edit_target.prev().text();
@@ -1149,7 +1162,7 @@ $('#menu_insert_line').on('click', function() {
 	var collapseDiv  =$(contextDataTable).parent().parent()[0];
 	collapseDiv.style.maxHeight = collapseDiv.scrollHeight + "px";
     categoryID = categoryTable.data('id');
-    var clickrate = $(contextDataTable).data('clickrate');
+    var clickrate = $(contextDataTable).parents('table.tableCategory').data('clickrate');
 
    	$.ajax({
     	headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -1164,7 +1177,6 @@ $('#menu_insert_line').on('click', function() {
         success: function(data,textStatus,jqXHR) {
 
 			$(contextDataTable).find("tr:nth-child("+(index+2)+")").attr('data-id',data.id);
-			$(contextDataTable).find("tr:nth-child("+(index+2)+")").attr('data-clickrate',clickrate);
 			$(contextDataTable).find("tr:nth-child("+(index+2)+")").attr('data-adimpressions',0);
 
 			reorderTable(contextDataTable);
@@ -1198,7 +1210,7 @@ $('#menu_duplicate_line').on('click', function() {
 		categoryID = categoryTable.data('id');
 
 		var cpc = $(contextDataRow).hasClass('hasCPC')?1:0;
-		var clickrate = $(contextDataRow).data('clickrate');
+		var clickrate = $(contextDataTable).parents('table.tableCategory').data('clickrate');
 
 		$.ajax({
 			headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -1358,7 +1370,7 @@ $('body').on('click',"#addctgmodal", function() {
 			return;
 		}
 		var mediaID = $(contextDataRow).data('id');
-		var clickrate = $(contextDataRow).data('clickrate');
+		var clickrate = $(contextDataTable).parents('table.tableCategory').data('clickrate');
 
 		if(!clickrate) return;
 

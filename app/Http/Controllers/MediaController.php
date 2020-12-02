@@ -66,6 +66,7 @@ class MediaController extends Controller
         }
 
         $categories = CoreCampaignCategory::where('isConstant','1')->where('channel_name', $active_channel)->get();
+
         $campaigns = Campaign::all();
         $campaignsName = array();
         
@@ -162,6 +163,7 @@ class MediaController extends Controller
 
                 $categoryName = $category->corecampaigncategory->name;
                 $categoryNote = $category->categoryNote;
+                $clickrate = $category->clickrate;
                 $medias = $category->campaignchannelmedia;
 
                 $mediaData = array();
@@ -225,6 +227,7 @@ class MediaController extends Controller
                     'isConstant' => $isConstant,
                     'name' => $categoryName,
                     'note' => $categoryNote,
+                    'clickrate' => $clickrate,
                     'media' => $mediaData,
                 );
             }
@@ -925,14 +928,36 @@ class MediaController extends Controller
     public function editCategory(Request $request)
     {
         $category = CampaignChannelMediaConCategory::where('ID',$request->categoryID)->first();
+        $change_rate = 0;
         
         if ($request->checkboxInfo) {
             $category->categoryNote = $request->addInfo;
         }
 
+        $aryCPC = array();
+        $clickrate =  $request->clickrate;
+
+        if($category->clickrate !=  $clickrate){
+            $change_rate = 1;
+            $category->clickrate = $clickrate;
+            //todo
+            //calc cpc
+            $medias = $category->campaignchannelmedia;
+            foreach ($medias as $k=>$m){
+                if($m->is_cpc){
+                    $m->ad_impressions = $m->adPressureValue/$clickrate*100;
+                    $m->save();
+                    $aryCPC[] = $m;
+                }
+            }
+
+        }
+
         $msg = ($category->save()) ? "Edit Successed!" : "Edit Failed!";
+
         $category = CoreCampaignCategory::where('ID',$category->categoryID)->where('channel_name',$request->active_channel)->first();
         $category->name = $request->categoryName;
+
         $msg = ($category->save()) ? "Edit Successed!" : "Edit Failed!";
 
         $this->plusVersionNumber($request->campaignID, $request->active_channel);
@@ -940,7 +965,10 @@ class MediaController extends Controller
 
         $resp = array(
             'status' => 'OK',
-            'msg' => $msg
+            'msg' => $msg,
+            'change_rate' => $change_rate,
+            'clickrate'=>$request->clickrate,
+            'cpc_items'=>$aryCPC
             );
         return response()->json($resp);
 
