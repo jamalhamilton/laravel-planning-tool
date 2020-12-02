@@ -85,23 +85,24 @@
                                                                         @endif
                                                                     </td>
                                                                     <td width="120">
-                                                                        @if ($media['grps'] == '0' || $media['grps'] == '' || $media['grps'] == 0)
+                                                            @if ($media['grps'] == '0' || $media['grps'] == '' || $media['grps'] == 0)
                                                                             <input type="text"  value ="tbd"  disabled>
                                                                         @else
                                                                             <input type="text"   value ="{{$media['grps']}}"  disabled>
                                                                         @endif
                                                                     </td>
                                                                     <td width="120">
-                                                                        @if ($media['adWeekSum'] == '0' || $media['adWeekSum'] == '' || $media['adWeekSum'] == 0)
-                                                                            <input type="text"  value ="tbd" style="color:{{$media['overflow']}}" disabled>
+                                                            @if ($media['grps'] == '0' || $media['grps'] == '' || $media['grps'] == 0)
+                                                                <input type="text"  value ="" style="color:{{$media['overflow']}}" disabled>
                                                                         @else
                                                                             <input type="text"   value ="{{$media['adWeekSum']}}" style="color:{{$media['overflow']}}" disabled>
                                                                         @endif
                                                                     </td>
+
                                                                     @foreach($media['distCount'] as $idx => $count)
                                                                         <td width="85">
-                                                                            @if ($media['adPrint'] == '0' || $media['adPrint'] == '' || $media['adPrint'] == 0)
-                                                                                <input type="text" value ="tbd" data-weeknum="{{$idx}}">
+                                                            @if ($media['grps'] == '0' || $media['grps'] == '' || $media['grps'] == 0 || $count=='tbd')
+                                                                <input type="text" value ="{{$count == 'tbd'?'tbd':''}}" data-weeknum="{{$idx}}">
                                                                             @elseif($count == 0)
                                                                                 <input type="text"  value ="" data-weeknum="{{$idx}}">
                                                                             @else

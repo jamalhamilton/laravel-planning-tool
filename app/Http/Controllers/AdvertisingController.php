@@ -259,6 +259,7 @@ class AdvertisingController extends Controller
     public function edit(Request $request)
     {
         $ignore = 0;
+        $msg = '';
         $active_channel = $request->active_channel;
         $media = CampaignChannelMedia::where('ID',$request->mediaID)->first();
         $remained = $media->adPressureValue;
@@ -267,7 +268,7 @@ class AdvertisingController extends Controller
         }
 
 
-        if($active_channel == 'online'  || $active_channel == 'tv' ) {
+        if($active_channel == 'online'  || $active_channel == 'tv'|| $active_channel == 'ambient' ) {
 
             foreach ($media->channeldistribution as $dist) {
                 if ($dist->weekNumber != $request->weekNum) {
