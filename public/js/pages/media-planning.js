@@ -592,7 +592,6 @@ $(document).ready(function() {
 	            },
 	            dataType: 'JSON',
 	            success: function(data,textStatus,jqXHR) {
-	        		// alert('1');
 					$edit_target.parents('tr').data('adimpressions',data.item.ad_impressions);
 	            	calTotal();
 
@@ -1230,7 +1229,6 @@ $('#menu_duplicate_line').on('click', function() {
 				$(contextDataTable).find("tr:nth-child("+(index+2)+")").attr('data-id',data.id);
 
 				if(data.media.is_cpc){
-					alert(data.media.is_cpc);
 					$(contextDataTable).find("tr:nth-child("+(index+2)+")").addClass('hasCPC');
 					$(contextDataTable).find("tr:nth-child("+(index+2)+")").attr('data-adimpressions',data.media.ad_impressions.toFixed(2));
 					// $(contextDataTable).find("tr:nth-child("+(index+2)+")").find('.cpcSummary').attr('title',data.media.ad_impressions.toFixed(2));
