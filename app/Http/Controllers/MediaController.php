@@ -328,6 +328,7 @@ class MediaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function insertCPC(Request $request){
+
         $media = CampaignChannelMedia::where('ID',$request->mediaID)->first();
         $clickrate = $request->clickrate;
 
@@ -347,6 +348,53 @@ class MediaController extends Controller
             }else{
                 $media->grossCHF = $media->adPressureValue / 1000 * $media->tkpGrossCHF;
                 $media->ad_impressions = 0;
+            }
+
+            $onlineChannel = CampaignChannel::where('campaignID', $request->campaignID)->where('name', $request->active_channel)->first();
+
+            $startDate = $onlineChannel->startDate;
+            $endDate = $onlineChannel->endDate;
+            $hasExtra = $onlineChannel->hasExtraWeek;
+            $startDay = getdate(strtotime($startDate));
+            $startWeek = date("W", strtotime($startDate));
+            $endDay = getdate(strtotime($endDate));
+            if ($startDay["yday"] > $endDay["yday"]) {
+                $endWeek = floor(($endDay["yday"] + 365) / 7) + $hasExtra;
+            } else {
+                $endWeek = date("W", strtotime($endDate)) + $hasExtra;
+            }
+            if(($startDay["year"] != $endDay["year"])
+                && ($startDay["year"] == 2020 || $startDay["year"] == 2026 || $startDay["year"] == 2032) ){
+                $endWeek ++;
+            }
+
+            $dists = CampaignChannelDistribution::where('mediaID', $media->ID)->get();
+
+            $active_channel = $request->active_channel;
+
+            if($active_channel == 'online' || $active_channel == 'ambient') {   // just remove all distribution when it is online.
+                foreach ($dists as $dist) {
+                    $dist->delete();
+                }
+
+                for ($i = $startWeek; $i <= ($endWeek - $hasExtra); $i++) {
+                    $dist = new CampaignChannelDistribution;
+                    $dist->mediaID = $request->mediaID;
+
+                    if($active_channel == 'tv')
+                        $dist->distributionCount =  intval($media->grps / ($endWeek - $startWeek + 1 - $hasExtra));
+                    else{
+                        if($media->is_cpc){
+                            $ad_impressions = $media->adPressureValue/$clickrate*100;
+                            $dist->distributionCount =  intval($ad_impressions / ($endWeek - $startWeek + 1 - $hasExtra));
+
+                        }else{
+                            $dist->distributionCount =  intval($media->adPressureValue / ($endWeek - $startWeek + 1 - $hasExtra));
+                        }
+                    }
+                    $dist->weekNumber = $i;
+                    $dist->save();
+                }
             }
 
             $msg = ($media->save())? "CPC has updated!" : "CPC Failed!";

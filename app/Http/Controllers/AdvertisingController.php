@@ -272,7 +272,8 @@ class AdvertisingController extends Controller
         $msg = '';
         $active_channel = $request->active_channel;
         $media = CampaignChannelMedia::where('ID',$request->mediaID)->first();
-        $remained = $media->adPressureValue;
+
+        $remained = ($media->is_cpc)?$media->ad_impressions:$media->adPressureValue;
         if($active_channel == 'tv'){
             $remained = $media->grps;
         }

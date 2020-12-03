@@ -567,9 +567,10 @@ class PdfController extends Controller
                     if($channel->name == 'online' || $channel->name == 'tv' || $channel->name == 'ambient'){
 
                         $i = 0;
+
                         foreach ($dists as $dist) {
 
-                            array_push($disCount, number_format(intval($dist->distributionCount), 0, '.', '\''));
+                            array_push($disCount, ($dist->distributionCount == 'tbd')?'tbd':number_format(intval($dist->distributionCount), 0, '.', '\''));
                             $disSum[$i++] += intval($dist->distributionCount);
                             $adWeekSum += intval($dist->distributionCount);
                         }
