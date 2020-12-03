@@ -241,14 +241,15 @@
 								<tr class="borderTdNone">
 									<td colspan="3" class="tdTitle"><div>Abzüge</div></td>
 								</tr>
-
+								@php $i=0; @endphp
 								@foreach ($data['costData']['deductsCost']['deductServices'] as $idx => $cost)
-									<tr class="{{($idx == 0) ? 'borderTdNone' : ''}}">
+									<tr class="{{($i == 0) ? 'borderTdNone' : ''}}">
 										<td style="width: 50%;">{{$idx}}</td>
 										<td style="width: 30%; text-align: right;">{{number_format($cost,2,'.',"'")}}</td>
 										<td></td>
 
 									</tr>
+									@php $i++; @endphp
 								@endforeach
 								<tr>
 									<td style="width: 50%;"><strong>Total Abzüge</strong></td>
