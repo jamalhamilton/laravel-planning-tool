@@ -247,7 +247,6 @@
 										<td style="width: 50%;">{{$idx}}</td>
 										<td style="width: 30%; text-align: right;">{{number_format($cost,2,'.',"'")}}</td>
 										<td></td>
-
 									</tr>
 									@php $i++; @endphp
 								@endforeach
