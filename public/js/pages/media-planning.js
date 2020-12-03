@@ -197,10 +197,18 @@ function calTotal() {
     	region = $($regions[j]).find('td:first').text();
     	sum[region] = 0;
     }
-
+    var val = 0;
     for (var j = 0; j < cells.length; j++) {
+
     	region = $(cells[j]).prev().prev()[0].innerHTML;
-    	sum[region] += parseFloat($(cells[j])[0].innerHTML.replace("\'","").replace("\'","").replace("\'","").replace(",",""));
+
+        if($(cells[j]).parents('tr').hasClass('hasCPC')){
+            val = $(cells[j]).parents('tr').data('adimpressions');
+        }else{
+            val = parseFloat($(cells[j])[0].innerHTML.replace("\'","").replace("\'","").replace("\'","").replace(",",""))
+        }
+        console.log(j,region,$(cells[j])[0].innerHTML,val);
+    	sum[region] += val;
     }
 
     current = 0;
@@ -219,14 +227,14 @@ function calTotal() {
     	if (isNaN(sum[region])) {
     		$(elems[i]).text("0");
     	} else {
-    		$(elems[i]).text(numberWithCommas(sum[region]));    	   	
+    		$(elems[i]).text(numberWithCommas(sum[region].toFixed(2)));
     	}
     };
 
     if (isNaN(current)) {
     	$(".adpressall").text("0");
     } else {
-    	$(".adpressall").text(numberWithCommas(current));
+    	$(".adpressall").text(numberWithCommas(current.toFixed(2)));
     }
 
     elems = document.getElementsByClassName('adpresspercent');
@@ -550,6 +558,7 @@ $(document).ready(function() {
 						//console.log(i,data.cpc_items[i].ad_impressions);
 						$('table.table_selected').find('tr[data-id="'+data.cpc_items[i].ID+'"]').attr('data-adimpressions',data.cpc_items[i].ad_impressions)
 						$('table.table_selected').find('tr[data-id="'+data.cpc_items[i].ID+'"]').find('td:nth-child(7)').text(data.cpc_items[i].grossCHF.toFixed(2));
+						$('table.table_selected').find('tr[data-id="'+data.cpc_items[i].ID+'"]').find('td:nth-child(5)').attr("title",numberWithCommas(data.cpc_items[i].ad_impressions.toFixed(2)));
 					}
 					calTotal();
 				}
@@ -1233,7 +1242,12 @@ $('#menu_duplicate_line').on('click', function() {
 				if(data.media.is_cpc){
 					$(contextDataTable).find("tr:nth-child("+(index+2)+")").addClass('hasCPC');
 					$(contextDataTable).find("tr:nth-child("+(index+2)+")").attr('data-adimpressions',data.media.ad_impressions.toFixed(2));
-					// $(contextDataTable).find("tr:nth-child("+(index+2)+")").find('.cpcSummary').attr('title',data.media.ad_impressions.toFixed(2));
+					if(data.media.ad_impressions){
+                        $(contextDataTable).find("tr:nth-child("+(index+2)+")").find('.cpcSummary').attr('title',numberWithCommas(data.media.ad_impressions.toFixed(2)));
+                    }else{
+                        $(contextDataTable).find("tr:nth-child("+(index+2)+")").find('.cpcSummary').removeAttr('title');
+                    }
+
 					calTotal();
 				}
 
@@ -1394,7 +1408,12 @@ $('body').on('click',"#addctgmodal", function() {
 					$(contextDataTable).find("tr:nth-child("+(index+1)+")").attr('data-adimpressions',data.media.ad_impressions.toFixed(2));
 
 					$(contextDataTable).find("tr:nth-child("+(index+1)+")").find('td:nth-child(7)').text(data.media.grossCHF.toFixed(2));
-					// $(contextDataTable).find("tr:nth-child("+(index+1)+")").find('.cpcSummary').attr('title',data.media.ad_impressions.toFixed(2));
+					if(data.media.ad_impressions){
+                        $(contextDataTable).find("tr:nth-child("+(index+1)+")").find('.cpcSummary').attr('title',numberWithCommas(data.media.ad_impressions.toFixed(2)));
+                    }else{
+                        $(contextDataTable).find("tr:nth-child("+(index+1)+")").find('.cpcSummary').removeAttr('title');
+                    }
+
 				}
 
 				$(contextDataTable).find("tr:nth-child("+(index+1)+")").toggleClass('hasCPC');
