@@ -475,31 +475,56 @@ class PdfController extends Controller
                             switch ($reg) {
                                 case 'D-CH':
                                     $dch_f = 1;
-                                    $adp['dch'] += $media->adPressureValue;
+                                    if($media->is_cpc){
+                                        $adp['dch'] += $media->ad_impressions;
+                                    }else{
+                                        $adp['dch'] += $media->adPressureValue;
+                                    }
+
                                     $nn['dch'] += $media->nnCHF;
                                     $tkpnn['dch'] += $media->tkpNNCHF;
                                     break;
                                 case 'F-CH':
                                     $fch_f = 1;
-                                    $adp['fch'] += $media->adPressureValue;
+                                    if($media->is_cpc){
+                                        $adp['fch'] += $media->ad_impressions;
+                                    }else {
+                                        $adp['fch'] += $media->adPressureValue;
+                                    }
+
                                     $nn['fch'] += $media->nnCHF;
                                     $tkpnn['fch'] += $media->tkpNNCHF;
                                     break;
                                 case 'I-CH':
                                     $ich_f = 1;
-                                    $adp['ich'] += $media->adPressureValue;
+                                    if($media->is_cpc){
+                                        $adp['ich'] += $media->ad_impressions;
+                                    }else {
+                                        $adp['ich'] += $media->adPressureValue;
+                                    }
+
                                     $nn['ich'] += $media->nnCHF;
                                     $tkpnn['ich'] += $media->tkpNNCHF;
                                     break;
                                 case 'D-/F-CH':
                                     $dfch_f = 1;
-                                    $adp['dfch'] += $media->adPressureValue;
+                                    if($media->is_cpc){
+                                        $adp['dfch'] += $media->ad_impressions;
+                                    }else {
+                                        $adp['dfch'] += $media->adPressureValue;
+                                    }
+
                                     $nn['dfch'] += $media->nnCHF;
                                     $tkpnn['dfch'] += $media->tkpNNCHF;
                                     break;
                                 case 'National':
                                     $national_f = 1;
-                                    $adp['national'] += $media->adPressureValue;
+                                    if($media->is_cpc){
+                                        $adp['national'] += $media->ad_impressions;
+                                    }else {
+                                        $adp['national'] += $media->adPressureValue;
+                                    }
+
                                     $nn['national'] += $media->nnCHF;
                                     $tkpnn['national'] += $media->tkpNNCHF;
                                     break;
