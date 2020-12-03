@@ -866,7 +866,7 @@ class PdfController extends Controller
             }
 
             //deduct
-            $service_total+= $deductTotal;
+//            $service_total+= $deductTotal;
             $total+= $deductTotal;
 
 

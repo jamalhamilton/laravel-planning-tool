@@ -739,7 +739,7 @@ class PlanningController extends Controller
             $campaignExport = CampaignExport::where('campaignID', $campaignID)->orderBy('version', 'desc')->get();
 
             //deduct
-            $total+= $deductsCost['subtotal'];
+//            $total+= $deductsCost['subtotal'];
             $totalMWST+= $deductsCost['subtotal'];
 
             $data = array(
@@ -1813,9 +1813,17 @@ class PlanningController extends Controller
                 if($active_channel == 'ambient' || $active_channel == 'online'  || $active_channel == 'tv') {
                     if($active_channel == 'tv')
                         $distributionCount =  intval($media->grps / ($endWeek - $startWeek + 1 - $hasExtra));
-                    else
-                        $distributionCount =  intval($media->adPressureValue / ($endWeek - $startWeek + 1 - $hasExtra));
+                    else {
+                        if($media->is_cpc){
+                            $clickrate = $this->getDefaultClickRate($category);
+                            $ad_impressions = $media->adPressureValue/$clickrate*100;
+                            $distributionCount =  intval($ad_impressions / ($endWeek - $startWeek + 1 - $hasExtra));
 
+                        }else{
+                            $distributionCount = intval($media->adPressureValue / ($endWeek - $startWeek + 1 - $hasExtra));
+                        }
+
+                    }
                     for ($i = $startWeek; $i <= ($endWeek - $hasExtra); $i++) {
 
                         $dist = new CampaignChannelDistribution;
@@ -1859,4 +1867,18 @@ class PlanningController extends Controller
         }
     }
 
+    private function getDefaultClickRate($category){
+        $clickrate = $category->clickrate;
+        if(!isset($clickrate)){
+            if($category->ID == 1) // Display category.
+                $clickrate = 0.25;
+            else if($category->ID == 2) // Mobile category.
+                $clickrate = 0.3;
+            else if($category->ID == 5) // Native category.
+                $clickrate = 0.2;
+            else
+                $clickrate = 0.25;
+        }
+        return $clickrate;
+    }
 }

@@ -140,7 +140,15 @@ class AdvertisingController extends Controller
                 $dists = CampaignChannelDistribution::where('mediaID',$media->ID)->get();
 //                dd($dists);
                 $distCount = array();
-                $adPrint = number_format($media->adPressureValue, 0, '.', '\'');
+
+                if($media->is_cpc){
+                    $clickrate = $this->getDefaultClickRate($category);
+                    $ad_impressions = $media->adPressureValue/$clickrate *100;
+                    $adPrint  =  number_format($ad_impressions, 0, '.', '\'');
+                }else{
+                    $adPrint = number_format($media->adPressureValue, 0, '.', '\'');
+                }
+
                 $grps = number_format($media->grps, 0, '.', '\'');
 
                 $adWeekSum = 0;
@@ -480,5 +488,20 @@ class AdvertisingController extends Controller
         }
 
         return $datediff;
+    }
+
+    private function getDefaultClickRate($category){
+        $clickrate = $category->clickrate;
+        if(!isset($clickrate)){
+            if($category->ID == 1) // Display category.
+                $clickrate = 0.25;
+            else if($category->ID == 2) // Mobile category.
+                $clickrate = 0.3;
+            else if($category->ID == 5) // Native category.
+                $clickrate = 0.2;
+            else
+                $clickrate = 0.25;
+        }
+        return $clickrate;
     }
 }
