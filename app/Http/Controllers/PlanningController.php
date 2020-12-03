@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClickRate;
 use App\Models\Client;
 use App\Models\CoreCampaignCategory;
 use App\Models\Campaign;
@@ -1869,15 +1870,16 @@ class PlanningController extends Controller
 
     private function getDefaultClickRate($category){
         $clickrate = $category->clickrate;
+
+
         if(!isset($clickrate)){
-            if($category->ID == 1) // Display category.
-                $clickrate = 0.25;
-            else if($category->ID == 2) // Mobile category.
-                $clickrate = 0.3;
-            else if($category->ID == 5) // Native category.
-                $clickrate = 0.2;
-            else
-                $clickrate = 0.25;
+            $cate_core = CoreCampaignCategory::where('ID',$category->categoryID)->first();
+            $clickrate = ClickRate::all();
+            $clickrateArr = [];
+            foreach ($clickrate as $c){
+                $clickrateArr[$c->name] = $c->value;
+            }
+            $clickrate = ($clickrateArr[$cate_core->name])??$clickrateArr['DEFAULT'];
         }
         return $clickrate;
     }
