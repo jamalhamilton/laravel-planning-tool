@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\ClickRate;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -14,6 +15,7 @@ use App\Models\CoreRightGroup;
 use App\Models\Client;
 use App\Models\ClientConService;
 use App\Models\ClientConServiceValue;
+use App\Models\CampaignExport;
 
 use App\Models\Campaign;
 use App\Models\CampaignChannel;
@@ -226,6 +228,8 @@ class ApiController extends Controller
 
             $channels = CampaignChannel::where('campaignID', $campaignID)->get();
             $serviceGroups = CoreServiceGroup::where('isConstant',1)->get()->toArray();
+            $serviceDeducts = CoreServiceGroup::where('isConstant',2)->get()->toArray();
+            $deductTotal = 0;
             $serviceCosts = array();
             $serviceCosts_channel = array();
             $serviceTotal = 0;
@@ -283,6 +287,35 @@ class ApiController extends Controller
 
                     array_push($serviceCosts_channel[$channel->name] , $cost);
                 }
+
+                //deduct
+                $serviceCosts_channel_deduct[$channel->name] = array();
+                foreach ($serviceDeducts as $deduct){
+                    $query = "select *
+                        from core_service_groups_items t1
+                        left join campaign_channels_parameters t3 on t1.ID = t3.serviceItemID
+                        where t3.channelID = ? and t1.groupID = ?";
+
+                    $res = \Illuminate\Support\Facades\DB::select($query, [$onlineChannelID, $deduct['ID']]);
+                    if(empty($res)) $res = array();
+
+                    $subTotal = 0;
+                    foreach ($res as $k=>$v){
+                        $subTotal+= $v->calcValue;
+                    }
+
+
+                    $cost = array(
+                        'groupName' => $deduct["name"],
+                        'subTotal' => floatval($subTotal),
+                        'child'=>$res
+                    );
+
+                    $deductTotal += floatval($subTotal);
+
+                    array_push($serviceCosts_channel_deduct[$channel->name] , $cost);
+
+                }
             }
 
             foreach ($serviceCosts_channel as $chn_name => $costs_ar) {
@@ -297,6 +330,25 @@ class ApiController extends Controller
                     'subTotal' => $value
                 );
                 array_push($serviceCosts, $cost);
+            }
+
+            //deduct
+            $deductsCost = array();
+            $deductsCost['items'] = [];
+            $deductsCost['subtotal'] = 0;
+            foreach ($serviceCosts_channel_deduct as $c=>$item){
+                foreach ($item as $k => $v) {
+                    foreach ($v['child'] as $x=>$y){
+                        if(isset($deductsCost['items'][$y->name])){
+                            $deductsCost['items'][$y->name] += $y->calcValue;
+                        }else{
+                            $deductsCost['items'][$y->name] = $y->calcValue;
+                        }
+                        $deductsCost['subtotal'] += $y->calcValue;
+
+                    }
+                }
+
             }
 
             ////////////////////
@@ -443,22 +495,31 @@ class ApiController extends Controller
                 $mediaData["percentage"] = number_format(floatval($nnCHFTotal) / floatval($total) * 100, 2);
             }
 
+            $campaignExport = CampaignExport::where('campaignID', $campaignID)->orderBy('version', 'desc')->get();
+
+            //deduct
+            $totalMWST+= $deductsCost['subtotal'];
 
             $data[] = array(
                 'campaignID' => $campaignID,
                 'campaignName' => $campaignName,
                 'customerName' => $customerName,
                 'channels' => $versions,
+                'campaignExport' => $campaignExport,
+                'onlineChannel' => $onlineChannelID,
                 'totalStartdate' => date("d.m.Y", $totalStartTime),
                 'totalEnddate' => date("d.m.Y", $totalEndTime),
                 'planningStatus' => $status,
                 'statuses' => $statuses,
+                'traffickosten' => $adP,
+                'honorar' => $NNInChf,
                 'costData' => array(
                     'serviceData' => $serviceData,
                     'mediaData' => $mediaData,
                     'total' => number_format($total, 2),
                     'totalMWST' => number_format($totalMWST, 2)
-                )
+                ),
+                'abzuge'=>$deductsCost
             );
         }
 
@@ -621,11 +682,60 @@ class ApiController extends Controller
 
         $NNInChf = number_format($NNInChf, 2,".","'");
         $AdP = number_format($AdP, 2,".","'");*/
+        $deductTotal = 0;
+        $serviceCosts_channel_deduct = [];
+        $serviceCosts_channel_deduct[$channel->name] = [];
+        $serviceDeducts = CoreServiceGroup::where('isConstant',2)->get()->toArray();
+        foreach ($serviceDeducts as $deduct){
+            $query = "select *
+                        from core_service_groups_items t1
+                        left join campaign_channels_parameters t3 on t1.ID = t3.serviceItemID
+                        where t3.channelID = ? and t1.groupID = ?";
+
+            $res = \Illuminate\Support\Facades\DB::select($query, [$channelID, $deduct['ID']]);
+            if(empty($res)) $res = array();
+
+            $subTotal = 0;
+            foreach ($res as $k=>$v){
+                $subTotal+= $v->calcValue;
+            }
+
+
+            $cost = array(
+                'groupName' => $deduct["name"],
+                'subTotal' => floatval($subTotal),
+                'child'=>$res
+            );
+
+            $deductTotal += floatval($subTotal);
+
+            array_push($serviceCosts_channel_deduct[$channel->name] , $cost);
+
+        }
+
+        $deductsCost = array();
+        $deductsCost['items'] = [];
+        $deductsCost['subtotal'] = 0;
+        foreach ($serviceCosts_channel_deduct as $c=>$item){
+            foreach ($item as $k => $v) {
+                foreach ($v['child'] as $x=>$y){
+                    if(isset($deductsCost['items'][$y->name])){
+                        $deductsCost['items'][$y->name] += $y->calcValue;
+                    }else{
+                        $deductsCost['items'][$y->name] = $y->calcValue;
+                    }
+                    $deductsCost['subtotal'] += $y->calcValue;
+
+                }
+            }
+
+        }
 
         $resp = array(
             'code' => 200,
             'msg' => '',
-            'data' => $parameters
+            'data' => $parameters,
+            'abzuge' => $deductsCost
         );
 
         return response()->json($resp);
@@ -695,9 +805,13 @@ class ApiController extends Controller
 
         foreach ($currentCategory as $ctg) {
             $currentCategories[$ctg->categoryID] = CoreCampaignCategory::where('ID',$ctg->categoryID)->where('channel_name', $active_channel)->first();
+            $currentCategories[$ctg->categoryID]->clickrate = $this->getClickRateByName($currentCategories[$ctg->categoryID]->name);
         }
 
         $constantCategories = CoreCampaignCategory::where('isConstant','1')->where('channel_name',$active_channel)->get();
+        foreach ($constantCategories as $k=>$v){
+            $constantCategories[$k]->clickrate = $this->getClickRateByName($v->name);
+        }
         $categories = CampaignChannel::where('campaignID',$campaignID)->where('name',$active_channel)->first()->campaignChannelmediaconcategory;
         $data = array();
 
@@ -750,6 +864,8 @@ class ApiController extends Controller
                         'format' => $media->formatValue,
                         'grps' => number_format($media->grps, 2, '.', '\''),
                         'kontaktsumme' => number_format($media->kontaktsumme, 0, '.', '\''),
+                        'is_cpc'=>$media->is_cpc,
+                        'ad_impressions'=>$media->ad_impressions
                     );
                     if ($media->regionID) {
 
@@ -985,5 +1101,32 @@ class ApiController extends Controller
         }
 
         return number_format($sum, 2, '.', '\'');
+    }
+
+    private function getDefaultClickRate($category){
+        $clickrate = $category->clickrate;
+
+
+        if(!isset($clickrate)){
+            $cate_core = CoreCampaignCategory::where('ID',$category->categoryID)->first();
+            $clickrate = ClickRate::all();
+            $clickrateArr = [];
+            foreach ($clickrate as $c){
+                $clickrateArr[$c->name] = $c->value;
+            }
+            $clickrate = ($clickrateArr[$cate_core->name])??$clickrateArr['DEFAULT'];
+        }
+        return $clickrate;
+    }
+
+    private function getClickRateByName($name)
+    {
+        $clickrate = ClickRate::all();
+        $clickrateArr = [];
+        foreach ($clickrate as $c) {
+            $clickrateArr[$c->name] = $c->value;
+        }
+        $clickrate = ($clickrateArr[$name]) ?? $clickrateArr['DEFAULT'];
+        return $clickrate;
     }
 }
