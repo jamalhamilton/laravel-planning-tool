@@ -237,7 +237,7 @@
         }
 
         .colCPC{
-            border-right:10px solid #A4B7CB!important;
+            border-right:10px solid #77B0D7!important;
         }
     </style>
 
@@ -327,13 +327,13 @@ $_total_page = ceil(sizeof($date)/16);
                 <th width="120" class="nowrap tg-15li w120">SPRACHE</th>
                 <th width="120" class="nowrap tg-15li w220">FORMAT</th>
                 <th width="120" class="nowrap tg-15li w120 text-right">WERBE-<br>DRUCK</th>
-                <th width="120" class="nowrap tg-15li w120 text-right">TKP/CPC<br>BRUT<br></th>
+                <th width="120" class="nowrap tg-15li w120 text-right">TKP/CPC<br>BRUTTO IN CHF<br></th>
                 <th width="120" class="nowrap tg-15li w120 text-right">KOSTEN<br>BRUT</th>
                 <th width="120" class="nowrap tg-15li w120 text-right">RABATT<br>IN %</th>
                 <th width="120" class="nowrap tg-15li w120 text-right">KOSTEN<br>NET</th>
                 <th width="120" class="nowrap tg-15li w120 text-right">BK IN %</th>
                 <th width="120" class="nowrap tg-15li w120 text-right">TKP/CPC<br>NET-NET</th>
-                <th width="120" class="nowrap tg-15li w120 text-right">KOSTEN<br>NET-NET</th>
+                <th width="120" class="nowrap tg-15li w120 text-right">KOSTEN N/N<br>IN CHF</th>
                 <th width="30" class="nowrap tg-drrh  w30 text-right" ></th>
                 @for ($j = 0; $j < $size - 1; $j++)
                     <th width="120" class="tg-15li bt_border text-right">{!!$date[$j + ($_p*16)]??''!!}</th>
@@ -538,7 +538,7 @@ $_total_page = ceil(sizeof($date)/16);
                     <td class="tg-drrh " ></td>
                     @for ($j = 0; $j < $size; $j++)
                         <td class="tg-15li @if($j == $size - 1)  @else  @endif text-right">
-                            @if (isset($disSum[$i][$j+ ($_p*16)]))
+                            @if (isset($disSum[$i][$j+ ($_p*16)])  && $totalDisSum[$j+ ($_p*16)]!= 0)
                                 {{number_format($disSum[$i][$j+ ($_p*16)], 0, '.', '\'')}}
                             @endif
                         </td>
@@ -681,7 +681,7 @@ $_total_page = ceil(sizeof($date)/16);
 
             <div style="margin-top: 50px; font-size: 30px; width: 2530px;color: #5C7DA2">
                 <p>
-                    <strong style="border-left:5px solid #A4B7CB; padding-left: 10px;">CPC Klickpreismodell</strong> - die gekennzeichneten Platzierungen werden pro Klick verrechnet. Der Werbedruck wird in Klicks angegeben. Der zu erwartende Werbedruck in Ad Impressions wird auf Basis von Annahmen bei den Clickraten (Display 0.25%, Mobile 0.30% und Native 0.20%) berechnet.
+                    <strong style="border-left:5px solid #A4B7CB; padding-left: 10px;">CPC Klickpreismodell</strong> - die gekennzeichneten Platzierungen werden pro Klick verrechnet. Der Werbedruck wird in Klicks angegeben. Der zu erwartende Werbedruck in Ad Impressions wird auf Basis von Annahmen bei den Klickraten (Display 0.25%, Mobile 0.30% und Native 0.20%) berechnet.
                 </p>
             </div>
           @php //dd($rightTable);@endphp

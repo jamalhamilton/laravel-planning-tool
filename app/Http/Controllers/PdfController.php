@@ -872,7 +872,7 @@ class PdfController extends Controller
 
 
             array_push($rightTable, array('Total Servicekosten exkl. MWST', number_format($service_total,2, ".", "'"), $service_percentage,'',[]));
-            array_push($rightTable, array('Total Media- & Servicekosten exkl. MWST.', number_format($total, 2, ".", "'"), '100.00','',[]));
+            array_push($rightTable, array('Total Media- & Servicekosten exkl. MWST', number_format($total, 2, ".", "'"), '100.00','',[]));
             //dd($rightTable);
             $diff = sizeof($rightTable) - sizeof($leftTable) - 1;
 

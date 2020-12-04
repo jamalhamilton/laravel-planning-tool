@@ -234,6 +234,10 @@
         color: #fff!important;
         border-left:0px solid #fff ;
     }
+
+    .colCPC{
+        border-right:10px solid #77B0D7!important;
+    }
 </style>
 
 
@@ -321,12 +325,12 @@
             <th width="120" class="nowrap tg-15li w120">SPRACHE</th>
             <th width="120" class="nowrap tg-15li w220">FORMAT</th>
             <th width="120" class="nowrap tg-15li w120 text-right">WERBE-<br>DRUCK</th>
-            <th width="120" class="nowrap tg-15li w120 text-right">TKP/CPC<br>BRUT<br></th>
+            <th width="120" class="nowrap tg-15li w120 text-right">TKP/CPC<br>BRUTTO IN CHF<br></th>
             <th width="120" class="nowrap tg-15li w120 text-right">KOSTEN<br>BRUT</th>
             <th width="120" class="nowrap tg-15li w120 text-right">RABATT<br>IN %</th>
             <th width="120" class="nowrap tg-15li w120 text-right">KOSTEN<br>NET</th>
             <th width="120" class="nowrap tg-15li w120 text-right">BK IN %</th>
-            <th width="120" class="nowrap tg-15li w120 text-right">TKP/CPC NET-<br>NET CHF</th>
+            <th width="120" class="nowrap tg-15li w120 text-right">TKP/CPC N/N<br/> IN CHF</th>
             <th width="120" class="nowrap tg-15li w120 text-right">KOSTEN<br>NET-NET</th>
             <th width="30" class="nowrap tg-drrh  w30 text-right" ></th>
             @for ($j = 0; $j < $size - 1; $j++)
@@ -398,9 +402,9 @@
                 <td class="tg-0lax br_border2 bt_border2">{!! $row[3] !!}</td>
 
                 <?php if($row[4] == 0 || $row[4] == '0' || $row[4] == 0.00 || $row[4] == '0.00'){ ?>
-                    <td class="tg-0lax br_border2 bt_border2 text-right"></td>
+                    <td class="tg-0lax br_border2 bt_border2 text-right @if($row[15]) colCPC @endif"></td>
                 <?php }else{ ?>
-                    <td class="tg-0lax br_border2 bt_border2 text-right">{!! number_format($row[4], 0, '.', '\'') !!}</td>
+                    <td class="tg-0lax br_border2 bt_border2 text-right @if($row[15]) colCPC @endif">{!! number_format($row[4], 0, '.', '\'') !!}</td>
                 <?php } ?>
 
                 <?php if($row[5] == 0 || $row[5] == '0' || $row[5] == 0.00 || $row[5] == '0.00'){ ?>
@@ -422,9 +426,9 @@
                 <?php } ?>
 
                 <?php if($row[8] == 0 || $row[8] == '0' || $row[8] == 0.00 || $row[8] == '0.00'){ ?>
-                    <td class="tg-0lax br_border2 bt_border2 text-right"></td>
+                    <td class="tg-0lax br_border2 bt_border2 text-right @if($row[15]) colCPC @endif"></td>
                 <?php }else{ ?>
-                    <td class="tg-0lax br_border2 bt_border2 text-right">{!! number_format($row[8], 0, '.', '\'') !!}</td>
+                    <td class="tg-0lax br_border2 bt_border2 text-right @if($row[15]) colCPC @endif">{!! number_format($row[8], 0, '.', '\'') !!}</td>
                 <?php } ?>
 
                 <?php if($row[9] == 0 || $row[9] == '0' || $row[9] == 0.00 || $row[9] == '0.00'){ ?>
@@ -570,7 +574,7 @@
             <td class="tg-drrh  " style="border-top:none;border-bottom:none"></td>
             @for ($j = 0; $j < $size; $j++)
                 <td class="tg-16li  @if($j == $size - 1)  @endif text-right" >
-                @if (isset($totalDisSum[$j+ ($_p*16)]))
+                @if (isset($totalDisSum[$j+ ($_p*16)]) && $totalDisSum[$j+ ($_p*16)]!= 0)
                 {{number_format($totalDisSum[$j+ ($_p*16)], 0, '.', '\'')}}
                 @endif
             </td>
@@ -655,7 +659,7 @@
         </table>
         <div style="margin-top: 50px; font-size: 30px; width: 2530px; color: #5C7DA2">
             <p>
-                <strong style="border-left:5px solid #A4B7CB; padding-left: 10px;">CPC Klickpreismodell</strong> - die gekennzeichneten Platzierungen werden pro Klick verrechnet. Der Werbedruck wird in Klicks angegeben. Der zu erwartende Werbedruck in Ad Impressions wird auf Basis von Annahmen bei den Clickraten (Display 0.25%, Mobile 0.30% und Native 0.20%) berechnet.
+                <strong style="border-left:5px solid #A4B7CB; padding-left: 10px;">CPC Klickpreismodell</strong> - die gekennzeichneten Platzierungen werden pro Klick verrechnet. Der Werbedruck wird in Klicks angegeben. Der zu erwartende Werbedruck in Ad Impressions wird auf Basis von Annahmen bei den Klickraten (Display 0.25%, Mobile 0.30% und Native 0.20%) berechnet.
             </p>
         </div>
     <!--  <table class="t-title">
