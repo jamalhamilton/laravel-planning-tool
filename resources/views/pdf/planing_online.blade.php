@@ -458,7 +458,7 @@ $_total_page = ceil(sizeof($date)/16);
                             @if($j<$size - 1)
                                 <td class="tg-0lax bt_border2 @if($j == $size - 1)  @else br_border2 @endif text-right">
                                     @if($row[4] == 0 || $row[4] == '0' || $row[4] == 0.00 || $row[4] == '0.00' || $discount[$i][$x][$j+ ($_p*16)]=='tbd')
-                                        {{($discount[$i][$x][$j+ ($_p*16)]=='tbd')?'tbd':''}}
+                                        {{(isset($discount[$i][$x][$j+ ($_p*16)]) && $discount[$i][$x][$j+ ($_p*16)]=='tbd')?'tbd':''}}
                                     @else
                                         {!! $discount[$i][$x][$j+ ($_p*16)] !!}
                                     @endif
@@ -471,7 +471,7 @@ $_total_page = ceil(sizeof($date)/16);
                                 @else
                                     <td class="tg-0lax bt_border2 @if($j == $size - 1)  @else  br_border2 @endif text-right">
                                         @if($row[4] == 0 || $row[4] == '0' || $row[4] == 0.00 || $row[4] == '0.00' || $discount[$i][$x][$j+ ($_p*16)]=='tbd')
-                                            {{($discount[$i][$x][$j+ ($_p*16)]=='tbd')?'tbd':''}}
+                                            {{(isset($discount[$i][$x][$j+ ($_p*16)]) && $discount[$i][$x][$j+ ($_p*16)]=='tbd')?'tbd':''}}
                                         @else
                                             {!! $discount[$i][$x][$j+ ($_p*16)] !!}
                                         @endif
