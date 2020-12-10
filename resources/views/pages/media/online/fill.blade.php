@@ -213,6 +213,7 @@
                                                         @if ($table['note'] != "")
                                                             <div style="width:17%;position: relative;"><span class="note ic-triangle"><div class="note-data">{{$table['note']}}</div></span></div>
                                                         @endif
+
                                                         <button class="collapsible"> {{$table['name']}} </button>
                                                         <div class="contentCollap" style="max-width: 100%;max-height: 100%;">
                                                             @if (isset($table['media'][0]))
@@ -234,6 +235,7 @@
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody class="tableToAdd">
+
                                                                 @foreach ($table['media'] as $idR => $media)
                                                                     <tr class="blankInputTd @if($media['is_cpc']) hasCPC @endif" data-id="{{$media['id']}}" data-adimpressions="{{$media['ad_impressions']}}">
                                                                         <td data-type="free-input" class="{{(isset($media['mediaNotes']['1'])) ? 'cell-note':''}}" data-note="{{(isset($media['mediaNotes']['1'])) ? $media['mediaNotes']['1'] : ''}}">{!!$media['placement']!!}</td>
@@ -250,8 +252,44 @@
                                                                         <td class="" data-type="free-input" class="{{(isset($media['mediaNotes']['12'])) ? 'cell-note':''}}" data-note="{{(isset($media['mediaNotes']['12'])) ? $media['mediaNotes']['12'] : ''}}">{{$media['tkpNNCHF']}}</td>
                                                                     </tr>
                                                                 @endforeach
+
                                                                 </tbody>
                                                             </table>
+                                                            @else
+                                                                <table class="table tableDisplay mytable">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th style="width:16.8%"></th>
+                                                                        <th style="width:16.8%"></th>
+                                                                        <th style="width:6.4%"></th>
+                                                                        <th style="width:11.7%"></th>
+                                                                        <th style="width:6.4%"></th>
+                                                                        <th style="width:6.7%"></th>
+                                                                        <th style="width:6.4%"></th>
+                                                                        <th style="width:3.9%"></th>
+                                                                        <th style="width:6.4%"></th>
+                                                                        <th style="width:3.9%"></th>
+                                                                        <th style="width:6.4%"></th>
+                                                                        <th style="width:6.4%"></th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody class="tableToAdd">
+                                                                        <tr class="odd">
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
                                                             @endif
                                                         </div><!--contentCollap-->
 

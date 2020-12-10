@@ -249,7 +249,7 @@ function calTotal() {
     	if (isNaN(sum[region])) {
     		$(elems[i]).text("0");
     	} else {
-    		$(elems[i]).text(numberWithCommas(sum[region].toFixed(2)));
+    		if(sum[region]) $(elems[i]).text(numberWithCommas(sum[region].toFixed(2)));
     	}
     };
 
@@ -611,6 +611,7 @@ $(document).ready(function() {
 			mediaID = $edit_target.parents('tr').data('id');
 	       	colIndex = $edit_target[0].cellIndex;     	
 	       	value = $edit_target.text();
+			categoryTable = $($edit_target).parents('.bigTable1780');
 
 			var clickrate = $edit_target.parents('table.tableCategory').data('clickrate');
 
@@ -625,11 +626,15 @@ $(document).ready(function() {
 	            	'type':'select-search',
 					'active_channel':$("#active_channel").val(),
 					'campaignID':$("#campaign_id").val(),
-					'clickrate':clickrate
+					'clickrate':clickrate,
+					'categoryID' : categoryTable.data('id')
 	            },
 	            dataType: 'JSON',
 	            success: function(data,textStatus,jqXHR) {
 					$edit_target.parents('tr').data('adimpressions',data.item.ad_impressions);
+					if(!$edit_target.parents('tr').data('id')){
+						$edit_target.parents('tr').data('id',data.item.ID);
+					}
 	            	calTotal();
 					//alert(1);
 
@@ -678,6 +683,8 @@ $(document).ready(function() {
 		if ( $edit_target && $edit_target[0] == $(e.target).parent()[0] ) {
 			return;
 		}
+
+		categoryTable = $(e.target).parents('.bigTable1780');
 
 		$edit_target = $(e.target);	
 		var $editor = null;
@@ -735,6 +742,8 @@ $(document).ready(function() {
 		       	colIndex = $edit_target[0].cellIndex;
 		       	var cur_value = value.replace(/\'/g,"");
 
+				categoryTable = $($edit_target).parents('.bigTable1780');
+
 
 		       	if (colIndex > 2) {
 		       		if (!($.isNumeric(cur_value))) {
@@ -778,11 +787,14 @@ $(document).ready(function() {
 							'nnsum' : nnsum,
 							'active_channel':$("#active_channel").val(),
 			            	'type':"free-input",
-							'clickrate':clickrate
+							'clickrate':clickrate,
+							'categoryID' : categoryTable.data('id')
 			            },
 			            dataType: 'JSON',
 			            success: function(data,textStatus,jqXHR) {
-
+			        		if(!$edit_target.parents('tr').data('id')){
+								$edit_target.parents('tr').data('id',data.item.ID);
+							}
 							$edit_target.parents('tr').data('adimpressions',data.item.ad_impressions);
 							console.log(data.mediaData);
 			            	if(colIndex>1){
@@ -899,6 +911,7 @@ $(document).ready(function() {
 
                 $edittarget = $(this).parent();
                 colIndex = $edittarget[0].cellIndex;
+				categoryTable = $($edit_target).parents('.bigTable1780');
 
                 if( colIndex == 3) {
                     var val = $(this).val();
@@ -926,11 +939,15 @@ $(document).ready(function() {
 			            	'value':value,
 			            	'type':"auto-complete",
 							'active_channel':$("#active_channel").val(),
-							'campaignID':$("#campaign_id").val()
+							'campaignID':$("#campaign_id").val(),
+							'categoryID' : categoryTable.data('id')
 			            },
 			            dataType: 'JSON',
 			            success: function(data,textStatus,jqXHR) {
 			        		//alert('3')
+							if(!$edit_target.parents('tr').data('id')){
+								$edit_target.parents('tr').data('id',data.item.ID);
+							}
 						},
 						error: function(jqXHR, textStatus, errorThrown) {
 
@@ -953,6 +970,7 @@ $(document).ready(function() {
 				mediaID = $edit_target.parents('tr').data('id');
 		       	colIndex = $edit_target[0].cellIndex;
 		       	value = $(this).val().replaceAll("\n","<br>");
+				categoryTable = $($edit_target).parents('.bigTable1780');
 
 		       	$.ajax({
 		        	headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -964,11 +982,15 @@ $(document).ready(function() {
 		            	'value':value,
 		            	'type':"auto-complete",
 						'active_channel':$("#active_channel").val(),
-						'campaignID':$("#campaign_id").val()
+						'campaignID':$("#campaign_id").val(),
+						'categoryID' : categoryTable.data('id')
 		            },
 		            dataType: 'JSON',
 		            success: function(data,textStatus,jqXHR) {
 		        		//alert(4);
+						if(!$edit_target.parents('tr').data('id')){
+							$edit_target.parents('tr').data('id',data.item.ID);
+						}
 					},
 					error: function(jqXHR, textStatus, errorThrown) {
 
@@ -1169,6 +1191,7 @@ $(document).on('click',function() {$('.media-table-menu').hide();});
 
 function showContextMenu(e) {
 	e.preventDefault();
+
 	contextDataCol = e.target;
 	contextDataRow = $(e.target).parents('tr')[0];
 	contextDataTable = $(e.target).parents('table')[0];
@@ -1276,9 +1299,9 @@ $('#menu_duplicate_line').on('click', function() {
                         $(contextDataTable).find("tr:nth-child("+(index+2)+")").find('.cpcSummary').removeAttr('title');
                     }
 
-					calTotal();
-				}
 
+				}
+				calTotal();
 				reorderTable(contextDataTable);
 
 			},

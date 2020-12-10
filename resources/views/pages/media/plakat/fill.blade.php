@@ -236,6 +236,41 @@
                                                                 @endforeach
                                                                 </tbody>
                                                             </table>
+                                                            @else
+                                                                <table class="table tableDisplay mytable">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th style="width:16.8%"></th>
+                                                                        <th style="width:16.8%"></th>
+                                                                        <th style="width:6.4%"></th>
+                                                                        <th style="width:11.7%"></th>
+                                                                        <th style="width:6.4%"></th>
+                                                                        <th style="width:6.7%"></th>
+                                                                        <th style="width:6.4%"></th>
+                                                                        <th style="width:3.9%"></th>
+                                                                        <th style="width:6.4%"></th>
+                                                                        <th style="width:3.9%"></th>
+                                                                        <th style="width:6.4%"></th>
+                                                                        <th style="width:6.4%"></th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody class="tableToAdd">
+                                                                    <tr class="odd">
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
                                                             @endif
                                                         </div><!--contentCollap-->
 

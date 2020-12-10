@@ -530,6 +530,7 @@ $(document).ready(function() {
 			mediaID = $edit_target.parents('tr').data('id');
 	       	colIndex = $edit_target[0].cellIndex;
 	       	value = $edit_target.text();
+			categoryTable = $($edit_target).parents('.bigTable1780');
 
 	       	$.ajax({
 	        	headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -541,12 +542,15 @@ $(document).ready(function() {
 	            	'value':value,
 	            	'type':'select-search',
 					'active_channel':$("#active_channel").val(),
-					'campaignID':$("#campaign_id").val()
+					'campaignID':$("#campaign_id").val(),
+					'categoryID' : categoryTable.data('id')
 	            },
 	            dataType: 'JSON',
 	            success: function(data,textStatus,jqXHR) {
 	            	calTotal();
-
+					if(!$edit_target.parents('tr').data('id')){
+						$edit_target.parents('tr').data('id',data.item.ID);
+					}
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
 
@@ -1481,6 +1485,8 @@ function reCalculation($edit_target, value, eventFlag, e){
 	mediaID = $edit_target.parents('tr').data('id');
 	var colIndex = $edit_target[0].cellIndex;
 
+	categoryTable = $($edit_target).parents('.bigTable1780');
+
 	if(colIndex ==0 || colIndex ==1 || colIndex ==3){
 		value = value.replaceAll("\n","<br>");
 	}
@@ -1517,9 +1523,14 @@ function reCalculation($edit_target, value, eventFlag, e){
 				'value':value,
 				'active_channel':$("#active_channel").val(),
 				'type':"free-input",
+				'categoryID' : categoryTable.data('id')
 			},
 			dataType: 'JSON',
 			success: function(data,textStatus,jqXHR) {
+
+				if(!$edit_target.parents('tr').data('id')){
+					$edit_target.parents('tr').data('id',data.item.ID);
+				}
 
 				if(colIndex>1){
 					if (typeof data.mediaData.tkpGrossCHF !== 'undefined')
