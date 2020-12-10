@@ -1,6 +1,18 @@
 var formats = [];
 var max_char_limit = 200;
 
+function isEmptyWerbedruck() {
+	var empty = false;
+	var len = $('.cpcSummary').length;
+	$('.cpcSummary').each(function () {
+		if($(this).hasClass('free-input')){
+			var val = $(this).text();
+			if(val === "0") empty = true;
+		}
+
+	})
+	console.log("cpcSummary",len,empty);
+}
 
 function numberWithCommas(x) {
 	var str = x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "\'");
@@ -86,13 +98,13 @@ function calTotal() {
                 var TableData = $(tableRows[j]).children("td")[5];
                   totalValue += parseFloat($(TableData).text().replace("\'","").replace("\'","").replace("\'","").replace(",",""));
               }
-
+              
               $(elems[i]).text(totalValue.toFixed(2));
             FinaGrossTotal += totalValue;
     }
 
-    $(elems[elems.length - 1]).text(FinaGrossTotal.toFixed(2));
 
+    $(elems[elems.length - 1]).text(FinaGrossTotal.toFixed(2));
 
     elems = document.getElementsByClassName('grossCHF');
 
@@ -105,10 +117,12 @@ function calTotal() {
 
               for (var j = 0 ; j < tableRows.length; j++) {
 				  var TableData = $(tableRows[j]).children("td")[8];
-				  netto_inchf += parseFloat($(TableData).text().replace("\'","").replace("\'","").replace("\'","").replace(",",""));
+				  var tmp = parseFloat($(TableData).text().replace("\'","").replace("\'","").replace("\'","").replace(",",""));
+				  if(!isNaN(tmp)) netto_inchf += parseFloat(tmp);
 
 				  TableData = $(tableRows[j]).children("td")[6];
-				  brutto_inchf += parseFloat($(TableData).text().replace("\'","").replace("\'","").replace("\'","").replace(",",""));
+				  var tmp = parseFloat($(TableData).text().replace("\'","").replace("\'","").replace("\'","").replace(",",""));
+				  if(!isNaN(tmp)) brutto_inchf += tmp
               }
 
 			if(netto_inchf == 0){
@@ -149,10 +163,12 @@ function calTotal() {
 
 		for (var j = 0 ; j < tableRows.length; j++) {
                 var TableData = $(tableRows[j]).children("td")[8];
-					netto_inchf += parseFloat($(TableData).text().replace("\'","").replace("\'","").replace("\'","").replace(",",""));
+                var tmp = parseFloat($(TableData).text().replace("\'","").replace("\'","").replace("\'","").replace(",",""));
+                if(!isNaN(tmp)) netto_inchf += tmp
 
+				var tmp = parseFloat($(TableData).text().replace("\'","").replace("\'","").replace("\'","").replace(",",""));
 					TableData = $(tableRows[j]).children("td")[10];
-					nn_inchf += parseFloat($(TableData).text().replace("\'","").replace("\'","").replace("\'","").replace(",",""));
+				if(!isNaN(tmp)) nn_inchf += tmp;
               }
 			if(netto_inchf == 0){
 				$(elems[i]).text("0.00");
@@ -207,8 +223,10 @@ function calTotal() {
         }else{
             val = parseFloat($(cells[j])[0].innerHTML.replace("\'","").replace("\'","").replace("\'","").replace(",",""))
         }
-        console.log(j,region,$(cells[j])[0].innerHTML,val);
-    	sum[region] += val;
+        if(!isNaN(val)){
+			sum[region] += val;
+		}
+
     }
 
     current = 0;
@@ -346,6 +364,7 @@ function tkpCalculate(){
 			aryTotal[5] = 0;
 			aryTotal[11] = 0;
 		}
+
 		$(this).find("td:nth-child(6)").html(aryTotal[5].toFixed(2));
 		$(this).find("td:nth-child(12)").html(aryTotal[11].toFixed(2));
 
@@ -391,7 +410,7 @@ $(document).ready(function() {
     });
 	
 	$(".hasDatepicker").datepicker( "option", "firstDay", 1 );
-	calTotal();
+
 	
 	$('.mytable').dataTable({
 		"bSearchable": false,
@@ -421,6 +440,8 @@ $(document).ready(function() {
         "bDestroy": true,
         "bRetrieve": true
 	});
+
+	calTotal();
 
 	$("#Online").on('click','.btn-deletectg',function( e ) {
 		selectedTab = $(this).parents('table');
