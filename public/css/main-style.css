@@ -441,7 +441,11 @@ h4{font-size: 13px; color: #5C7C9D; text-transform: uppercase; margin:  30px 0px
 }
 
 .mediaPlanningTable .table .table tbody>tr.hasCPC>td.cpcFlag{
-    border-right: 6px solid #77B0D7!important;
+    border-left: 6px solid #77B0D7!important;
+}
+.cpcBorder{
+    border-left:6px solid #77B0D7;
+    padding-left: 10px;
 }
 
     /* Style the checkmark/indicator */

@@ -180,13 +180,13 @@
                                             <th style="width:6.4%" class="text-truncate">Sprache</th>
                                             <th style="width:11.7%" class="text-truncate">format</th>
                                             <th style="width:6.4%; text-align: right" class="text-truncate">werbedruck</th>
-                                            <th style="width:7%; text-align: right">TKP/CPC <br>BRUTTO IN CHF </th>
+                                            <th style="width:7%; text-align: right">TKP / CPC <br>BRUTTO IN CHF </th>
                                             <th style="width:6.4%; text-align: right">KOSTEN<br> BURT</th>
                                             <th style="width:3.9%; text-align: right">rabatt in %</th>
                                             <th style="width:6.4%; text-align: right">KOSTEN<br> NET</th>
                                             <th style="width:3.9%; text-align: right">bk<br> in %</th>
                                             <th style="width:6.4%; text-align: right">KOSTEN<br>NET-NET</th>
-                                            <th style="width:6.4%; text-align: right">TKP/CPC<br> N/N IN CHF</th>
+                                            <th style="width:6.4%; text-align: right">TKP / CPC<br> N/N IN CHF</th>
                                         </tr>
                                         </thead>
 
@@ -374,7 +374,7 @@
 
                                         <div style="margin-top: 50px">
                                             <p>
-                                                <strong style="border-left:5px solid #A4B7CB; padding-left: 10px;">CPC Klickpreismodell</strong> - die gekennzeichneten Platzierungen werden pro Klick verrechnet. Der Werbedruck wird in Klicks angegeben. Der zu erwartende Werbedruck in Ad Impressions wird auf Basis von Annahmen bei den Klickraten (Display 0.25%, Mobile 0.30% und Native 0.20%) berechnet.
+                                                <strong class="cpcBorder">CPC Klickpreismodell</strong> - die gekennzeichneten Platzierungen werden pro Klick verrechnet. Der Werbedruck wird in Klicks angegeben. Der zu erwartende Werbedruck in Ad Impressions wird auf Basis von Annahmen bei den Klickraten (Display 0.25%, Mobile 0.30% und Native 0.20%) berechnet.
                                             </p>
                                         </div>
                                     </div>

@@ -490,14 +490,14 @@
                     <td class="tg-15li"></td>
                     <td class="tg-15li"></td>
                     <td class="tg-15li tg-drrh"></td>
-                    <td class="tg-15li text-right">{{number_format($subTotalAd, 0, '.', '\'')}}</td>
-                    <td class="tg-15li text-right">{{number_format($subTotalTkpGross, 2, '.', '\'')}}</td>
-                    <td class="tg-15li text-right">{{number_format($subTotalGross, 2, '.', '\'')}}</td>
-                    <td class="tg-15li text-right">{{number_format($subTotalDiscount, 2, '.', '\'')}}</td>
-                    <td class="tg-15li text-right">{{number_format($subTotalNet, 0, '.', '\'')}}</td>
-                    <td class="tg-15li text-right">{{number_format($subTotalBk, 2, '.', '\'')}}</td>
-                    <td class="tg-15li text-right">{{number_format($subTotalTkp, 2, '.', '\'')}}</td>
-                    <td class="tg-15li text-right">{{number_format($subTotalNN, 2, '.', '\'')}}</td>
+                    <td class="tg-15li text-right">{{($subTotalAd)?number_format($subTotalAd, 0, '.', '\''):''}}</td>
+                    <td class="tg-15li text-right">{{($subTotalTkpGross)?number_format($subTotalTkpGross, 2, '.', '\''):''}}</td>
+                    <td class="tg-15li text-right">{{($subTotalGross)?number_format($subTotalGross, 2, '.', '\''):''}}</td>
+                    <td class="tg-15li text-right">{{($subTotalDiscount)?number_format($subTotalDiscount, 2, '.', '\''):''}}</td>
+                    <td class="tg-15li text-right">{{($subTotalNet)?number_format($subTotalNet, 0, '.', '\''):''}}</td>
+                    <td class="tg-15li text-right">{{($subTotalBk)?number_format($subTotalBk, 2, '.', '\''):''}}</td>
+                    <td class="tg-15li text-right">{{($subTotalTkp)?number_format($subTotalTkp, 2, '.', '\''):''}}</td>
+                    <td class="tg-15li text-right">{{($subTotalNN)?number_format($subTotalNN, 2, '.', '\''):''}}</td>
                     <td class="tg-drrh" ></td>
                     @for ($j = 0; $j < $size; $j++)
                         <td class="tg-15li @if($j == $size - 1) @else @endif text-right">
@@ -538,14 +538,14 @@
                 <td class="tg-16li"></td>
                 <td class="tg-16li"></td>
                 <td class="tg-16li"></td>
-                <td class="tg-16li text-right">{{number_format($totalAd, 0, '.', '\'')}}</td>
-                <td class="tg-16li text-right">{{number_format($totalTkpGross, 2, '.', '\'')}}</td>
-                <td class="tg-16li text-right">{{number_format($totalGross, 2, '.', '\'')}}</td>
-                <td class="tg-16li text-right">{{number_format($totalDiscount, 2, '.', '\'')}}</td>
-                <td class="tg-16li text-right">{{number_format($totalNet, 0, '.', '\'')}}</td>
-                <td class="tg-16li text-right">{{number_format($totalBk, 2, '.', '\'')}}</td>
-                <td class="tg-16li text-right">{{number_format($totalTkp, 2, '.', '\'')}}</td>
-                <td class="tg-16li tg-drrh text-right">{{number_format($totalNN, 2, '.', '\'')}}</td>
+                <td class="tg-16li text-right">{{($totalAd)?number_format($totalAd, 0, '.', '\''):''}}</td>
+                <td class="tg-16li text-right">{{($totalTkpGross)?number_format($totalTkpGross, 2, '.', '\''):''}}</td>
+                <td class="tg-16li text-right">{{($totalGross)?number_format($totalGross, 2, '.', '\''):''}}</td>
+                <td class="tg-16li text-right">{{($totalDiscount)?number_format($totalDiscount, 2, '.', '\''):''}}</td>
+                <td class="tg-16li text-right">{{($totalNet)?number_format($totalNet, 0, '.', '\''):''}}</td>
+                <td class="tg-16li text-right">{{($totalBk)?number_format($totalBk, 2, '.', '\''):''}}</td>
+                <td class="tg-16li text-right">{{($totalTkp)?number_format($totalTkp, 2, '.', '\''):''}}</td>
+                <td class="tg-16li tg-drrh text-right">{{($totalNN)?number_format($totalNN, 2, '.', '\''):''}}</td>
                 <td class="tg-drrh  " style="border-top:none;border-bottom:none"></td>
                 @for ($j = 0; $j < $size; $j++)
                     <td class="tg-16li @if($j == $size - 1) @endif text-right" style="padding:10px;">

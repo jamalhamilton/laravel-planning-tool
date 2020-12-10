@@ -402,11 +402,13 @@ $(document).ready(function() {
 		"bInfo": false,
 		"bAutoWidth": false,
 		"aoColumnDefs": [
-            { "sClass": "cpcFlag cpcSummary free-input", "aTargets": [ 4 ] },
-            { "sClass": "cpcFlag disabled", "aTargets": [ 8 ] },
-            { "sClass": "free-input", "aTargets": [ 0,1,5,7,9 ] },
+            { "sClass": "cpcSummary free-input", "aTargets": [ 4 ] },
+            { "sClass": "disabled", "aTargets": [ 8 ] },
+            { "sClass": "free-input", "aTargets": [ 0,1,7,9 ] },
+			{ "sClass": "cpcFlag free-input", "aTargets": [ 5 ] },
             { "sClass": "select-box", "aTargets": [ 2 ] },
-            { "sClass": "disabled", "aTargets": [ 6,11 ] },
+            { "sClass": "disabled", "aTargets": [ 6 ] },
+			{ "sClass": "cpcFlag disabled", "aTargets": [ 11 ] },
 			{ "sClass": "kostenCol disabled", "aTargets": [ 10 ] },
             { "sClass": "auto-complete", "aTargets": [ 3 ] }
         ],

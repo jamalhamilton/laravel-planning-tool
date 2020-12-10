@@ -236,7 +236,7 @@
     }
 
     .colCPC{
-        border-right:10px solid #77B0D7!important;
+        border-left:10px solid #77B0D7!important;
     }
 </style>
 
@@ -325,12 +325,12 @@
             <th width="120" class="nowrap tg-15li w120">SPRACHE</th>
             <th width="120" class="nowrap tg-15li w220">FORMAT</th>
             <th width="120" class="nowrap tg-15li w120 text-right">WERBE-<br>DRUCK</th>
-            <th width="120" class="nowrap tg-15li w120 text-right">TKP/CPC<br>BRUTTO IN CHF<br></th>
+            <th width="120" class="nowrap tg-15li w120 text-right">TKP / CPC<br>BRUTTO IN CHF<br></th>
             <th width="120" class="nowrap tg-15li w120 text-right">KOSTEN<br>BRUT</th>
             <th width="120" class="nowrap tg-15li w120 text-right">RABATT<br>IN %</th>
             <th width="120" class="nowrap tg-15li w120 text-right">KOSTEN<br>NET</th>
             <th width="120" class="nowrap tg-15li w120 text-right">BK IN %</th>
-            <th width="120" class="nowrap tg-15li w120 text-right">TKP/CPC N/N<br/> IN CHF</th>
+            <th width="120" class="nowrap tg-15li w120 text-right">TKP / CPC N/N<br/> IN CHF</th>
             <th width="120" class="nowrap tg-15li w120 text-right">KOSTEN<br>NET-NET</th>
             <th width="30" class="nowrap tg-drrh  w30 text-right" ></th>
             @for ($j = 0; $j < $size - 1; $j++)
@@ -402,15 +402,15 @@
                 <td class="tg-0lax br_border2 bt_border2">{!! $row[3] !!}</td>
 
                 <?php if($row[4] == 0 || $row[4] == '0' || $row[4] == 0.00 || $row[4] == '0.00'){ ?>
-                    <td class="tg-0lax br_border2 bt_border2 text-right @if($row[15]) colCPC @endif"></td>
+                    <td class="tg-0lax br_border2 bt_border2 text-right"></td>
                 <?php }else{ ?>
-                    <td class="tg-0lax br_border2 bt_border2 text-right @if($row[15]) colCPC @endif">{!! number_format($row[4], 0, '.', '\'') !!}</td>
+                    <td class="tg-0lax br_border2 bt_border2 text-right">{!! number_format($row[4], 0, '.', '\'') !!}</td>
                 <?php } ?>
 
                 <?php if($row[5] == 0 || $row[5] == '0' || $row[5] == 0.00 || $row[5] == '0.00'){ ?>
-                    <td class="tg-0lax br_border2 bt_border2 text-right"></td>
+                    <td class="tg-0lax br_border2 bt_border2 text-right  @if($row[15]) colCPC @endif"></td>
                 <?php }else{ ?>
-                    <td class="tg-0lax br_border2 bt_border2 text-right">{!! number_format($row[5], 2, '.', '\'') !!}</td>
+                    <td class="tg-0lax br_border2 bt_border2 text-right  @if($row[15]) colCPC @endif">{!! number_format($row[5], 2, '.', '\'') !!}</td>
                 <?php } ?>
 
                 <?php if($row[6] == 0 || $row[6] == '0' || $row[6] == 0.00 || $row[6] == '0.00'){ ?>
@@ -426,9 +426,9 @@
                 <?php } ?>
 
                 <?php if($row[8] == 0 || $row[8] == '0' || $row[8] == 0.00 || $row[8] == '0.00'){ ?>
-                    <td class="tg-0lax br_border2 bt_border2 text-right @if($row[15]) colCPC @endif"></td>
+                    <td class="tg-0lax br_border2 bt_border2 text-right"></td>
                 <?php }else{ ?>
-                    <td class="tg-0lax br_border2 bt_border2 text-right @if($row[15]) colCPC @endif">{!! number_format($row[8], 0, '.', '\'') !!}</td>
+                    <td class="tg-0lax br_border2 bt_border2 text-right">{!! number_format($row[8], 0, '.', '\'') !!}</td>
                 <?php } ?>
 
                 <?php if($row[9] == 0 || $row[9] == '0' || $row[9] == 0.00 || $row[9] == '0.00'){ ?>
@@ -438,9 +438,9 @@
                 <?php } ?>
 
                 <?php if($row[10] == 0 || $row[10] == '0' || $row[10] == 0.00 || $row[10] == '0.00'){ ?>
-                    <td class="tg-0lax  tg-17li br_border2 bt_border2 text-right"></td>
+                    <td class="tg-0lax  tg-17li br_border2 bt_border2 text-right @if($row[15]) colCPC @endif"></td>
                 <?php }else{ ?>
-                    <td class="tg-0lax  tg-17li br_border2 bt_border2 text-right">{!! number_format($row[10], 2, '.', '\'') !!}</td>
+                    <td class="tg-0lax  tg-17li br_border2 bt_border2 text-right @if($row[15]) colCPC @endif">{!! number_format($row[10], 2, '.', '\'') !!}</td>
                 <?php } ?>
 
                 <?php if($row[11] == 0 || $row[11] == '0' || $row[11] == 0.00 || $row[11] == '0.00'){ ?>
@@ -512,19 +512,19 @@
             <td class="tg-15li"></td>
             <td class="tg-15li"></td>
             <td class="tg-15li tg-drrh"></td>
-            <td class="tg-15li text-right">{{number_format($subTotalAd, 0, '.', '\'')}}</td>
-            <td class="tg-15li text-right">{{number_format($subTotalTkpGross, 2, '.', '\'')}}</td>
-            <td class="tg-15li text-right">{{number_format($subTotalGross, 2, '.', '\'')}}</td>
-            <td class="tg-15li text-right">{{number_format($subTotalDiscount, 2, '.', '\'')}}</td>
-            <td class="tg-15li text-right">{{number_format($subTotalNet, 0, '.', '\'')}}</td>
-            <td class="tg-15li text-right">{{number_format($subTotalBk, 2, '.', '\'')}}</td>
-            <td class="tg-15li text-right">{{number_format($subTotalTkp, 2, '.', '\'')}}</td>
-            <td class="tg-15li  text-right">{{number_format($subTotalNN, 2, '.', '\'')}}</td>
+            <td class="tg-15li text-right">{{($subTotalAd)?number_format($subTotalAd, 0, '.', '\''):''}}</td>
+            <td class="tg-15li text-right">{{($subTotalTkpGross)?number_format($subTotalTkpGross, 2, '.', '\''):''}}</td>
+            <td class="tg-15li text-right">{{($subTotalGross)?number_format($subTotalGross, 2, '.', '\''):''}}</td>
+            <td class="tg-15li text-right">{{($subTotalDiscount)?number_format($subTotalDiscount, 2, '.', '\''):''}}</td>
+            <td class="tg-15li text-right">{{($subTotalNet)?number_format($subTotalNet, 0, '.', '\''):''}}</td>
+            <td class="tg-15li text-right">{{($subTotalBk)?number_format($subTotalBk, 2, '.', '\''):''}}</td>
+            <td class="tg-15li text-right">{{($subTotalTkp)?number_format($subTotalTkp, 2, '.', '\''):''}}</td>
+            <td class="tg-15li  text-right">{{($subTotalNN)?number_format($subTotalNN, 2, '.', '\''):''}}</td>
             <td class="tg-drrh " ></td>
                 @for ($j = 0; $j < $size; $j++)
                     <td class="tg-15li @if($j == $size - 1)  @else  @endif text-right">
                 @if (isset($disSum[$i][$j+ ($_p*16)]))
-                {{number_format($disSum[$i][$j+ ($_p*16)], 0, '.', '\'')}}
+                {{($disSum[$i][$j+ ($_p*16)])?number_format($disSum[$i][$j+ ($_p*16)], 0, '.', '\''):''}}
                 @endif
             </td>
             @endfor
@@ -563,14 +563,14 @@
             <td class="tg-16li"></td>
             <td class="tg-16li"></td>
             <td class="tg-16li"></td>
-            <td class="tg-16li text-right">{{number_format($totalAd, 0, '.', '\'')}}</td>
-            <td class="tg-16li text-right">{{number_format($totalTkpGross, 2, '.', '\'')}}</td>
-            <td class="tg-16li text-right">{{number_format($totalGross, 2, '.', '\'')}}</td>
-            <td class="tg-16li text-right">{{number_format($totalDiscount, 2, '.', '\'')}}</td>
-            <td class="tg-16li text-right">{{number_format($totalNet, 0, '.', '\'')}}</td>
-            <td class="tg-16li text-right">{{number_format($totalBk, 2, '.', '\'')}}</td>
-            <td class="tg-16li text-right">{{number_format($totalTkp, 2, '.', '\'')}}</td>
-            <td class="tg-16li tg-drrh text-right">{{number_format($totalNN, 2, '.', '\'')}}</td>
+            <td class="tg-16li text-right">{{($totalAd)?number_format($totalAd, 0, '.', '\''):''}}</td>
+            <td class="tg-16li text-right">{{($totalTkpGross)?number_format($totalTkpGross, 2, '.', '\''):''}}</td>
+            <td class="tg-16li text-right">{{($totalGross)?number_format($totalGross, 2, '.', '\''):''}}</td>
+            <td class="tg-16li text-right">{{($totalDiscount)?number_format($totalDiscount, 2, '.', '\''):''}}</td>
+            <td class="tg-16li text-right">{{($totalNet)?number_format($totalNet, 0, '.', '\''):''}}</td>
+            <td class="tg-16li text-right">{{($totalBk)?number_format($totalBk, 2, '.', '\''):''}}</td>
+            <td class="tg-16li text-right">{{($totalTkp)?number_format($totalTkp, 2, '.', '\''):''}}</td>
+            <td class="tg-16li tg-drrh text-right">{{($totalNN)?number_format($totalNN, 2, '.', '\''):''}}</td>
             <td class="tg-drrh  " style="border-top:none;border-bottom:none"></td>
             @for ($j = 0; $j < $size; $j++)
                 <td class="tg-16li  @if($j == $size - 1)  @endif text-right" >
@@ -659,7 +659,7 @@
         </table>
         <div style="margin-top: 20px; font-size: 30px; width: 2530px; color: #5C7DA2">
             <p>
-                <strong style="border-left:5px solid #A4B7CB; padding-left: 10px;">CPC Klickpreismodell</strong> - die gekennzeichneten Platzierungen werden pro Klick verrechnet. Der Werbedruck wird in Klicks angegeben. Der zu erwartende Werbedruck in Ad Impressions wird auf Basis von Annahmen bei den Klickraten (Display 0.25%, Mobile 0.30% und Native 0.20%) berechnet.
+                <strong style="border-left:6px solid #77B0D7; padding-left: 10px;">CPC Klickpreismodell</strong> - die gekennzeichneten Platzierungen werden pro Klick verrechnet. Der Werbedruck wird in Klicks angegeben. Der zu erwartende Werbedruck in Ad Impressions wird auf Basis von Annahmen bei den Klickraten (Display 0.25%, Mobile 0.30% und Native 0.20%) berechnet.
             </p>
         </div>
     <!--  <table class="t-title">
