@@ -38,17 +38,18 @@ function calTotal() {
         total = 0;
         for (var j = 0; j < cells.length; j++) {
 			// if(i==0)console.log(total,j,cells[j].innerHTML,parseFloat($(cells[j]).parents("tr").attr('data-adimpressions')));
-
+			var tmp1 = parseInt(cells[j].innerHTML.replace("\'","").replace("\'","").replace("\'","").replace(",",""));
+			var tmp2 = parseFloat(cells[j].innerHTML.replace("\'","").replace("\'","").replace("\'","").replace(",",""));
             if (idx == 5 && cells[j].innerHTML != "") {
             	if($(cells[j]).parents("tr").hasClass('hasCPC') && $(cells[j]).parents("table.tableCategory").attr('data-clickrate')){
             		total += parseFloat($(cells[j]).parents("tr").attr('data-adimpressions'));
 				}else{
-					total += parseInt(cells[j].innerHTML.replace("\'","").replace("\'","").replace("\'","").replace(",",""));
+					if(!isNaN(tmp1)) total += tmp1;
 				}
 
             }
             else {
-                total += parseFloat(cells[j].innerHTML.replace("\'","").replace("\'","").replace("\'","").replace(",",""));
+				if(!isNaN(tmp2)) total += tmp2;
             }
 
         }
@@ -79,7 +80,8 @@ function calTotal() {
         total = 0;
         
         for (var j = 0; j < cells.length; j++) {  	
-            total += parseFloat(cells[j].innerText.replace("\'","").replace("\'","").replace("\'","").replace(",",""));
+           	var tmp = parseFloat(cells[j].innerText.replace("\'","").replace("\'","").replace("\'","").replace(",",""));
+            if(!isNaN(tmp)) total += tmp
         };  	
     	if(idx == 5)
     		$(elems[i]).text(numberWithCommas(total));	
@@ -96,7 +98,8 @@ function calTotal() {
               var totalValue = 0;
               for (var j = 0 ; j < tableRows.length; j++) {
                 var TableData = $(tableRows[j]).children("td")[5];
-                  totalValue += parseFloat($(TableData).text().replace("\'","").replace("\'","").replace("\'","").replace(",",""));
+                var tmp = parseFloat($(TableData).text().replace("\'","").replace("\'","").replace("\'","").replace(",",""));
+                if(!isNaN(tmp)) totalValue += tmp;
               }
               
               $(elems[i]).text(totalValue.toFixed(2));
@@ -195,7 +198,8 @@ function calTotal() {
               var totalValue = 0;
               for (var j = 0 ; j < tableRows.length; j++) {
                 var TableData = $(tableRows[j]).children("td")[11];
-                  totalValue += parseFloat($(TableData).text().replace("\'","").replace("\'","").replace("\'","").replace(",",""));
+                var tmp = parseFloat($(TableData).text().replace("\'","").replace("\'","").replace("\'","").replace(",",""));
+                  if(!isNaN(tmp)) totalValue += tmp
               }
 
               $(elems[i]).text(totalValue.toFixed(2));
@@ -281,7 +285,8 @@ function calTotal() {
     
     for (var j = 0; j < cells.length; j++) {
     	region = $(cells[j]).prev().prev().prev().prev().prev().prev().prev().prev()[0].innerHTML;
-    	sum[region] += parseFloat($(cells[j])[0].innerHTML.replace("\'","").replace("\'","").replace("\'","").replace(",",""));
+    	var tmp= parseFloat($(cells[j])[0].innerHTML.replace("\'","").replace("\'","").replace("\'","").replace(",",""));
+    	if(!isNaN(tmp)) sum[region] += tmp
     }
 
     current = 0;
