@@ -249,14 +249,14 @@ function calTotal() {
     	if (isNaN(sum[region])) {
     		$(elems[i]).text("0");
     	} else {
-    		if(sum[region]) $(elems[i]).text(numberWithCommas(sum[region].toFixed(2)));
+    		if(sum[region]) $(elems[i]).text(numberWithCommas(parseFloat(sum[region]).toFixed(2)));
     	}
     };
 
     if (isNaN(current)) {
     	$(".adpressall").text("0");
     } else {
-    	$(".adpressall").text(numberWithCommas(current.toFixed(2)));
+    	$(".adpressall").text(numberWithCommas(parseFloat(current).toFixed(2)));
     }
 
     elems = document.getElementsByClassName('adpresspercent');
@@ -305,13 +305,13 @@ function calTotal() {
     	if (isNaN(sum[region]))
     		$(elems[i]).text("0.00");
     	else
-    		$(elems[i]).text(numberWithCommas(sum[region].toFixed(2)));    	   	
+    		$(elems[i]).text(numberWithCommas(parseFloat(sum[region]).toFixed(2)));
     };
 
     if (isNaN(current)) {
     	$(".netCHFall").text("0.00");
     } else {
-    	$(".netCHFall").text(numberWithCommas(current.toFixed(2)));
+    	$(".netCHFall").text(numberWithCommas(parseFloat(current).toFixed(2)));
     }
 
 

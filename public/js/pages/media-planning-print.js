@@ -226,13 +226,13 @@ function calTotal() {
 		if (isNaN(sum[region]))
 			$(elems[i]).text("0.00");
 		else
-			$(elems[i]).text(numberWithCommas(sum[region].toFixed(2)));
+			$(elems[i]).text(numberWithCommas(parseFloat(sum[region]).toFixed(2)));
 	};
 
 	if (isNaN(current)) {
 		$(".netCHFall").text("0.00");
 	} else {
-		$(".netCHFall").text(numberWithCommas(current.toFixed(2)));
+		$(".netCHFall").text(numberWithCommas(parseFloat(current).toFixed(2)));
 	}
 
 
