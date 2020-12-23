@@ -458,9 +458,11 @@ class MediaController extends Controller
      */
     public function deleteLine(Request $request)
     {
-        foreach ($request->selectedID as $mediaID) {
+        if($request->selectedID) foreach ($request->selectedID as $mediaID) {
             $media = CampaignChannelMedia::where('ID',$mediaID)->first();        
             $msg = ($media->delete()) ? "Delete Successed!" : "Delete Failed!";     
+        }else{
+            $msg = "No row selected";
         }
 
         $this->plusVersionNumber($request->campaignID, $request->active_channel);
@@ -657,6 +659,12 @@ class MediaController extends Controller
      */
     public function editCol(Request $request)
     {
+
+        if(!$request->mediaID){
+           $data = $this->insertLine($request);
+           $res = json_decode($data->getContent());
+           $request->mediaID = $res->id;
+        }
 
         $media = CampaignChannelMedia::where('ID',$request->mediaID)->first();
         $onlineChannel = CampaignChannel::where('campaignID', $request->campaignID)->where('name', $request->active_channel)->first();
