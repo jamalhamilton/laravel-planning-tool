@@ -316,7 +316,7 @@
             </tr>
             <tr class="text-bold tr_highlight">
                 <th width="300" class="nowrap tg-15li w300">PLATZIERUNG / GATTUNG</th>
-                <th width="300" class="nowrap tg-15li w300">STANDORTE</th>
+                <th width="{{$detailWidth}}" class="nowrap tg-15li w{{$detailWidth}}">STANDORTE</th>
                 <th width="120" class="nowrap tg-15li w120">SPRACHREGION</th>
                 <th width="120" class="nowrap tg-15li w220">FORMAT</th>
                 <th width="120" class="nowrap tg-15li w120 text-right">STELLEN /<br>SCREENS</th>
@@ -573,7 +573,7 @@
                                 if(!empty($v[4]))$right_row += (count($v[4])-1);
                             }
                         @endphp
-                        <table  class="tg tb_bottom" style="margin-top: <?php echo $calc_margin_top+$right_row*50 ;?>px !important;" >
+                        <table  class="tg tb_bottom" style="margin-top: <?php echo $calc_margin_top + 17 +$right_row*50 ;?>px !important;" >
 
                             @for ($i = 0; $i < sizeof($leftTable) - 1; $i++)
                                 <tr>

@@ -277,7 +277,7 @@
         </tr>
         <tr class="text-bold">
             <th width="300" class="nowrap tg-15li bt_border bl_border br_border2 w300">PLATZIERUNG</th>
-            <th width="300" class="nowrap tg-15li bt_border br_border2 w300">DETAILS</th>
+            <th width="{{$detailWidth}}" class="nowrap tg-15li bt_border br_border2 w{{$detailWidth}}">DETAILS</th>
             <th width="120" class="nowrap tg-15li bt_border br_border2 w120">SPRACHE</th>
             <th width="120" class="nowrap tg-15li bt_border br_border bl_border2 w220">FORMAT</th>
             <th width="120" class="nowrap tg-15li bl_border bt_border br_border2 w120">WERBE-<br>DRUCK</th>

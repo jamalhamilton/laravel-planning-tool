@@ -323,7 +323,7 @@ $_total_page = ceil(sizeof($date)/16);
             </tr>
             <tr class="text-bold tr_highlight">
                 <th width="300" class="nowrap tg-15li w300">PLATZIERUNG</th>
-                <th width="300" class="nowrap tg-15li w300">DETAILS</th>
+                <th width="{{$detailWidth}}" class="nowrap tg-15li w{{$detailWidth}}">DETAILS</th>
                 <th width="120" class="nowrap tg-15li w120">SPRACHE</th>
                 <th width="120" class="nowrap tg-15li w220">FORMAT</th>
                 <th width="120" class="nowrap tg-15li w120 text-right">WERBE-<br>DRUCK</th>
@@ -332,7 +332,7 @@ $_total_page = ceil(sizeof($date)/16);
                 <th width="120" class="nowrap tg-15li w120 text-right">RABATT<br>IN %</th>
                 <th width="120" class="nowrap tg-15li w120 text-right">KOSTEN<br>NET</th>
                 <th width="120" class="nowrap tg-15li w120 text-right">BK IN %</th>
-                <th width="120" class="nowrap tg-15li w120 text-right">TKP / CPC<br>N/N <br> IN CHF</th>
+                <th width="120" class="nowrap tg-15li w120 text-right">TKP / CPC<br> N/N IN CHF</th>
                 <th width="120" class="nowrap tg-15li w120 text-right">KOSTEN <br>NET-NET</th>
                 <th width="30" class="nowrap tg-drrh  w30 text-right" ></th>
                 @for ($j = 0; $j < $size - 1; $j++)
@@ -620,7 +620,7 @@ $_total_page = ceil(sizeof($date)/16);
                             if(!empty($v[4]))$right_row += (count($v[4])-1);
                         }
                     @endphp
-                    <table  class="tg tb_bottom" style="margin-top: <?php echo $calc_margin_top +$right_row*50 ;?>px !important;" >
+                    <table  class="tg tb_bottom" style="margin-top: <?php echo $calc_margin_top + 17 +$right_row*50 ;?>px !important;" >
 
                         @for ($i = 0; $i < sizeof($leftTable) - 1; $i++)
                             <tr>

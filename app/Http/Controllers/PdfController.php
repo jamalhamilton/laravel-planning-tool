@@ -394,7 +394,7 @@ class PdfController extends Controller
 
         $data2 = array();
         foreach($channels as $channel) {
-
+            $maxStrLen = 0;
             $starttime = strtotime($channel->startDate);
             $endtime = strtotime($channel->endDate);
 
@@ -532,6 +532,10 @@ class PdfController extends Controller
                         }
                     }
 
+                    $strlen = strlen($media->details);
+                    if($strlen > $maxStrLen){
+                        $maxStrLen = $strlen;
+                    }
 
                     $mediaData[$index] = array(
                         $media->placing,
@@ -898,7 +902,9 @@ class PdfController extends Controller
             }
 
             $leftTable = array_merge($empty, $leftTable);
-
+            $detailWidth = "300";
+            if($maxStrLen > 70)
+                $detailWidth = "500";
             $data2[$channel->name] = [
                 'type' => $type,
                 'header' => $header,
@@ -912,6 +918,7 @@ class PdfController extends Controller
                 'date' => $dateArr,
                 'leftTable' => $leftTable,
                 'rightTable' => $rightTable,
+                'detailWidth' => $detailWidth,
                 'diff' => $diff
             ];
 
