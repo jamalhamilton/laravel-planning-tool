@@ -192,7 +192,7 @@
             border-left:1px solid #5C7C9D ;
             border-right:1px solid #B7AFAC ;
         }
-        .w120{width: 110px;}
+        .w120{width: 120px;}
         .w140{width: 150px;}
         .w150{width:180px;}
         .w220{width:220px;}
@@ -606,7 +606,7 @@ $_total_page = ceil(sizeof($date)/16);
 
         </table>
 
-            <table style="width: 2530px">
+            <table style="width: 2600px">
             <tr><td style="position: relative">
                     @php
                         //dd($rightTable);
@@ -679,7 +679,7 @@ $_total_page = ceil(sizeof($date)/16);
                 </td></tr>
             </table>
 
-            <div style="position: relative; margin-top: 20px; font-size: 30px; width: 2530px;color: #5C7DA2">
+            <div style="position: relative; margin-top: 20px; font-size: 30px; width: 2600px;color: #5C7DA2">
                 <p>
                     <strong style="border-left:6px solid #77B0D7; padding-left: 10px;">CPC Klickpreismodell</strong> - die gekennzeichneten Platzierungen werden pro Klick verrechnet. Der Werbedruck wird in Klicks angegeben. Der zu erwartende Werbedruck in Ad Impressions wird auf Basis von Annahmen bei den Klickraten (Display 0.25%, Mobile 0.30% und Native 0.20%) berechnet.
                 </p>

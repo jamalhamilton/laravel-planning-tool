@@ -196,7 +196,7 @@
             border-left:1px solid #5C7C9D ;
             border-right:1px solid #A4B7CB ;
         }
-        .w120{width: 110px;}
+        .w120{width: 120px;}
         .w140{width: 150px;}
         .w150{width:180px;}
         .w220{width:220px;}
