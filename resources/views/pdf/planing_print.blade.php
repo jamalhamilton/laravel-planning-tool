@@ -537,82 +537,86 @@
                 @endfor
 
             </tr>
-            <tr><td colspan="10" class=" ">&nbsp;</td><td colspan="{{$size+1}}"></td></tr>
+            <tr><td colspan="10" style=" padding: 0!important;" height="<?php echo (50 + sizeof($rightTable)*30)?>">&nbsp;
+                    <table width="100%" style="margin-top: 20px;">
+                        <tr><td style="position: relative; padding: 0!important;">
+                                @php
+                                    //dd($rightTable);
+                                    $sofLeft = sizeof($leftTable);
+                                    $sofRight = sizeof($rightTable);
+                                    $space = $sofRight-$sofLeft + 1;
+                                    if($space == 4) $space = $space + 1;
+                                    $right_row = 0;
+                                    foreach ($rightTable as $k=>$v){
+                                        if(!empty($v[4]))$right_row += (count($v[4])-1);
+                                    }
+                                @endphp
+                                <table  class="tg tb_bottom" style="margin-top: <?php echo $calc_margin_top + 17 +$right_row*50;?>px !important;" >
+
+                                    @for ($i = 0; $i < sizeof($leftTable) - 1; $i++)
+                                        <tr>
+                                            @if ($leftTable[$i][0] == 'SPRACHE')
+                                                <td class="tg-15li w220 nowrap text-bold"><span>{{ $leftTable[$i][0] }}</span></td>
+                                                <td class="tg-15li w220 nowrap text-bold" ><span style="float: right !important;">{{ $leftTable[$i][1] }}</span></td>
+                                                <td class="tg-15li w220 nowrap text-bold" ><span style="float: right !important;">{{ $leftTable[$i][2] }}</span></td>
+                                                <td class="tg-15li w220 nowrap text-bold" ><span style="float: right !important;">{{ $leftTable[$i][3] }}</span></td>
+                                                <td class="tg-15li w220 nowrap text-bold" ><span style="float: right !important;">{{ $leftTable[$i][4] }}</span></td>
+                                            @elseif ($leftTable[$i][0] == '' )
+                                                <td class="tg-space text-bold @if ($i != 0) bb_border2 @endif"><span>{{ $leftTable[$i][0] }}&nbsp;</span></td>
+                                                <td class="tg-space text-bold @if ($i != 0) bb_border2 @endif"><span style="float: right !important;">{{ $leftTable[$i][1] }}</span></td>
+                                                <td class="tg-space text-bold @if ($i != 0) bb_border2 @endif"><span style="float: right !important;">{{ $leftTable[$i][2] }}</span></td>
+                                                <td class="tg-space text-bold @if ($i != 0) bb_border2 @endif"><span style="float: right !important;">{{ $leftTable[$i][3] }}</span></td>
+                                                <td class="tg-space text-bold @if ($i != 0) bb_border2 @endif"><span style="float: right !important;">{{ $leftTable[$i][4] }}</span></td>
+                                            @else
+                                                <td class="tg-17li tg-space bb_border2"><span>{{ $leftTable[$i][0] }}</span></td>
+                                                <td class="tg-space br_border2 bb_border2"><span style="float: right !important;">{{ number_format($leftTable[$i][1], 0, '.', '\'') }}</span></td>
+                                                <td class="tg-space br_border2 bb_border2"><span style="float: right !important;">{{ number_format($leftTable[$i][2], 2, '.', '\'') }}</span></td>
+                                                <td class="tg-space br_border2 bb_border2 "><span style="float: right !important;">{{ number_format($leftTable[$i][3], 0, '.', '\'') }}</span></td>
+                                                <td class="tg-space bb_border2"><span style="float: right !important;">{{ number_format($leftTable[$i][4], 2, '.', '\'') }}</span></td>
+                                            @endif
+                                        </tr>
+                                    @endfor
+                                    <tr class="text-bold tr_highlight">
+                                        <td class="tg-16li "><span>{{ $leftTable[$i][0] }}</span></td>
+                                        <td class="tg-16li"><span style="float: right !important;">{{ number_format($leftTable[$i][1], 0, '.', '\'') }}</span></td>
+                                        <td class="tg-16li"><span style="float: right !important;">{{ $leftTable[$i][2] }}</span></td>
+                                        <td class="tg-16li"><span style="float: right !important;">{{ number_format($leftTable[$i][3], 0, '.', '\'') }}</span></td>
+                                        <td class="tg-16li"><span style="float: right !important;">{{ number_format($leftTable[$i][4], 2, '.', '\'') }}</span></td>
+                                    </tr>
+                                </table>
+
+                            </td>
+                            <td style="position: relative; padding: 0!important;">
+
+                                <table class="tg tb_bottom" align="right" style="bottom: 0; position: relative;">
+
+                                    @for ($i = 0; $i < sizeof($rightTable) - 1; $i++)
+                                        <tr class="@if($i== sizeof($rightTable) - 2) tg-17li @endif">
+                                            <td class="tg-17li tg-space bb_border2 br_border2 w500 nowrap" colspan="2"><span>{{ $rightTable[$i][0] }}</span></td>
+                                            <td class="tg-space bb_border2 br_border2 w150 tb_right_span"><table width="100%">@foreach($rightTable[$i][4] as $k=>$v)<tr><td class="text-right">{{$v}}</td></tr> @endforeach</table></td>
+                                            <td class="tg-space bb_border2 br_border2 w150 br_border2 tb_right_span" style="vertical-align: bottom;">CHF {{ $rightTable[$i][1] }}</td>
+                                        </tr>
+
+                                    @endfor
+
+                                    <tr class="text-bold tr_highlight">
+                                        <td class="tg-16li  nowrap" colspan="2"><span>{{ $rightTable[$i][0] }}</span></td>
+                                        <td class="tg-16li  tb_right_span"> </td>
+                                        <td class="tg-16li  tb_right_span">CHF  {{ $rightTable[$i][1] }}</td>
+
+                                        <td class="tg-space "></td>
+                                    </tr>
+                                </table>
+                            </td></tr>
+                    </table>
+                </td>
+
+                <td colspan="{{$size+1}}"></td></tr>
 
 
 
         </table>
-            <table style="width: 2520px">
-                <tr><td style="position: relative">
-                        @php
-                            //dd($rightTable);
-                            $sofLeft = sizeof($leftTable);
-                            $sofRight = sizeof($rightTable);
-                            $space = $sofRight-$sofLeft + 1;
-                            if($space == 4) $space = $space + 1;
-                            $right_row = 0;
-                            foreach ($rightTable as $k=>$v){
-                                if(!empty($v[4]))$right_row += (count($v[4])-1);
-                            }
-                        @endphp
-                        <table  class="tg tb_bottom" style="margin-top: <?php echo $calc_margin_top + 17 +$right_row*50;?>px !important;" >
 
-                            @for ($i = 0; $i < sizeof($leftTable) - 1; $i++)
-                                <tr>
-                                    @if ($leftTable[$i][0] == 'SPRACHE')
-                                        <td class="tg-15li w220 nowrap text-bold"><span>{{ $leftTable[$i][0] }}</span></td>
-                                        <td class="tg-15li w220 nowrap text-bold" ><span style="float: right !important;">{{ $leftTable[$i][1] }}</span></td>
-                                        <td class="tg-15li w220 nowrap text-bold" ><span style="float: right !important;">{{ $leftTable[$i][2] }}</span></td>
-                                        <td class="tg-15li w220 nowrap text-bold" ><span style="float: right !important;">{{ $leftTable[$i][3] }}</span></td>
-                                        <td class="tg-15li w220 nowrap text-bold" ><span style="float: right !important;">{{ $leftTable[$i][4] }}</span></td>
-                                    @elseif ($leftTable[$i][0] == '' )
-                                        <td class="tg-space text-bold @if ($i != 0) bb_border2 @endif"><span>{{ $leftTable[$i][0] }}&nbsp;</span></td>
-                                        <td class="tg-space text-bold @if ($i != 0) bb_border2 @endif"><span style="float: right !important;">{{ $leftTable[$i][1] }}</span></td>
-                                        <td class="tg-space text-bold @if ($i != 0) bb_border2 @endif"><span style="float: right !important;">{{ $leftTable[$i][2] }}</span></td>
-                                        <td class="tg-space text-bold @if ($i != 0) bb_border2 @endif"><span style="float: right !important;">{{ $leftTable[$i][3] }}</span></td>
-                                        <td class="tg-space text-bold @if ($i != 0) bb_border2 @endif"><span style="float: right !important;">{{ $leftTable[$i][4] }}</span></td>
-                                    @else
-                                        <td class="tg-17li tg-space bb_border2"><span>{{ $leftTable[$i][0] }}</span></td>
-                                        <td class="tg-space br_border2 bb_border2"><span style="float: right !important;">{{ number_format($leftTable[$i][1], 0, '.', '\'') }}</span></td>
-                                        <td class="tg-space br_border2 bb_border2"><span style="float: right !important;">{{ number_format($leftTable[$i][2], 2, '.', '\'') }}</span></td>
-                                        <td class="tg-space br_border2 bb_border2 "><span style="float: right !important;">{{ number_format($leftTable[$i][3], 0, '.', '\'') }}</span></td>
-                                        <td class="tg-space bb_border2"><span style="float: right !important;">{{ number_format($leftTable[$i][4], 2, '.', '\'') }}</span></td>
-                                    @endif
-                                </tr>
-                            @endfor
-                            <tr class="text-bold tr_highlight">
-                                <td class="tg-16li "><span>{{ $leftTable[$i][0] }}</span></td>
-                                <td class="tg-16li"><span style="float: right !important;">{{ number_format($leftTable[$i][1], 0, '.', '\'') }}</span></td>
-                                <td class="tg-16li"><span style="float: right !important;">{{ $leftTable[$i][2] }}</span></td>
-                                <td class="tg-16li"><span style="float: right !important;">{{ number_format($leftTable[$i][3], 0, '.', '\'') }}</span></td>
-                                <td class="tg-16li"><span style="float: right !important;">{{ number_format($leftTable[$i][4], 2, '.', '\'') }}</span></td>
-                            </tr>
-                        </table>
-
-                    </td>
-                    <td style="position: relative">
-
-                        <table class="tg tb_bottom" align="right" style="bottom: 0; position: relative;">
-
-                            @for ($i = 0; $i < sizeof($rightTable) - 1; $i++)
-                                <tr class="@if($i== sizeof($rightTable) - 2) tg-17li @endif">
-                                    <td class="tg-17li tg-space bb_border2 br_border2 w500 nowrap" colspan="2"><span>{{ $rightTable[$i][0] }}</span></td>
-                                    <td class="tg-space bb_border2 br_border2 w150 tb_right_span"><table width="100%">@foreach($rightTable[$i][4] as $k=>$v)<tr><td class="text-right">{{$v}}</td></tr> @endforeach</table></td>
-                                    <td class="tg-space bb_border2 br_border2 w150 br_border2 tb_right_span" style="vertical-align: bottom;">CHF {{ $rightTable[$i][1] }}</td>
-                                </tr>
-
-                            @endfor
-
-                            <tr class="text-bold tr_highlight">
-                                <td class="tg-16li  nowrap" colspan="2"><span>{{ $rightTable[$i][0] }}</span></td>
-                                <td class="tg-16li  tb_right_span"> </td>
-                                <td class="tg-16li  tb_right_span">CHF  {{ $rightTable[$i][1] }}</td>
-
-                                <td class="tg-space "></td>
-                            </tr>
-                        </table>
-                    </td></tr>
-            </table>
         <div style="text-align: right; position: relative; height: 100px;"><img style="position: absolute; bottom: 150px; float: right;" class="house-logo" src="{{ public_path() }}/icons/amo-logo.png" /></div>
         <div style="color: #A4B7CB;font-size: 50px; position: absolute; bottom: 30px;">Seite {{$page_number + $_p}}/{{$totalPage}}</div>
 

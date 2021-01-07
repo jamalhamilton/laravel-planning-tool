@@ -597,9 +597,9 @@ $_total_page = ceil(sizeof($date)/16);
 
             </tr>
             <tr>
-                <td colspan="12" height="<?php echo (30 + sizeof($rightTable)*30)?>">
+                <td colspan="12" style=" padding: 0!important;" height="<?php echo (50 + sizeof($rightTable)*30)?>">
                     <div>
-                        <table style="width: 100%">
+                        <table width="100%" style="margin-top: 20px;">
                             <tr><td style="position: relative; padding: 0;">
                                     @php
                                         //dd($rightTable);
@@ -648,7 +648,7 @@ $_total_page = ceil(sizeof($date)/16);
                                     </table>
 
                                 </td>
-                                <td  style="position: relative; padding: 0;">
+                                <td  style="position: relative; padding: 0!important;">
 
                                     <table class="tg tb_bottom" align="right" style="bottom: 0; position: relative;">
 
@@ -680,10 +680,7 @@ $_total_page = ceil(sizeof($date)/16);
 
                 </td>
                 <td colspan="{{$size+1}}"></td></tr>
-            <tr>
 
-                {{--<td colspan="{{$size+1}}"></td>--}}
-            </tr>
 
         </table>
 
