@@ -344,10 +344,12 @@ class MediaController extends Controller
                 }else{
                     $media->ad_impressions = 0;
                 }
+                $media->tkpNNCHF = $media->nnCHF / $media->adPressureValue;
 
             }else{
                 $media->grossCHF = $media->adPressureValue / 1000 * $media->tkpGrossCHF;
                 $media->ad_impressions = 0;
+                $media->tkpNNCHF = ($media->nnCHF / $media->adPressureValue) * 1000;
             }
 
             $onlineChannel = CampaignChannel::where('campaignID', $request->campaignID)->where('name', $request->active_channel)->first();
@@ -855,7 +857,12 @@ class MediaController extends Controller
                 if ($media->adPressureValue == 0) {
                     $media->tkpNNCHF = 0;
                 } else {
-                    $media->tkpNNCHF = ($media->nnCHF / $media->adPressureValue) * 1000;
+                    if($media->is_cpc){
+                        $media->tkpNNCHF = $media->nnCHF / $media->adPressureValue;
+                    }else{
+                        $media->tkpNNCHF = ($media->nnCHF / $media->adPressureValue) * 1000;
+                    }
+
                 }
 
                 $media->save();

@@ -1459,6 +1459,7 @@ $('body').on('click',"#addctgmodal", function() {
 					$(contextDataTable).find("tr:nth-child("+(index+1)+")").attr('data-adimpressions',data.media.ad_impressions.toFixed(2));
 
 					$(contextDataTable).find("tr:nth-child("+(index+1)+")").find('td:nth-child(7)').text(data.media.grossCHF.toFixed(2));
+					$(contextDataTable).find("tr:nth-child("+(index+1)+")").find('td:nth-child(12)').text(data.media.tkpNNCHF.toFixed(2));
 					if(data.media.ad_impressions){
                         $(contextDataTable).find("tr:nth-child("+(index+1)+")").find('.cpcSummary').attr('title',numberWithCommas(data.media.ad_impressions.toFixed(2)));
                     }else{
