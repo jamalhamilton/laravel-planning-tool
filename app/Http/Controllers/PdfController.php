@@ -829,10 +829,11 @@ class PdfController extends Controller
                     foreach ($tmp_des[$groupNm] as $m => $n){
 
                         if ($groupNm == 'Media-Honorar') {
-                            if ($m != "") {
+                            if ($m) {
                                 $descript[] = ' '.$m.'%';
                             } else {
-                                $descript[] = 'Pauschale CHF '.$this->prettyPrint($n).' ';
+//                                $descript[] = 'Pauschale CHF '.$this->prettyPrint($n).' ';
+                                $descript[] = ' '.$m.'%';
                             }
                         } elseif ($groupNm == 'Technische Kosten') {
                             if ($m != "")
@@ -862,6 +863,7 @@ class PdfController extends Controller
 
                 array_push($rightTable, $row);
             }
+
 
         //    $service_total += $totalNN;
             $total = $service_total + $totalNN;
